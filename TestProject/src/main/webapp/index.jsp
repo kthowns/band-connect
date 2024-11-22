@@ -5,6 +5,7 @@
 <head>
 <meta charset="EUC-KR">
 <title>Insert title here</title>
+<% out.print("Change is Coming!") %>
 </head>
 <body>
 

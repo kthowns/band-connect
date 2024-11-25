@@ -1,0 +1,180 @@
+/* General Reset */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9fb; /* 밝은 배경색 */
+    color: #333;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #84c5f4; /* 파스텔 블루 */
+    color: white;
+}
+.logo {
+    font-size: 1.5rem;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+}
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Sections */
+.section {
+    padding: 2rem;
+    text-align: center;
+}
+.section h1, .section h2, .section h3 {
+    color: #4d78ff; /* 밝은 블루 */
+}
+.search-bar {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.search-bar input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 300px;
+}
+.search-bar button {
+    padding: 0.5rem 1rem;
+    background-color: #ffb6b9; /* 밝은 핑크 */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.search-bar button:hover {
+    background-color: #ff8f94; /* 약간 어두운 핑크 */
+}
+.card-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    width: 250px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.card h3 {
+    color: #4d78ff;
+}
+.card button {
+    margin-top: 0.5rem;
+    background-color: #ffc48c; /* 밝은 오렌지 */
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.card button:hover {
+    background-color: #ffa670; /* 어두운 오렌지 */
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 1rem;
+    background: #84c5f4; /* 헤더와 통일된 색상 */
+    color: white;
+}
+
+/* Form */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 300px;
+    margin: 0 auto;
+}
+.form input, .form button {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.form button {
+    background-color: #84e4d8; /* 밝은 민트색 */
+    color: white;
+    cursor: pointer;
+}
+.form button:hover {
+    background-color: #5ed3c5; /* 조금 더 어두운 민트 */
+}
+
+/* Profile Section */
+.profile-section {
+    padding: 2rem;
+    text-align: center;
+}
+.profile-info {
+    background-color: #fff;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    text-align: left;
+    width: 80%;
+    max-width: 600px;
+}
+.profile-info p, .profile-info ul {
+    margin: 0.5rem 0;
+}
+.profile-info ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+}
+
+/* Login Section */
+.login-section {
+    padding: 2rem;
+    text-align: center;
+}
+.login-section h1 {
+    margin-bottom: 1rem;
+    color: #4CAF50;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 300px;
+    margin: 0 auto;
+}
+.form input, .form button {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.form button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+.form button:hover {
+    background-color: #45a049;
+}

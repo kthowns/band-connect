@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,28 +11,27 @@
         <div class="logo">🎵 BandConnect</div>
         <nav>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="register.html">Register</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="login-section">
-        <h1>Login</h1>
-        <form class="form">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="register.html">Sign up here</a>.</p>
-    </main>
+    <form class="form">
+        <label for="username">아이디</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit" id="loginButton">로그인</button>
+        
+        <!-- Sign-up 텍스트 -->
+        <p class="sign-up-text">회원이 아니신가요? <a href="register.html">회원가입 하기</a></p>
+    </form>
+    
 
     <footer class="footer">
         <p>© 2024 BandConnect. All Rights Reserved.</p>
     </footer>
+    <script src="script.js"></script>
 </body>
 </html>

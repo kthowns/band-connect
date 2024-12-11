@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Details - BandConnect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">🎵 BandConnect</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="post-section">
+        <div id="post-details">
+            <h1 id="post-title"></h1>
+            <p id="post-content"></p>
+        </div>
+    
+        <form id="application-form" class="form">
+            <h2>Apply Now</h2>
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Write a message" required></textarea>
+            
+            <button type="submit">Submit Application</button>
+        </form>
+    </main>    
+
+    <footer class="footer">
+        <p>© 2024 BandConnect. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -66,31 +66,62 @@ main {
 .section h1, .section h2, .section h3 {
     color: #4d78ff; /* 밝은 블루 */
 }
-/* 태그 버튼 스타일 */
-.tag-buttons {
+
+/* 태그 입력 섹션 */
+.tag-search {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 0.5rem; /* 입력창과 버튼 간격 */
 }
 
-.tag-buttons button {
-    background-color: #e3f2fd; /* 연한 파란색 */
-    color: #0d47a1; /* 진한 파란색 */
+.tag-search input {
+    flex: 1; /* 입력창이 가능한 넓게 차지 */
+    max-width: 500px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 30px 0 0 30px; /* 왼쪽만 둥근 모서리 */
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #f9f9fb;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tag-search input::placeholder {
+    color: #aaa;
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+.tag-search input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+    background-color: #fff;
+}
+
+/* 검색 버튼 */
+.tag-search-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #4CAF50;
+    color: white;
     border: none;
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
+    border-radius: 0 30px 30px 0; /* 오른쪽만 둥근 모서리 */
     font-size: 1rem;
     font-weight: bold;
+    cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.tag-buttons button:hover {
-    background-color: #bbdefb; /* 약간 더 진한 파란색 */
-    transform: scale(1.05);
+.tag-search-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05); /* 약간 확대 효과 */
 }
+
+
 
 /* 게시글 카드 스타일 */
 .card-container {
@@ -128,11 +159,19 @@ main {
     color: #555;
 }
 
+.card .comment-count {
+    font-size: 1rem;
+    color: #4CAF50;
+    margin-top: 0.5rem;
+    font-weight: bold;
+}
+
 .card .date {
     font-size: 0.9rem;
     color: #999;
     margin-top: 0.5rem;
 }
+
 
 
 /* Footer */
@@ -170,9 +209,10 @@ main {
     padding: 2rem;
     text-align: center;
 }
+
 .profile-info {
     background-color: #fff;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -180,13 +220,43 @@ main {
     text-align: left;
     width: 80%;
     max-width: 600px;
+    margin: 0 auto 2rem auto;
 }
-.profile-info p, .profile-info ul {
+
+.profile-info p {
     margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #555;
 }
-.profile-info ul {
-    list-style: disc;
-    padding-left: 1.5rem;
+
+/* 게시판 스타일 */
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.action-link {
+    display: block;
+    background-color: #f9f9fb;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    text-decoration: none;
+    font-size: 1.1rem;
+    color: #333;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.action-link:hover {
+    background-color: #84c5f4;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Login Section */
@@ -370,22 +440,134 @@ main {
 }
 
 
-/* 게시글 상세 */
-.post-section {
+/* 게시글 카드 */
+.post-card {
+    background: #fff;
     padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
 }
-#post-details {
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.my-posts-section, .my-comments-section {
-    padding: 2rem;
-}
-
-.my-posts-section h2, .my-comments-section h2 {
+.post-title {
+    font-size: 2rem;
+    color: #0d47a1;
     margin-bottom: 1rem;
+}
+.post-meta {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1rem;
+}
+.post-meta span {
+    margin-right: 1rem;
+}
+.post-content {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Form Section */
+.application-form {
+    background-color: #f9f9fb;
+    padding: 2rem;
+    border-radius: 8px;
+    border-top: 1px solid #ddd;
+}
+.application-form h2 {
+    font-size: 1.5rem;
     color: #4CAF50;
+    margin-bottom: 1rem;
+}
+.form label {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.3rem;
+}
+.form input, .form select, .form textarea {
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+}
+.form input:focus, .form select:focus, .form textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+.form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.form button:hover {
+    background-color: #45a049;
+}
+
+/* 댓글 섹션 */
+.comments-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.comments-section h2 {
+    font-size: 1.5rem;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+.comments-list {
+    margin-top: 1rem;
+}
+.comment {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.comment strong {
+    color: #0d47a1;
+}
+.comment p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #555;
+}
+
+.comment-inline-input {
+    width: 80%;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+.comment-inline-submit-btn {
+    width: 20%;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.comment-inline-submit-btn:hover {
+    background-color: #45a049;
 }
 
 /* 리스트 스타일 */

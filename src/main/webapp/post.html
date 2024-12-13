@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Details - BandConnect</title>
+    <title>게시글 - BandConnect</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,37 +11,76 @@
         <div class="logo">🎵 BandConnect</div>
         <nav>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="profile.html">My Profile</a></li>
             </ul>
         </nav>
     </header>
 
-    <main class="post-section">
-        <div id="post-details">
-            <h1 id="post-title"></h1>
-            <p id="post-content"></p>
-        </div>
-    
-        <form id="application-form" class="form">
-            <h2>Apply Now</h2>
-            <label for="name">Your Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter your name" required>
-            
-            <label for="email">Your Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-            
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="4" placeholder="Write a message" required></textarea>
-            
-            <button type="submit">Submit Application</button>
-        </form>
-    </main>    
+    <<main class="post-container">
+        <!-- 게시글 카드 -->
+        <section class="post-card">
+            <h1 class="post-title">드러머 구합니다</h1>
+            <div class="post-meta">
+                <span class="date">작성일: 2024-12-13 14:30</span> | 
+                <span class="views">조회수: 150</span> | 
+                <span class="applicants">지원자 수: 12명</span>
+            </div>
+            <p class="post-content">
+                서울에서 활동 중인 록 밴드입니다. 공연 경험이 있으신 드러머분을 찾습니다. 관심 있으신 분은 아래 신청서를 작성해주세요.
+            </p>
+        </section>
+
+        <!-- 신청 폼 -->
+        <section class="application-form">
+            <h2>지원하기</h2>
+            <form id="application-form" class="form">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
+                
+                <label for="age">나이</label>
+                <input type="number" id="age" name="age" placeholder="나이를 입력하세요" required>
+                
+                <label for="location">지역</label>
+                <input type="text" id="location" name="location" placeholder="지역을 입력하세요" required>
+                
+                <label for="session">세션</label>
+                <select id="session" name="session" required>
+                    <option value="">세션 선택</option>
+                    <option value="guitar1">기타1</option>
+                    <option value="guitar2">기타2</option>
+                    <option value="bass">베이스</option>
+                    <option value="drum">드럼</option>
+                    <option value="keyboard">키보드</option>
+                    <option value="vocal">보컬</option>
+                </select>
+                
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>
+                
+                <label for="phone">전화번호</label>
+                <input type="tel" id="phone" name="phone" placeholder="전화번호를 입력하세요" required>
+                
+                <button type="submit">제출하기</button>
+            </form>
+        </section>
+
+        <!-- 댓글 섹션 -->
+        <section class="comments-section">
+            <h2>댓글</h2>
+            <input type="text" id="comment-inline" class="comment-inline-input" placeholder="댓글을 입력하세요">
+            <button class="comment-inline-submit-btn">게시</button>
+            <div class="comments-list">
+                <div class="comment">
+                    <strong>홍길동:</strong> 저 관심 있습니다! 연락주세요.
+                </div>
+                <div class="comment">
+                    <strong>김철수:</strong> 지원하고 싶습니다. 나이는 상관없나요?
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer class="footer">
         <p>© 2024 BandConnect. All Rights Reserved.</p>
     </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>

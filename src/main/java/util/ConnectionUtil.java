@@ -41,6 +41,16 @@ public class ConnectionUtil {
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
+	
+	public <T> Integer requestUpdate(Class<T> cls) throws SQLException {
+		Integer result = 0;
+		try {
+			result = this.pstmt.executeUpdate();
+		} finally {
+			this.conn.close();
+		}
+		return result;
+	}
 
 	public <T> Optional<T> request(Class<T> cls) throws SQLException {
 		ResultSet rs = this.pstmt.executeQuery();

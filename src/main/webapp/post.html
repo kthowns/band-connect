@@ -10,12 +10,15 @@
     <header class="header">
         <div class="logo">🎵 BandConnect</div>
         <nav>
-            <ul class="nav-links">
-            </ul>
+            <div class="nav-links">
+                <a href="index.html">홈</a>
+                <a href="login.html">로그인/회원가입</a>
+                <a href="profile.html">내 프로필</a>
+            </div>
         </nav>
     </header>
 
-    <<main class="post-container">
+    <main class="post-container">
         <!-- 게시글 카드 -->
         <section class="post-card">
             <h1 class="post-title">드러머 구합니다</h1>
@@ -27,11 +30,29 @@
             <p class="post-content">
                 서울에서 활동 중인 록 밴드입니다. 공연 경험이 있으신 드러머분을 찾습니다. 관심 있으신 분은 아래 신청서를 작성해주세요.
             </p>
+            <button class="apply-btn" onclick="openModal()">지원하기</button>
         </section>
 
-        <!-- 신청 폼 -->
-        <section class="application-form">
-            <h2>지원하기</h2>
+        <!-- 댓글 섹션 -->
+        <section class="comments-section">
+            <h2>댓글</h2>
+            <input type="text" id="comment-inline" class="comment-inline-input" placeholder="댓글을 입력하세요">
+            <button class="comment-inline-submit-btn">게시</button>
+            <div class="comments-list">
+                <div class="comment">
+                    <strong>홍길동:</strong> 저 관심 있습니다! 연락주세요.
+                </div>
+                <div class="comment">
+                    <strong>김철수:</strong> 지원하고 싶습니다. 나이는 상관없나요?
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="applyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>지원 폼</h2>
             <form id="application-form" class="form">
                 <label for="name">이름</label>
                 <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
@@ -61,26 +82,21 @@
                 
                 <button type="submit">제출하기</button>
             </form>
-        </section>
-
-        <!-- 댓글 섹션 -->
-        <section class="comments-section">
-            <h2>댓글</h2>
-            <input type="text" id="comment-inline" class="comment-inline-input" placeholder="댓글을 입력하세요">
-            <button class="comment-inline-submit-btn">게시</button>
-            <div class="comments-list">
-                <div class="comment">
-                    <strong>홍길동:</strong> 저 관심 있습니다! 연락주세요.
-                </div>
-                <div class="comment">
-                    <strong>김철수:</strong> 지원하고 싶습니다. 나이는 상관없나요?
-                </div>
-            </div>
-        </section>
-    </main>
+        </div>
+    </div>
 
     <footer class="footer">
         <p>© 2024 BandConnect. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        function openModal() {
+            document.getElementById('applyModal').style.display = 'block';
+        }
+        function closeModal() {
+            document.getElementById('applyModal').style.display = 'none';
+        }
+    </script>
+
 </body>
 </html>

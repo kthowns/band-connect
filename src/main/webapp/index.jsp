@@ -55,7 +55,7 @@
 				<div class="card">
 					<h3>락밴드 기타 모집합니다.</h3>
 					<p>
-						<strong>세션:</strong> 기타1(2/1), 기타2(3/1)
+						<strong>세션:</strong> 기타1(완료), 기타2(모집중)
 					</p>
 					<p class="comment-count">댓글(10)</p>
 					<p class="date">작성 날짜: 2024-12-02</p>
@@ -64,7 +64,7 @@
 				<div class="card">
 					<h3>Jazz Trio Needs Saxophonist</h3>
 					<p>
-						<strong>세션:</strong> 색소폰(3/1)
+						<strong>세션:</strong> 기타2(모집중)
 					</p>
 					<p class="comment-count">댓글(7)</p>
 					<p class="date">작성 날짜: 2024-12-01</p>
@@ -73,7 +73,7 @@
 				<div class="card">
 					<h3>Pop Group Guitarist Wanted</h3>
 					<p>
-						<strong>세션:</strong> 기타(5/2)
+						<strong>세션:</strong> 기타2(완료)
 					</p>
 					<p class="comment-count">댓글(15)</p>
 					<p class="date">작성 날짜: 2024-11-28</p>

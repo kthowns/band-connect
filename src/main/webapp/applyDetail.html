@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지원 상세 - BandConnect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="logo">🎵 BandConnect</div>
+        <nav class="nav-links">
+            <a href="index.html">홈</a>
+            <a href="login.html">로그인/회원가입</a>
+            <a href="profile.html">내 프로필</a>
+        </nav>
+    </header>
+
+    <!-- 구인 글 목록 -->
+    <main>
+        <ul class="post-list">
+            <!-- 각 카드 클릭 시 모달 표시 -->
+            <li class="post-card" onclick="showModal('락밴드 기타 모집', '홍길동', 27, '서울', '기타1', '밴드 경험 많습니다.', 'test@example.com', '010-1234-5678')">
+                <h3>락밴드 기타 모집</h3>
+                <p>작성 날짜: 2024-12-10</p>
+                <p>기타1</p>
+            </li>
+            <li class="post-card" onclick="showModal('Jazz Trio Needs Saxophonist', '김철수', 30, '부산', '색소폰', '연주 경력 5년입니다.', 'test2@example.com', '010-9876-5432')">
+                <h3>Jazz Trio Needs Saxophonist</h3>
+                <p>작성 날짜: 2024-12-10</p>
+                <p>색소폰</p>
+            </li>
+        </ul>
+    </main>
+
+    <!-- 지원자 상세 정보 모달 -->
+    <div id="applicantModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p><strong>이름:</strong> <span id="modalName"></span></p>
+            <p><strong>나이:</strong> <span id="modalAge"></span></p>
+            <p><strong>지역:</strong> <span id="modalLocation"></span></p>
+            <p><strong>세션:</strong> <span id="modalSession"></span></p>
+            <p><strong>이메일:</strong> <span id="modalEmail"></span></p>
+            <p><strong>전화번호:</strong> <span id="modalPhone"></span></p>
+            <p><strong>소개:</strong> <span id="modalIntro"></span></p>
+        
+            <div class="modal-buttons">
+                <button id="acceptBtn" class="accept-btn" onclick="handleResponse('accept')">수락</button>
+                <button id="rejectBtn" class="reject-btn" onclick="handleResponse('reject')">거절</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 -->
+    <script>
+        // 모달 표시
+        function showModal(title, name, age, location, session, intro, email, phone) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalName').textContent = name;
+            document.getElementById('modalAge').textContent = age;
+            document.getElementById('modalLocation').textContent = location;
+            document.getElementById('modalSession').textContent = session;
+            document.getElementById('modalEmail').textContent = email;
+            document.getElementById('modalPhone').textContent = phone;
+            document.getElementById('modalIntro').textContent = intro;
+
+            document.getElementById('applicantModal').style.display = 'block';
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('applicantModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

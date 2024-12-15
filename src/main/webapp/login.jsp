@@ -28,17 +28,17 @@
 
 		<script>
 		<%
-			String errMessage = (String) request.getAttribute("err");
-			if (errMessage != null) {
+			String message = (String) request.getAttribute("message");
+			if (message != null) {
 		%>
-			alert("<%=errMessage%>");
+			alert("<%=message%>");
 		<%
 			}
 		%>
 		</script>
 		<!-- Sign-up 텍스트 -->
 		<p class="sign-up-text">
-			회원이 아니신가요? <a href="register.html">회원가입 하기</a>
+			회원이 아니신가요? <a href="/register">회원가입 하기</a>
 		</p>
 	</form>
 

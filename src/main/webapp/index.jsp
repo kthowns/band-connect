@@ -17,7 +17,7 @@
 		<div class="logo">🎵 BandConnect</div>
 		<nav>
 			<div class="nav-links">
-				<a href="index.html">홈</a>
+				<a href="/main">홈</a>
 				<%
 					if(user != null){
 						%>
@@ -44,6 +44,13 @@
 				<button class="tag-search-btn">검색</button>
 			</div>
 			<div class="card-container">
+				<%
+					if(user != null){
+						%>
+						<button onclick="window.location.href='/newRecruit'">글 작성</button>
+						<%
+					} 
+				%>
 				<!-- 게시글 1 -->
 				<div class="card">
 					<h3>락밴드 기타 모집합니다.</h3>

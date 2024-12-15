@@ -22,6 +22,7 @@
 
     <main>
         <section class="register-section">
+        <% request.setCharacterEncoding("UTF-8"); %>
             <form class="form" method="post" action="/register" id="registerForm">
                 <h1>회원가입</h1>
 

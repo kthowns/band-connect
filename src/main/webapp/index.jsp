@@ -1,4 +1,8 @@
 <%@page import="entity.User"%>
+<%@page import="entity.PostDetail"%>
+<%@page import="entity.Recruit"%>
+<%@page import="entity.Comment"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -12,6 +16,7 @@
 <body>
 	<%
 	User user = (User) session.getAttribute("user");
+	List<PostDetail> posts = (List<PostDetail>) session.getAttribute("posts");
 	%>
 	<header class="header">
 		<div class="logo">🎵 BandConnect</div>
@@ -22,7 +27,7 @@
 					if(user != null){
 						%>
 						<a href="/logout">로그아웃</a>
-				<a href="profile.html">내 프로필</a>
+				<a href="/profile">내 프로필</a>
 						<%
 					} else {
 				%>
@@ -61,23 +66,31 @@
 					} 
 				%>
 				<!-- 게시글 1 -->
-				<div class="card">
-					<h3>락밴드 기타 모집합니다.</h3>
-					<p>
-						<strong>세션:</strong> 기타1(완료), 기타2(모집중)
-					</p>
-					<p class="comment-count">댓글(10)</p>
-					<p class="date">작성 날짜: 2024-12-02</p>
-				</div>
-				<!-- 게시글 2 -->
-				<div class="card">
-					<h3>Jazz Trio Needs Saxophonist</h3>
-					<p>
-						<strong>세션:</strong> 기타2(모집중)
-					</p>
-					<p class="comment-count">댓글(7)</p>
-					<p class="date">작성 날짜: 2024-12-01</p>
-				</div>
+				<%
+				if(posts != null){
+					for(PostDetail post : posts){
+				%>
+					<div class="card">
+						<h3><%= post.getTitle() %></h3>
+						<p>
+							<strong>세션:</strong>
+							<%
+								for(Recruit recruit : post.getRecruits()){
+									%>
+									<%= recruit.getPosition() + " " %>
+									<%
+								}
+							int commentSize = 0;
+							if(post.getComments()!=null)
+								commentSize = post.getComments().size();
+							%>
+						</p>
+						<p class="comment-count">댓글(<%= commentSize %>)</p>
+						<p class="date">작성 날짜: <%= post.getCreatedAt().toString().substring(0, 16) %></p>
+					</div>	
+				<%
+				}}
+				%>
 				<!-- 게시글 3 -->
 				<div class="card">
 					<h3>Pop Group Guitarist Wanted</h3>

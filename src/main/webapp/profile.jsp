@@ -1,3 +1,8 @@
+<%@page import="entity.User"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	
+<% User user = (User) session.getAttribute("user"); %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,22 +12,32 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+	<% 
+	if(user == null){
+		response.sendRedirect("/main");
+	}
+	%>
     <header class="header">
         <div class="logo">🎵 BandConnect</div>
         <nav>
             <div class="nav-links">
-                <a href="index.html">홈</a>
-                <a href="login.html">로그인/회원가입</a>
-                <a href="profile.html">내 프로필</a>
+                <a href="/main">홈</a>
+                <a href="/logout">로그아웃</a>
+                <a href="/profile">내 프로필</a>
             </div>
         </nav>
     </header>
-
     <main class="profile-section">
         <h1>My Profile</h1>
         <div class="profile-info">
-            <p><strong>이름:</strong> MusicLover123</p>
-            <p><strong>이메일:</strong> musiclover@example.com</p>
+        <%
+        	if(user != null){
+		%>
+                <p><strong>이름:</strong> <%= user.getUsername() %></p>
+                <p><strong>이메일:</strong> <%= user.getEmail() %></p>
+        <%
+        	}
+        %>
         </div>
 
         <div class="profile-actions">

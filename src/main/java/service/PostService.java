@@ -19,7 +19,7 @@ public class PostService {
 	private final BandRepository bandRepository = new BandRepository();
 	private final PostRepository postRepository = new PostRepository();
 
-	public Post createPost(Integer userId, String title, String bandName, String content, String part)
+	public Post createPost(Integer userId, String title, String bandName, String content, String[] parts)
 			throws ClassNotFoundException, SQLException {
 		ConnectionUtil connUtil = new ConnectionUtil();
 		connUtil.openTransactional();
@@ -36,12 +36,14 @@ public class PostService {
 			band = optBand.get();
 		}
 		
-		recruitRepository.findBybandIdAndPosition(userId, part)
-			.ifPresent((r) -> { throw new RuntimeException("Duplicated recruit"); });
-		Recruit recruit = new Recruit();
-		recruit.setBandId(band.getId());
-		recruit.setPosition(part);
-		recruitRepository.add(recruit, connUtil);
+		for(int i=0; i<parts.length; i++) {
+			recruitRepository.findBybandIdAndPosition(userId, parts[i])
+				.ifPresent((r) -> { throw new RuntimeException("이미 구인 중인 파트입니다 : "+r.getPosition()); });
+			Recruit recruit = new Recruit();
+			recruit.setBandId(band.getId());
+			recruit.setPosition(parts[i]);
+			recruitRepository.add(recruit, connUtil);
+		}
 		
 		Post post_ = new Post();
 		post_.setTitle(title);

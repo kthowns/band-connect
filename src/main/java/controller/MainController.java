@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import entity.PostDetail;
 import service.PostService;
@@ -22,8 +23,9 @@ public class MainController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
+			HttpSession session = request.getSession();
 			List<PostDetail> posts = postService.getPostDetails();
-			request.setAttribute("posts", posts);
+			session.setAttribute("posts", posts);
 			System.out.println(posts);
 		} catch (Exception e) {
 			e.printStackTrace();

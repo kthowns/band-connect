@@ -32,33 +32,18 @@ public class NewRecruitController extends HttpServlet {
 		String title = (String) req.getParameter("title");
 		String bandName = (String) req.getParameter("bandName");
 		String content = (String) req.getParameter("content");
-		String part = (String) req.getParameter("part");
+		String[] parts = req.getParameterValues("parts[]");
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
-		System.out.println(title + "/"+bandName+"/"+content+"/"+part);
+		System.out.println(title + "/"+bandName+"/"+content+"/"+parts);
 		try {
-			postService.createPost(user.getId(), title, bandName, content, part);
-			req.setAttribute("message", "구인글 등록에 성공했습니다.");
-		} catch (RuntimeException e) {
-			System.out.println(e);
-			req.setAttribute("message", "구인글 등록에 실패했습니다.");
-			e.printStackTrace();;
-		} catch (ClassNotFoundException e) {
-			System.out.println(e);
-			req.setAttribute("message", "구인글 등록에 실패했습니다.");
-			e.printStackTrace();
-		} catch (SQLException e) {
-			System.out.println(e);
-			req.setAttribute("message", "구인글 등록에 실패했습니다.");
-			e.printStackTrace();
+			postService.createPost(user.getId(), title, bandName, content, parts);
+			res.sendRedirect("/main");
+		} catch (Exception e) {
+			req.setAttribute("message", e.getMessage());
 		} finally {
-			try {
-				req.setAttribute("posts", postService.getPostDetails());
-				RequestDispatcher dispatcher = req.getRequestDispatcher("/index.jsp");
-				dispatcher.forward(req, res);
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+			RequestDispatcher dispatcher = req.getRequestDispatcher("/newRecruit.jsp");
+			dispatcher.forward(req, res);
 		}
 	}
 }

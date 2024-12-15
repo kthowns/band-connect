@@ -22,6 +22,17 @@ public class UserRepository {
 		connUtil.setQuery("SELECT * FROM users WHERE id = ?").setInt(1, userId);
 		return connUtil.request(User.class);
 	}
+	
+	public Optional<User> findByUsername(String username) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("SELECT * FROM users WHERE username = ?").setString(1, username);
+		return connUtil.request(User.class);
+	}
+	
+	public Optional<User> findByEmail(String email) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("SELECT * FROM users WHERE email = ?").setString(1, email);
+		return connUtil.request(User.class);
+	}
+
 
 	public List<User> findAll() throws ClassNotFoundException, SQLException {
 		connUtil.setQuery("SELECT * FROM users");

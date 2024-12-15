@@ -19,7 +19,7 @@ public class LoginController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/login.html");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -33,10 +33,12 @@ public class LoginController extends HttpServlet {
 	        HttpSession session = request.getSession();
 	        session.setAttribute("user", user);
 
+	        System.out.println("LOgin successed, " + user.toString());
 	        // index.jsp로 이동
 	        response.sendRedirect("/main");
 		} catch (Exception e) {
-            request.setAttribute("errorMessage", "아이디 또는 비밀번호가 잘못되었습니다.");
+			System.out.println("Login failed, " + username + " " + e);
+            request.setAttribute("err", "아이디 또는 비밀번호가 잘못되었습니다.");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
             dispatcher.forward(request, response);  // 로그인 페이지로 다시 전달
 		}

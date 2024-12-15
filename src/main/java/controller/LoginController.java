@@ -38,7 +38,7 @@ public class LoginController extends HttpServlet {
 	        response.sendRedirect("/main");
 		} catch (Exception e) {
 			System.out.println("Login failed, " + username + " " + e);
-            request.setAttribute("err", "아이디 또는 비밀번호가 잘못되었습니다.");
+            request.setAttribute("message", "아이디 또는 비밀번호가 잘못되었습니다.");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
             dispatcher.forward(request, response);  // 로그인 페이지로 다시 전달
 		}

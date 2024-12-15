@@ -1,46 +1,49 @@
-<header class="header">
-    <!DOCTYPE html>
-    <html lang="ko">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>회원가입 - BandConnect</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <header class="header">
-            <div class="logo">🎵 BandConnect</div>
-            <nav>
-                <ul class="nav-links">
-                </ul>
-            </nav>
-        </header>        
-    
-        <main class="register-section">
-            <h1>회원가입</h1>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - BandConnect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">🎵 BandConnect</div>
+        <nav>
+            <div class="nav-links">
+                <a href="index.html">홈</a>
+                <a href="login.html">로그인/회원가입</a>
+                <a href="profile.html">내 프로필</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="register-section">
             <form class="form" id="registerForm">
+                <h1>회원가입</h1>
+
                 <label for="username">아이디</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
-                
+                <input type="text" id="username" name="username" placeholder="아이디를 입력하세요" required>
+
                 <label for="email">이메일</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                
+                <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>
+
                 <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                
+                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+
                 <label for="confirm-password">비밀번호 확인</label>
-                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
-                
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="비밀번호를 다시 입력하세요" required>
+
                 <button type="submit">회원가입</button>
+
+                <p class="sign-up-text">이미 계정이 있으신가요? <a href="login.html">로그인하기</a></p>
             </form>
-            <p>이미 회원이신가요? <a href="login.html">로그인하기</a></p>            
-        </main>
-    
-        <footer class="footer">
-            <p>© 2024 BandConnect. All Rights Reserved.</p>
-        </footer>
-    
-        <script src="script.js"></script>
-    </body>
-    </html>
-    
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2024 BandConnect. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

@@ -33,7 +33,16 @@
 			</div>
 		</nav>
 	</header>
-
+<script>
+		<%
+			String message = (String) request.getAttribute("message");
+			if (message != null) {
+		%>
+			alert("<%=message%>");
+		<%
+			}
+		%>
+		</script>
 	<main>
 		<!-- Search Section -->
 		<section id="search" class="section">

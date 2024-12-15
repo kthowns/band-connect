@@ -22,9 +22,10 @@ public class ConnectionUtil {
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private String driver = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://127.0.0.1:3306/myband";
+	String url = "jdbc:mysql://127.0.0.1:3306/myband?characterEncoding=UTF-8&useUnicode=true";
 	private String id = "myband";
 	private String pass = "myband";
+	private Boolean isTransactional = false;
 
 	public void setDriver(String driver) {
 		this.driver = driver;
@@ -42,12 +43,45 @@ public class ConnectionUtil {
 		this.pass = pass;
 	}
 	
+	public void openTransactional() throws SQLException {
+		this.isTransactional = true;
+		this.conn = DriverManager.getConnection(this.url, this.id, this.pass);
+		if(this.conn != null && !this.conn.isClosed()) {
+			this.conn.setAutoCommit(false);
+		}
+	}
+	
+	public void commitTransactional() throws SQLException {
+		this.isTransactional = false;
+		this.conn.commit();
+		this.conn.setAutoCommit(true);
+		this.conn.close();
+	}
+	
+	private void closeTransactional() throws SQLException {
+		this.conn.rollback();
+		this.isTransactional = false;
+		this.conn.setAutoCommit(true);
+		this.conn.close();
+	}
+	
 	public <T> Integer requestUpdate(Class<T> cls) throws SQLException {
 		Integer result = 0;
 		try {
 			result = this.pstmt.executeUpdate();
+		} catch(Exception e) {
+			if(isTransactional) {
+				if(conn != null) {
+					closeTransactional();
+					throw e;
+				}
+			} else {
+				throw e;
+			}
 		} finally {
-			this.conn.close();
+			if(!isTransactional) {
+				this.conn.close();
+			}
 		}
 		return result;
 	}
@@ -59,7 +93,9 @@ public class ConnectionUtil {
 				return mapToOptional(rs, cls);
 			}
 		} finally {
-			this.conn.close();
+			if(!isTransactional) {
+				this.conn.close();
+			}
 		}
 		return Optional.empty();
 	}
@@ -73,14 +109,18 @@ public class ConnectionUtil {
 						.orElseThrow(() -> new SQLException("Handling response error")));
 				}
 		} finally {
-			this.conn.close();
+			if(!isTransactional) {
+				this.conn.close();
+			}
 		}
 		return result;
 	}
 
 	public PreparedStatement setQuery(String query) throws SQLException, ClassNotFoundException {
 		Class.forName(this.driver);
-		this.conn = DriverManager.getConnection(this.url, this.id, this.pass);
+		if(this.conn == null || this.conn.isClosed()) {
+			this.conn = DriverManager.getConnection(this.url, this.id, this.pass);
+		}
 		this.pstmt = this.conn.prepareStatement(query);
 		return this.pstmt;
 	}

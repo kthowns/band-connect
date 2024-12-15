@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성 - BandConnect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="logo">🎵 BandConnect</div>
+        <nav>
+            <div class="nav-links">
+                <a href="index.html">홈</a>
+                <a href="login.html">로그인/회원가입</a>
+                <a href="profile.html">내 프로필</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 게시글 작성 섹션 -->
+    <main class="post-write-container">
+        <section class="card">
+            <h1 class="card-title">게시글 작성</h1>
+            
+            <!-- 제목 입력 -->
+            <div class="card-field">
+                <label for="title">제목</label>
+                <div class="input-box">
+                    <span class="icon">📝</span>
+                    <input type="text" id="title" placeholder="제목을 입력하세요">
+                </div>
+            </div>
+            
+            <!-- 내용 입력 -->
+            <div class="card-field">
+                <label for="content">내용</label>
+                <div class="textarea-box">
+                    <textarea id="content" placeholder="내용을 입력하세요"></textarea>
+                </div>
+            </div>
+            
+            <!-- 구인 파트 (동적 추가/삭제) -->
+            <div class="card-field">
+                <label>구인 파트</label>
+                <div id="part-list" class="part-list">
+                    <div class="part-box">
+                        <input type="text" class="part-input" placeholder="구인 파트 항목">
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="add-remove-btn" onclick="addPart()">+</button>
+                    <button class="add-remove-btn" onclick="removePart()">-</button>
+                </div>
+            </div>
+            
+            <!-- 버튼 -->
+            <div class="submit-section">
+                <button class="submit-btn" onclick="postSubmit()">게시글 등록</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <p>© 2024 BandConnect. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function addPart() {
+            const partList = document.getElementById('part-list');
+            const newPartBox = document.createElement('div');
+            newPartBox.className = 'part-box';
+            newPartBox.innerHTML = `
+                <input type="text" class="part-input" placeholder="구인 파트 항목">
+            `;
+            partList.appendChild(newPartBox);
+        }
+
+        function removePart() {
+            const partList = document.getElementById('part-list');
+            const partBoxes = partList.getElementsByClassName('part-box');
+            if (partBoxes.length > 1) {
+                partList.removeChild(partBoxes[partBoxes.length - 1]);
+            } else {
+                alert('최소 하나의 파트는 남겨야 합니다.');
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -41,6 +41,16 @@ public class ConnectionUtil {
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
+	
+	public <T> Integer requestUpdate(Class<T> cls) throws SQLException {
+		Integer result = 0;
+		try {
+			result = this.pstmt.executeUpdate();
+		} finally {
+			this.conn.close();
+		}
+		return result;
+	}
 
 	public <T> Optional<T> request(Class<T> cls) throws SQLException {
 		ResultSet rs = this.pstmt.executeQuery();
@@ -83,6 +93,7 @@ public class ConnectionUtil {
 				user.setEmail(rs.getString("email"));
 				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
+				System.out.println(user.toString());
 				return Optional.of(cls.cast(user));
 			} else if (cls.isAssignableFrom(Band.class)) {
 				Band band = new Band();

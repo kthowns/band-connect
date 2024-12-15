@@ -11,8 +11,15 @@ import util.ConnectionUtil;
 public class UserRepository {
 	private final ConnectionUtil connUtil = new ConnectionUtil();
 
+	public Optional<User> findByUsernameAndPassword(String username, String password) throws SQLException, ClassNotFoundException{
+		PreparedStatement stmt = connUtil.setQuery("SELECT * FROM users WHERE username = ? AND password = ?");
+		stmt.setString(1, username);
+		stmt.setString(2, password);
+		return connUtil.request(User.class);
+	}
+	
 	public Optional<User> findById(Integer userId) throws ClassNotFoundException, SQLException {
-		connUtil.setQuery("SELECT * FROM users where id = ?").setInt(1, userId);
+		connUtil.setQuery("SELECT * FROM users WHERE id = ?").setInt(1, userId);
 		return connUtil.request(User.class);
 	}
 

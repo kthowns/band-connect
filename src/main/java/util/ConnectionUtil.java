@@ -93,6 +93,7 @@ public class ConnectionUtil {
 				user.setEmail(rs.getString("email"));
 				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
+				System.out.println(user.toString());
 				return Optional.of(cls.cast(user));
 			} else if (cls.isAssignableFrom(Band.class)) {
 				Band band = new Band();

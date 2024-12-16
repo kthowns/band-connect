@@ -56,6 +56,23 @@ public class PostService {
 		return post;
 	}
 	
+	public PostDetail getPostDetailByPostId(Integer postId) throws ClassNotFoundException, RuntimeException, SQLException {
+		PostDetail postDetail = new PostDetail();
+			Post post = postRepository.findById(postId)
+					.orElseThrow(() -> new RuntimeException("Post not found"));
+			Band band = bandRepository.findById(post.getBandId())
+					.orElseThrow(() -> new RuntimeException("Band not found"));
+			postDetail.setPostId(post.getId());
+			postDetail.setBand(band);
+			postDetail.setRecruits(recruitRepository.findByBandId(post.getBandId()));
+			postDetail.setTitle(post.getTitle());
+			postDetail.setViews(post.getViews());
+			postDetail.setCreatedAt(post.getCreatedAt());
+			postDetail.setContent(post.getContent());
+
+		return postDetail;
+	}
+	
 	public List<PostDetail> getPostDetails() throws ClassNotFoundException, SQLException{
 		List<PostDetail> postDetails = new ArrayList<PostDetail>();
 		List<Post> posts = postRepository.findAll();
@@ -64,9 +81,11 @@ public class PostService {
 				PostDetail postDetail = new PostDetail();
 				Band band = bandRepository.findById(post.getBandId())
 						.orElseThrow(() -> new RuntimeException("Band not found"));
+				postDetail.setPostId(post.getId());
 				postDetail.setBand(band);
 				postDetail.setRecruits(recruitRepository.findByBandId(post.getBandId()));
 				postDetail.setTitle(post.getTitle());
+				postDetail.setViews(post.getViews());
 				postDetail.setCreatedAt(post.getCreatedAt());
 				postDetail.setContent(post.getContent());
 				postDetails.add(postDetail);
@@ -85,16 +104,22 @@ public class PostService {
 				PostDetail postDetail = new PostDetail();
 				Band band = bandRepository.findById(post.getBandId())
 						.orElseThrow(() -> new RuntimeException("Band not found"));
+				postDetail.setPostId(post.getId());
 				postDetail.setBand(band);
 				postDetail.setRecruits(recruitRepository.findByBandId(post.getBandId()));
 				postDetail.setTitle(post.getTitle());
 				postDetail.setCreatedAt(post.getCreatedAt());
 				postDetail.setContent(post.getContent());
+				postDetail.setViews(post.getViews());
 				postDetails.add(postDetail);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
 		return postDetails;
+	}
+	
+	public Integer increaseViews(Integer postId) throws ClassNotFoundException, SQLException {
+		return postRepository.increaseViews(postId);
 	}
 }

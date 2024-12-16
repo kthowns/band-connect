@@ -18,6 +18,11 @@ public class RecruitService {
 		return recruitRepository.findByBandId(id);
 		
 	}
+
+	public Recruit getRecruitByBandIdAndPosition(Integer bandId, String position) throws ClassNotFoundException, RuntimeException, SQLException {
+		return recruitRepository.findBybandIdAndPosition(bandId, position)
+				.orElseThrow(() -> new RuntimeException("Recruit not found"));
+	}
 	
 	private void validateDuplication(Integer bandId, String position) throws ClassNotFoundException, SQLException {
 		recruitRepository.findBybandIdAndPosition(bandId, position)

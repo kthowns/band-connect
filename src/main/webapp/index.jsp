@@ -39,14 +39,10 @@
 		</nav>
 	</header>
 <script>
-		<%
-			String message = (String) request.getAttribute("message");
-			if (message != null) {
-		%>
+		<% String message = (String) session.getAttribute("message");
+			if (message != null) {%>
 			alert("<%=message%>");
-		<%
-			}
-		%>
+		<% session.setAttribute("message", null);}%>
 		</script>
 	<main>
 		<!-- Search Section -->
@@ -70,8 +66,9 @@
 				if(posts != null){
 					for(PostDetail post : posts){
 				%>
-					<div class="card">
+					<div class="card clickable" onClick="redirectToDetail('<%= post.getPostId() %>')">
 						<h3><%= post.getTitle() %></h3>
+						<p><strong>밴드 : <%= post.getBand().getName() %></strong></p>
 						<p>
 							<strong>세션:</strong>
 							<%
@@ -85,7 +82,7 @@
 								commentSize = post.getComments().size();
 							%>
 						</p>
-						<p class="comment-count">댓글(<%= commentSize %>)</p>
+						<p class="comment-count">댓글(<%= commentSize %>) 조회수(<%= post.getViews() %>)</p>
 						<p class="date">작성 날짜: <%= post.getCreatedAt().toString().substring(0, 16) %></p>
 					</div>	
 				<%
@@ -103,7 +100,11 @@
 			</div>
 		</section>
 	</main>
-
+	<script>
+		function redirectToDetail(postId){
+	        window.location.href = '/postDetail?id=' + encodeURIComponent(postId);
+		}
+	</script>
 	<footer class="footer">
 		<p>© 2024 BandConnect. Connecting Musicians Everywhere!</p>
 	</footer>

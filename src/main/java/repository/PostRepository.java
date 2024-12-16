@@ -113,4 +113,15 @@ public class PostRepository {
         }
         return Optional.empty();
     }
+
+	public Integer increaseViews(Integer postId) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("UPDATE posts SET views = views + 1 WHERE id = ?").setInt(1, postId);
+		if(connUtil.requestUpdate(Post.class) > 0) {
+			connUtil.setQuery("SELECT * FROM posts WHERE id = ?").setInt(1, postId);
+			Post post = connUtil.request(Post.class)
+					.orElseThrow(() -> new RuntimeException("Post not found"));
+			return post.getViews();
+		}
+		return 0;
+	}
 }

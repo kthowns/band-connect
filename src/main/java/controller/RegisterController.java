@@ -16,35 +16,39 @@ import service.UserService;
 public class RegisterController extends HttpServlet {
 	private final UserService userService = new UserService();
 	
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
-		dispatcher.forward(req, res);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/register.jsp");
+		dispatcher.forward(request, response);
 	}
 	
-	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        res.setContentType("text/html; charset=UTF-8");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
 		User newUser = new User();
-		newUser.setUsername(req.getParameter("username"));
-		newUser.setEmail(req.getParameter("email"));
-		newUser.setPassword(req.getParameter("password"));
+		newUser.setUsername(request.getParameter("username"));
+		newUser.setEmail(request.getParameter("email"));
+		newUser.setPassword(request.getParameter("password"));
 		System.out.println("New User : " + newUser.toString());
 		try {
 			User createdUser = userService.addUser(newUser);
-			req.setAttribute("message", "회원가입이 완료되었습니다. "+createdUser.getUsername()+"님, 로그인 해주세요");
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/login.jsp");
-			dispatcher.forward(req, res);
+			request.setAttribute("message", "회원가입이 완료되었습니다. "+createdUser.getUsername()+"님, 로그인 해주세요");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
+			dispatcher.forward(request, response);
 		} catch (Exception e) {
 			System.out.println(e);
 			if(e.getMessage().equals("Duplicated username")) {
-				req.setAttribute("message", "중복된 username 입니다.");
+				request.setAttribute("message", "중복된 username 입니다.");
 			} else if(e.getMessage().equals("Duplicated email")) {
-				req.setAttribute("message", "중복된 email 입니다.");
+				request.setAttribute("message", "중복된 email 입니다.");
 			} else {
-				req.setAttribute("message", e.getMessage());
+				request.setAttribute("message", e.getMessage());
 			}
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/register.jsp");
-			dispatcher.forward(req, res);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/register.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 }

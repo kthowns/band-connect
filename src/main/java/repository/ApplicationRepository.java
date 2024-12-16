@@ -27,13 +27,15 @@ public class ApplicationRepository {
 
     // Application 추가
     public Optional<Application> add(Application application) throws ClassNotFoundException, SQLException {
-        PreparedStatement stmt = connUtil.setQuery("INSERT INTO applications(applicant_id, recruit_id, status, position, description, created_at) VALUES(?, ?, ?, ?, ?, ?)");
+        PreparedStatement stmt = connUtil.setQuery("INSERT INTO applications(applicant_id, recruit_id, position, description, name, age, location, phone) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
         stmt.setInt(1, application.getApplicantId());
         stmt.setInt(2, application.getRecruitId());
-        stmt.setString(3, application.getStatus().name()); // enum은 문자열로 저장
-        stmt.setString(4, application.getPosition());
-        stmt.setString(5, application.getDescription());
-        stmt.setTimestamp(6, application.getCreatedAt());
+        stmt.setString(3, application.getPosition());
+        stmt.setString(4, application.getDescription());
+        stmt.setString(5, application.getName());
+        stmt.setInt(6, application.getAge());
+        stmt.setString(7, application.getLocation());
+        stmt.setString(8, application.getPhone());
         if (connUtil.requestUpdate(Application.class) > 0) {
             // 추가된 Application 정보 반환
             PreparedStatement stmt_ = connUtil.setQuery("SELECT * FROM applications WHERE applicant_id = ? AND recruit_id = ?");
@@ -46,13 +48,12 @@ public class ApplicationRepository {
 
     // Application 수정
     public Optional<Application> update(Application application) throws ClassNotFoundException, SQLException {
-        PreparedStatement stmt = connUtil.setQuery("UPDATE applications SET status = ?, position = ?, description = ?, created_at = ? WHERE applicant_id = ? AND recruit_id = ?");
-        stmt.setString(1, application.getStatus().name()); // enum은 문자열로 저장
+        PreparedStatement stmt = connUtil.setQuery("UPDATE applications SET status = ?, position = ?, description = ? WHERE applicant_id = ? AND recruit_id = ?");
+        stmt.setString(1, application.getStatus().name());
         stmt.setString(2, application.getPosition());
         stmt.setString(3, application.getDescription());
-        stmt.setTimestamp(4, application.getCreatedAt());
-        stmt.setInt(5, application.getApplicantId());
-        stmt.setInt(6, application.getRecruitId());
+        stmt.setInt(4, application.getApplicantId());
+        stmt.setInt(5, application.getRecruitId());
         if (connUtil.requestUpdate(Application.class) > 0) {
             // 수정된 Application 정보 반환
             PreparedStatement stmt_ = connUtil.setQuery("SELECT * FROM applications WHERE applicant_id = ? AND recruit_id = ?");

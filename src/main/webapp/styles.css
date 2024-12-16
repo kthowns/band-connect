@@ -260,6 +260,25 @@ textarea {
     margin-top: 0.5rem;
 }
 
+/* Card Hover and Active Styles */
+.card.clickable {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.card.clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    background-color: #f9f9fb; /* 호버 시 배경색 변경 */
+}
+
+.card.clickable:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    background-color: #e0f7fa; /* 클릭 시 배경색 변경 */
+}
+
+
 #intro {
     width: 100%; /* ���� �ʺ� �°� ���� */
     height: 80px; /* ���̸� 80px�� ���� */

@@ -22,28 +22,30 @@ public class NewRecruitController extends HttpServlet {
 	private final BandService bandService = new BandService();
 	private final PostService postService = new PostService();
 	
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		res.sendRedirect("/newRecruit.jsp");
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+		response.sendRedirect("/newRecruit.jsp");
 	}
 	
-	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        res.setContentType("text/html; charset=UTF-8");
-		String title = (String) req.getParameter("title");
-		String bandName = (String) req.getParameter("bandName");
-		String content = (String) req.getParameter("content");
-		String[] parts = req.getParameterValues("parts[]");
-		HttpSession session = req.getSession();
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+		String title = (String) request.getParameter("title");
+		String bandName = (String) request.getParameter("bandName");
+		String content = (String) request.getParameter("content");
+		String[] parts = request.getParameterValues("parts[]");
+		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		System.out.println(title + "/"+bandName+"/"+content+"/"+parts);
 		try {
 			postService.createPost(user.getId(), title, bandName, content, parts);
-			res.sendRedirect("/main");
+			response.sendRedirect("/main");
 		} catch (Exception e) {
-			req.setAttribute("message", e.getMessage());
+			request.setAttribute("message", e.getMessage());
 		} finally {
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/newRecruit.jsp");
-			dispatcher.forward(req, res);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/newRecruit.jsp");
+			dispatcher.forward(request, response);
 		}
 	}
 }

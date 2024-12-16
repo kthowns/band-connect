@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/profile")
 public class ProfileController extends HttpServlet {
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/profile.jsp");
-		dispatcher.forward(req, res);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/profile.jsp");
+		dispatcher.forward(request, response);
 	}
 }

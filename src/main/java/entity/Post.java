@@ -8,12 +8,19 @@ public class Post {
 	private Integer bandId;
 	private String title;
 	private String content;
+	private Integer views;
 	private Timestamp createdAt;
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public void setViews(Integer n) {
+		this.views = n;
+	}
+	public Integer getViews() {
+		return this.views;
 	}
 	public Integer getAuthorId() {
 		return authorId;

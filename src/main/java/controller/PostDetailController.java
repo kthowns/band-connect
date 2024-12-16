@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,28 +8,33 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import entity.PostDetail;
-import entity.User;
 import service.PostService;
 
-@WebServlet("/myRecruit")
-public class MyRecruitController extends HttpServlet {
+@WebServlet("/postDetail")
+public class PostDetailController extends HttpServlet {		
 	private final PostService postService = new PostService();
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
-		try{
-			List<PostDetail> posts = postService.getPostDetailsByAuthorId(user.getId());
-			request.setAttribute("posts", posts);
+		Integer postId = 0;
+		
+		try {
+			postId = Integer.parseInt((String) request.getParameter("id"));
+			if(postId > 0) {
+				PostDetail postDetail = postService.getPostDetailByPostId(postId);
+				request.setAttribute("postDetail", postDetail);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/postDetail.jsp");
+				postService.increaseViews(postId);
+				dispatcher.forward(request, response);
+			} else {
+				response.sendRedirect("/main");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.sendRedirect("/main");
 		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/myRecruit.jsp");
-		dispatcher.forward(request, response);
 	}
 }

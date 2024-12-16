@@ -144,6 +144,10 @@ public class ConnectionUtil {
 				return Optional.of(cls.cast(band));
 			} else if (cls.isAssignableFrom(Application.class)) {
 				Application application = new Application();
+				application.setAge(rs.getInt("age"));
+				application.setLocation(rs.getString("location"));
+				application.setName(rs.getString("name"));
+				application.setPhone(rs.getString("phone"));
 				application.setApplicantId(rs.getInt("applicant_id"));
 				application.setRecruitId(rs.getInt("recruit_id"));
 				application.setStatus(ApplyStatus.valueOf(rs.getString("status")));
@@ -172,6 +176,7 @@ public class ConnectionUtil {
 				post.setBandId(rs.getInt("band_id"));
 				post.setTitle(rs.getString("title"));
 				post.setContent(rs.getString("content"));
+				post.setViews(rs.getInt("views"));
 				post.setCreatedAt(rs.getTimestamp("created_at"));
 				return Optional.of(cls.cast(post));
 			} else if (cls.isAssignableFrom(Recruit.class)) {

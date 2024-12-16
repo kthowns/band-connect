@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import code.ApplyStatus;
-import entity.Application;
+import entity.Apl;
 import entity.Band;
 import entity.Comment;
 import entity.Hashtag;
@@ -85,6 +85,20 @@ public class ConnectionUtil {
 		}
 		return result;
 	}
+	
+	public Integer requestInt() throws SQLException {
+		ResultSet rs = this.pstmt.executeQuery();
+		try {
+			while (rs.next()) {
+				return rs.getInt(1);
+			}
+		} finally {
+			if(!isTransactional) {
+				this.conn.close();
+			}
+		}
+		return -1;
+	}
 
 	public <T> Optional<T> request(Class<T> cls) throws SQLException {
 		ResultSet rs = this.pstmt.executeQuery();
@@ -142,19 +156,19 @@ public class ConnectionUtil {
 				band.setName(rs.getString("name"));
 				band.setDescription(rs.getString("description"));
 				return Optional.of(cls.cast(band));
-			} else if (cls.isAssignableFrom(Application.class)) {
-				Application application = new Application();
-				application.setAge(rs.getInt("age"));
-				application.setLocation(rs.getString("location"));
-				application.setName(rs.getString("name"));
-				application.setPhone(rs.getString("phone"));
-				application.setApplicantId(rs.getInt("applicant_id"));
-				application.setRecruitId(rs.getInt("recruit_id"));
-				application.setStatus(ApplyStatus.valueOf(rs.getString("status")));
-				application.setPosition(rs.getString("position"));
-				application.setDescription(rs.getString("description"));
-				application.setCreatedAt(rs.getTimestamp("created_at"));
-				return Optional.of(cls.cast(application));
+			} else if (cls.isAssignableFrom(Apl.class)) {
+				Apl apl = new Apl();
+				apl.setAge(rs.getInt("age"));
+				apl.setLocation(rs.getString("location"));
+				apl.setName(rs.getString("name"));
+				apl.setPhone(rs.getString("phone"));
+				apl.setApplicantId(rs.getInt("applicant_id"));
+				apl.setRecruitId(rs.getInt("recruit_id"));
+				apl.setStatus(ApplyStatus.valueOf(rs.getString("status")));
+				apl.setPosition(rs.getString("position"));
+				apl.setDescription(rs.getString("description"));
+				apl.setCreatedAt(rs.getTimestamp("created_at"));
+				return Optional.of(cls.cast(apl));
 			} else if (cls.isAssignableFrom(Comment.class)) {
 				Comment comment = new Comment();
 				comment.setId(rs.getInt("id"));
@@ -182,6 +196,7 @@ public class ConnectionUtil {
 			} else if (cls.isAssignableFrom(Recruit.class)) {
 				Recruit recruit = new Recruit();
 				recruit.setId(rs.getInt("id"));
+				recruit.setPostId(rs.getInt("post_id"));
 				recruit.setBandId(rs.getInt("band_id"));
 				recruit.setPosition(rs.getString("position"));
 				recruit.setAcceptedId(rs.getInt("accepted_id"));

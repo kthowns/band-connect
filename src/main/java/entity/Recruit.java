@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class Recruit {
 	private Integer id;
 	private Integer bandId;
+	private Integer postId;
 	private String position;
 	private Integer acceptedId;
 	private Timestamp createdAt;
@@ -13,6 +14,12 @@ public class Recruit {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public Integer getPostId() {
+		return postId;
+	}
+	public void setPostId(Integer postId) {
+		this.postId = postId;
 	}
 	public Integer getBandId() {
 		return bandId;

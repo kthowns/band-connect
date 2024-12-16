@@ -12,11 +12,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-	<% 
-	if(user == null){
-		response.sendRedirect("/main");
-	}
-	%>
     <header class="header">
         <div class="logo">🎵 BandConnect</div>
         <nav>
@@ -30,18 +25,14 @@
     <main class="profile-section">
         <h1>My Profile</h1>
         <div class="profile-info">
-        <%
-        	if(user != null){
-		%>
+        <%if(user != null){%>
                 <p><strong>이름:</strong> <%= user.getUsername() %></p>
                 <p><strong>이메일:</strong> <%= user.getEmail() %></p>
-        <%
-        	}
-        %>
+        <%}else { response.sendRedirect("/main"); }%>
         </div>
 
         <div class="profile-actions">
-            <a href="my-application.html" class="action-link">지원 폼 목록</a>
+            <a href="/myApl" class="action-link">지원 폼 목록</a>
             <a href="/myRecruit" class="action-link">구인 폼 목록</a>
             <a href="my-comments.html" class="action-link">내가 쓴 댓글 보기</a>
         </div>

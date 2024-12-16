@@ -17,6 +17,7 @@
 	<%
 	User user = (User) session.getAttribute("user");
 	PostDetail postDetail = (PostDetail) request.getAttribute("postDetail");
+	Integer applicantNumber = (Integer) request.getAttribute("applicantNumber");
 	System.out.println(postDetail);
 	if(postDetail==null){
 		response.sendRedirect("/main");
@@ -57,7 +58,7 @@
             <div class="post-meta">
                 <span class="date">작성일: <%= postDetail.getCreatedAt().toString().substring(0, 16) %></span> | 
                 <span class="views">조회수: <%= postDetail.getViews() %></span> | 
-                <span class="applicants">지원자 수: 12명</span>
+                <span class="applicants">지원자 수: <%= applicantNumber %></span>
 				<p><strong>밴드명 : <%= postDetail.getBand().getName() %></strong></p>
             </div>
             <p class="post-content">

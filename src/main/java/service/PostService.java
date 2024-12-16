@@ -36,15 +36,6 @@ public class PostService {
 			band = optBand.get();
 		}
 		
-		for(int i=0; i<parts.length; i++) {
-			recruitRepository.findBybandIdAndPosition(userId, parts[i])
-				.ifPresent((r) -> { throw new RuntimeException("이미 구인 중인 파트입니다 : "+r.getPosition()); });
-			Recruit recruit = new Recruit();
-			recruit.setBandId(band.getId());
-			recruit.setPosition(parts[i]);
-			recruitRepository.add(recruit, connUtil);
-		}
-		
 		Post post_ = new Post();
 		post_.setTitle(title);
 		post_.setAuthorId(userId);
@@ -52,6 +43,17 @@ public class PostService {
 		post_.setContent(content);
 		Post post = postRepository.add(post_, connUtil)
 				.orElseThrow(() -> new RuntimeException("Adding post failed"));
+
+		for(int i=0; i<parts.length; i++) {
+			recruitRepository.findBybandIdAndPosition(userId, parts[i])
+				.ifPresent((r) -> { throw new RuntimeException("이미 구인 중인 파트입니다 : "+r.getPosition()); });
+			Recruit recruit = new Recruit();
+			recruit.setBandId(band.getId());
+			recruit.setPosition(parts[i]);
+			recruit.setPostId(post.getId());
+			recruitRepository.add(recruit, connUtil);
+		}
+		
 		connUtil.commitTransactional();
 		return post;
 	}

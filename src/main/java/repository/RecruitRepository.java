@@ -37,9 +37,10 @@ public class RecruitRepository {
     
     // 리크루트 추가
     public Optional<Recruit> add(Recruit recruit) throws ClassNotFoundException, SQLException {
-        PreparedStatement stmt = connUtil.setQuery("INSERT INTO recruits(band_id, position) VALUES(?, ?)");
+        PreparedStatement stmt = connUtil.setQuery("INSERT INTO recruits(band_id, position, post_id) VALUES(?, ?, ?)");
         stmt.setInt(1, recruit.getBandId());
         stmt.setString(2, recruit.getPosition());
+        stmt.setInt(3, recruit.getPostId());
         if (connUtil.requestUpdate(Recruit.class) > 0) {
             // 추가된 리크루트 정보 반환
             PreparedStatement stmt_ = connUtil.setQuery("SELECT * FROM recruits WHERE band_id = ? AND position = ?");
@@ -52,9 +53,10 @@ public class RecruitRepository {
     
     // 리크루트 추가, Transactional
     public Optional<Recruit> add(Recruit recruit, ConnectionUtil connUtil_) throws ClassNotFoundException, SQLException {
-        PreparedStatement stmt = connUtil_.setQuery("INSERT INTO recruits(band_id, position) VALUES(?, ?)");
+        PreparedStatement stmt = connUtil_.setQuery("INSERT INTO recruits(band_id, position, post_id) VALUES(?, ?, ?)");
         stmt.setInt(1, recruit.getBandId());
         stmt.setString(2, recruit.getPosition());
+        stmt.setInt(3, recruit.getPostId());
         if (connUtil_.requestUpdate(Recruit.class) > 0) {
             // 추가된 리크루트 정보 반환
             PreparedStatement stmt_ = connUtil_.setQuery("SELECT * FROM recruits WHERE band_id = ? AND position = ?");

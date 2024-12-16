@@ -21,7 +21,7 @@
 		response.sendRedirect("/main");
 	}
 	
-	List<PostDetail> posts = (List<PostDetail>) session.getAttribute("posts");
+	List<PostDetail> posts = (List<PostDetail>) request.getAttribute("posts");
 	%>
     <header class="header">
         <div class="logo">🎵 BandConnect</div>
@@ -40,7 +40,7 @@
             <ul class="post-list">
                 <!-- 게시글 1 -->
                 <%
-                	if(posts != null){
+                	if(posts != null && user != null){
                 		for(PostDetail post : posts){
                 			%>
                 <li class="post-card complete">
@@ -66,7 +66,7 @@
                 </li>
                 			<%
                 		}
-                	}
+                	} else { response.sendRedirect("/main"); }
                 %>
             </ul>
         </section>

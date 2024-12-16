@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entity.PostDetail;
+import service.AplService;
 import service.PostService;
 
 @WebServlet("/postDetail")
 public class PostDetailController extends HttpServlet {		
 	private final PostService postService = new PostService();
+	private final AplService aplService = new AplService();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -25,7 +27,10 @@ public class PostDetailController extends HttpServlet {
 			postId = Integer.parseInt((String) request.getParameter("id"));
 			if(postId > 0) {
 				PostDetail postDetail = postService.getPostDetailByPostId(postId);
+				Integer applicantNumber = aplService.getApplicantNumber(postId);
 				request.setAttribute("postDetail", postDetail);
+				request.setAttribute("applicantNumber", applicantNumber);
+				System.out.println("Applicant Number : "+applicantNumber);
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/postDetail.jsp");
 				postService.increaseViews(postId);
 				dispatcher.forward(request, response);

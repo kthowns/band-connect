@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 import code.ApplyStatus;
 
-public class Application {
+public class Apl {
 	private Integer applicantId;
 	private Integer recruitId;
 	private String name;

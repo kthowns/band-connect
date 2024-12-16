@@ -40,15 +40,13 @@ public class UserRepository {
 	}
 
 	public Optional<User> add(User user) throws ClassNotFoundException, SQLException {
-		PreparedStatement stmt = connUtil.setQuery("INSERT INTO users(email, username, password) values(?, ?, ?)");
+		PreparedStatement stmt = connUtil.setInsertQuery("INSERT INTO users(email, username, password) values(?, ?, ?)");
 		stmt.setString(1, user.getEmail());
 		stmt.setString(2, user.getUsername());
 		stmt.setString(3, user.getPassword());
-		if (connUtil.requestUpdate(User.class) > 0) {
-			connUtil.setQuery("SELECT * FROM users where username = ?").setString(1, user.getUsername());
-			return connUtil.request(User.class);
-		}
-		return Optional.empty();
+		Integer id = connUtil.requestInsert(User.class);
+		connUtil.setQuery("SELECT * FROM users where username = ?").setInt(1, id);
+		return connUtil.request(User.class);
 	}
 
 	public Optional<User> update(User user) throws ClassNotFoundException, SQLException {

@@ -30,36 +30,26 @@ public class PostRepository {
 
     // 포스트 추가
     public Optional<Post> add(Post post) throws ClassNotFoundException, SQLException {
-        PreparedStatement stmt = connUtil.setQuery("INSERT INTO posts(author_id, band_id, title, content) VALUES(?, ?, ?, ?)");
+        PreparedStatement stmt = connUtil.setInsertQuery("INSERT INTO posts(author_id, band_id, title, content) VALUES(?, ?, ?, ?)");
         stmt.setInt(1, post.getAuthorId());
         stmt.setInt(2, post.getBandId());
         stmt.setString(3, post.getTitle());
         stmt.setString(4, post.getContent());
-        if (connUtil.requestUpdate(Post.class) > 0) {
-            // 추가된 포스트 정보 반환
-            PreparedStatement stmt_ = connUtil.setQuery("SELECT * FROM posts WHERE author_id = ? AND title = ?");
-            stmt_.setInt(1, post.getAuthorId());
-            stmt_.setString(2, post.getTitle());
-            return connUtil.request(Post.class);
-        }
-        return Optional.empty();
+        Integer id = connUtil.requestInsert(Post.class);
+        connUtil.setQuery("SELECT * FROM posts WHERE id = ?").setInt(1, id);
+        return connUtil.request(Post.class);
     }
 
     // 포스트 추가
     public Optional<Post> add(Post post, ConnectionUtil connUtil_) throws ClassNotFoundException, SQLException {
-        PreparedStatement stmt = connUtil_.setQuery("INSERT INTO posts(author_id, band_id, title, content) VALUES(?, ?, ?, ?)");
+    	PreparedStatement stmt = connUtil_.setInsertQuery("INSERT INTO posts(author_id, band_id, title, content) VALUES(?, ?, ?, ?)");
         stmt.setInt(1, post.getAuthorId());
         stmt.setInt(2, post.getBandId());
         stmt.setString(3, post.getTitle());
         stmt.setString(4, post.getContent());
-        if (connUtil_.requestUpdate(Post.class) > 0) {
-            // 추가된 포스트 정보 반환
-            PreparedStatement stmt_ = connUtil_.setQuery("SELECT * FROM posts WHERE author_id = ? AND title = ?");
-            stmt_.setInt(1, post.getAuthorId());
-            stmt_.setString(2, post.getTitle());
-            return connUtil_.request(Post.class);
-        }
-        return Optional.empty();
+        Integer id = connUtil_.requestInsert(Post.class);
+        connUtil_.setQuery("SELECT * FROM posts WHERE id = ?").setInt(1, id);
+        return connUtil_.request(Post.class);
     }
 
     // 포스트 수정

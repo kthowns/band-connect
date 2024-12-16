@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +64,31 @@ public class ConnectionUtil {
 		this.isTransactional = false;
 		this.conn.setAutoCommit(true);
 		this.conn.close();
+	}
+	
+	public <T> Integer requestInsert(Class<T> cls) throws SQLException {
+		Integer result = 0;
+		try {
+			this.pstmt.executeUpdate();
+			ResultSet rs = this.pstmt.getGeneratedKeys();
+			while(rs.next()) {
+				result = rs.getInt(1);
+			}
+		} catch(Exception e) {
+			if(isTransactional) {
+				if(conn != null) {
+					closeTransactional();
+					throw e;
+				}
+			} else {
+				throw e;
+			}
+		} finally {
+			if(!isTransactional) {
+				this.conn.close();
+			}
+		}
+		return result;
 	}
 	
 	public <T> Integer requestUpdate(Class<T> cls) throws SQLException {
@@ -128,6 +154,15 @@ public class ConnectionUtil {
 			}
 		}
 		return result;
+	}
+	
+	public PreparedStatement setInsertQuery(String query) throws ClassNotFoundException, SQLException {
+		Class.forName(this.driver);
+		if(this.conn == null || this.conn.isClosed()) {
+			this.conn = DriverManager.getConnection(this.url, this.id, this.pass);
+		}
+		this.pstmt = this.conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+		return this.pstmt;
 	}
 
 	public PreparedStatement setQuery(String query) throws SQLException, ClassNotFoundException {

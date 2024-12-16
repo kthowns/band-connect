@@ -36,14 +36,9 @@ public class AplRepository {
         stmt.setInt(6, apl.getAge());
         stmt.setString(7, apl.getLocation());
         stmt.setString(8, apl.getPhone());
-        if (connUtil.requestUpdate(Apl.class) > 0) {
-            // 추가된 Apl 정보 반환
-            PreparedStatement stmt_ = connUtil.setQuery("SELECT * FROM apls WHERE applicant_id = ? AND recruit_id = ?");
-            stmt_.setInt(1, apl.getApplicantId());
-            stmt_.setInt(2, apl.getRecruitId());
-            return connUtil.request(Apl.class);
-        }
-        return Optional.empty();
+        Integer id = connUtil.requestUpdate(Apl.class);
+        connUtil.setQuery("SELECT * FROM apls WHERE id = ?").setInt(1, id);
+        return connUtil.request(Apl.class);
     }
 
     // Apl 수정

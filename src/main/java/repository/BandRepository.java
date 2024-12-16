@@ -32,27 +32,23 @@ public class BandRepository {
 	}
 
 	public Optional<Band> add(Band band) throws ClassNotFoundException, SQLException {
-		PreparedStatement stmt = connUtil.setQuery("INSERT INTO bands(leader_id, name, description) VALUES(?, ?, ?)");
+		PreparedStatement stmt = connUtil.setInsertQuery("INSERT INTO bands(leader_id, name, description) VALUES(?, ?, ?)");
 		stmt.setInt(1, band.getLeaderId());
 		stmt.setString(2, band.getName());
 		stmt.setString(3, band.getDescription());
-		if (connUtil.requestUpdate(Band.class) > 0) {
-			connUtil.setQuery("SELECT * FROM bands WHERE name = ?").setString(1, band.getName());
-			return connUtil.request(Band.class);
-		}
-		return Optional.empty();
+		Integer bandId = connUtil.requestInsert(Band.class);
+		connUtil.setQuery("SELECT * FROM bands WHERE id = ?").setInt(1, bandId);
+		return connUtil.request(Band.class);
 	}
 	
 	public Optional<Band> add(Band band, ConnectionUtil connUtil_) throws ClassNotFoundException, SQLException {
-		PreparedStatement stmt = connUtil_.setQuery("INSERT INTO bands(leader_id, name, description) VALUES(?, ?, ?)");
+		PreparedStatement stmt = connUtil_.setInsertQuery("INSERT INTO bands(leader_id, name, description) VALUES(?, ?, ?)");
 		stmt.setInt(1, band.getLeaderId());
 		stmt.setString(2, band.getName());
 		stmt.setString(3, band.getDescription());
-		if (connUtil_.requestUpdate(Band.class) > 0) {
-			connUtil_.setQuery("SELECT * FROM bands WHERE name = ?").setString(1, band.getName());
-			return connUtil_.request(Band.class);
-		}
-		return Optional.empty();
+		Integer bandId = connUtil_.requestInsert(Band.class);
+		connUtil_.setQuery("SELECT * FROM bands WHERE id = ?").setInt(1, bandId);
+		return connUtil_.request(Band.class);
 	}
 
 	public Optional<Band> update(Band band) throws ClassNotFoundException, SQLException {

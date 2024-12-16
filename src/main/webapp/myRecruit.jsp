@@ -39,35 +39,25 @@
             <h2>구인 폼 관리</h2>
             <ul class="post-list">
                 <!-- 게시글 1 -->
-                <%
-                	if(posts != null && user != null){
-                		for(PostDetail post : posts){
-                			%>
+                <%if(posts != null && user != null){
+                		for(PostDetail post : posts){%>
                 <li class="post-card complete">
                     <h3><%= post.getTitle() %></h3>
                     <p><strong>작성 날짜:</strong> <%= post.getCreatedAt().toString().substring(0, 16) %></p>
                     <p><strong>세션:</strong></p>
                     <ul class="session-status">
-                    <%
-                    	for(Recruit recruit : post.getRecruits()){ %>
+                    <% for(Recruit recruit : post.getRecruits()){ 
+                    	Boolean state = false;
+                        state = recruit.getAcceptedId() > 0; %>
                         <li><%= recruit.getPosition() %> 
-                        <span class="status complete">
-                        <% String state = "모집 중";
-                        if(recruit.getAcceptedId() > 0) {
-                        	System.out.println(recruit.getPosition() + " / "+ recruit.getAcceptedId());
-                        	state = "완료";
-                        }
-                        %>
-                        <%= state %>
+                        <span class="status <%= state ? "complete" : "" %>">
+                        <%= state ? "마감" : "모집 중" %>
                         </span></li>
-                    	<%}
-                    %>
+                    	<%}%>
                     </ul>
                 </li>
-                			<%
-                		}
-                	} else { response.sendRedirect("/main"); }
-                %>
+                			<%}
+                	} else { response.sendRedirect("/main"); }%>
             </ul>
         </section>
     </main>

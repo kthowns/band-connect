@@ -6,19 +6,26 @@ import java.util.List;
 import java.util.Optional;
 
 import entity.Band;
+import entity.Comment;
+import entity.CommentDetail;
 import entity.Post;
 import entity.PostDetail;
 import entity.Recruit;
+import entity.User;
 import repository.BandRepository;
+import repository.CommentRepository;
 import repository.PostRepository;
 import repository.RecruitRepository;
+import repository.UserRepository;
 import util.ConnectionUtil;
 
 public class PostService {
 	private final RecruitRepository recruitRepository = new RecruitRepository();
 	private final BandRepository bandRepository = new BandRepository();
 	private final PostRepository postRepository = new PostRepository();
-
+	private final CommentRepository commentRepository = new CommentRepository();
+	private final UserRepository userRepository = new UserRepository();
+	
 	public Post createPost(Integer userId, String title, String bandName, String content, String[] parts)
 			throws ClassNotFoundException, SQLException {
 		ConnectionUtil connUtil = new ConnectionUtil();
@@ -60,6 +67,19 @@ public class PostService {
 	
 	public PostDetail getPostDetailByPostId(Integer postId) throws ClassNotFoundException, RuntimeException, SQLException {
 		PostDetail postDetail = new PostDetail();
+			List<CommentDetail> commentDetails = new ArrayList();
+			List<Comment> comments = commentRepository.findByPostId(postId);
+			for(Comment comment : comments) {
+				CommentDetail commentDetail = new CommentDetail();
+				User author = userRepository.findById(comment.getAuthorId())
+						.orElseThrow(() -> new RuntimeException("User not found"));
+				commentDetail.setAuthor(author);
+				commentDetail.setContent(comment.getContent());
+				commentDetail.setCreatedAt(comment.getCreatedAt());
+				commentDetail.setId(comment.getId());
+				commentDetail.setPostId(postId);
+				commentDetails.add(commentDetail);
+			}
 			Post post = postRepository.findById(postId)
 					.orElseThrow(() -> new RuntimeException("Post not found"));
 			Band band = bandRepository.findById(post.getBandId())
@@ -70,6 +90,7 @@ public class PostService {
 			postDetail.setTitle(post.getTitle());
 			postDetail.setViews(post.getViews());
 			postDetail.setCreatedAt(post.getCreatedAt());
+			postDetail.setCommentDetails(commentDetails);
 			postDetail.setContent(post.getContent());
 
 		return postDetail;
@@ -80,17 +101,7 @@ public class PostService {
 		List<Post> posts = postRepository.findAll();
 		posts.forEach((post) -> {
 			try {
-				PostDetail postDetail = new PostDetail();
-				Band band = bandRepository.findById(post.getBandId())
-						.orElseThrow(() -> new RuntimeException("Band not found"));
-				postDetail.setPostId(post.getId());
-				postDetail.setBand(band);
-				postDetail.setRecruits(recruitRepository.findByBandId(post.getBandId()));
-				postDetail.setTitle(post.getTitle());
-				postDetail.setViews(post.getViews());
-				postDetail.setCreatedAt(post.getCreatedAt());
-				postDetail.setContent(post.getContent());
-				postDetails.add(postDetail);
+				postDetails.add(getPostDetailByPostId(post.getId()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -103,17 +114,7 @@ public class PostService {
 		List<Post> posts = postRepository.findByAuthorId(authorId);
 		posts.forEach((post) -> {
 			try {
-				PostDetail postDetail = new PostDetail();
-				Band band = bandRepository.findById(post.getBandId())
-						.orElseThrow(() -> new RuntimeException("Band not found"));
-				postDetail.setPostId(post.getId());
-				postDetail.setBand(band);
-				postDetail.setRecruits(recruitRepository.findByBandId(post.getBandId()));
-				postDetail.setTitle(post.getTitle());
-				postDetail.setCreatedAt(post.getCreatedAt());
-				postDetail.setContent(post.getContent());
-				postDetail.setViews(post.getViews());
-				postDetails.add(postDetail);
+				postDetails.add(getPostDetailByPostId(post.getId()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -2,6 +2,7 @@
 <%@page import="entity.PostDetail"%>
 <%@page import="entity.Recruit"%>
 <%@page import="entity.Comment"%>
+<%@page import="entity.CommentDetail"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -28,18 +29,12 @@
         <nav>
             <div class="nav-links">
 				<a href="/main">홈</a>
-				<%
-					if(user != null){
-						%>
-						<a href="/logout">로그아웃</a>
-				<a href="/profile">내 프로필</a>
-						<%
-					} else {
-				%>
+				<%if(user != null){%>
+					<a href="/logout">로그아웃</a>
+					<a href="/profile">내 프로필</a>
+				<%} else {%>
 				<a href="/login">로그인/회원가입</a> 
-				<%
-					}
-				%>
+				<%}%>
             </div>
         </nav>
     </header>
@@ -49,6 +44,8 @@
     		alert("<%= message %>");
     	<%session.setAttribute("message", null); }%>
     </script>
+    
+        <% request.setCharacterEncoding("UTF-8"); %>
 <% if(postDetail != null){%>
 	
     <main class="post-container">
@@ -66,16 +63,11 @@
             </p>
             <ul class="session-status">
                     <%
-                    	for(Recruit recruit : postDetail.getRecruits()){ %>
+                    	for(Recruit recruit : postDetail.getRecruits()){ 
+                    		Boolean state = recruit.getAcceptedId() > 0;%>
                         <li><%= recruit.getPosition() %> 
-                        <span class="status complete">
-                        <% String state = "모집 중";
-                        if(recruit.getAcceptedId() > 0) {
-                        	System.out.println(recruit.getPosition() + " / "+ recruit.getAcceptedId());
-                        	state = "완료";
-                        }
-                        %>
-                        <%= state %>
+                        <span class="status <%= state ? "complete" : "" %>">
+                        <%= state ? "마감" : "모집 중" %>
                         </span></li>
                     	<%}
                     %>
@@ -87,16 +79,28 @@
         <section class="comments-section">
             <h2>댓글</h2>
             <% if(user!=null){ %>
-            <input type="text" id="comment-inline" class="comment-inline-input" placeholder="댓글을 입력하세요">
-            <button class="comment-inline-submit-btn">게시</button>
+	            <form method="post" action="/comment">
+	            <input type="text" name="content" id="comment-inline" class="comment-inline-input" placeholder="댓글을 입력하세요" required>
+	            <input type="hidden" name="postId" value=<%= postDetail.getPostId() %>>
+	            <input type="hidden" name="authorId" value=<%= user.getId() %>>
+	            <button type="submit" class="comment-inline-submit-btn">게시</button>
+            </form>
             <% } %>
             <div class="comments-list">
+            <% for(CommentDetail commentDetail : postDetail.getCommentDetails()){%>
                 <div class="comment">
-                    <strong>홍길동:</strong> 저 관심 있습니다! 연락주세요.
-                </div>
-                <div class="comment">
-                    <strong>김철수:</strong> 지원하고 싶습니다. 나이는 상관없나요?
-                </div>
+                <strong><%= commentDetail.getAuthor().getUsername() %>:</strong> <%= commentDetail.getContent() %>
+            	<p><%= commentDetail.getCreatedAt().toString().substring(0, 16) %></p>
+            	<%if(user!=null && commentDetail.getAuthor().getId() == user.getId()){ %>
+            	<form method="post" action="/remove">
+            	<input type="hidden" name="cls" value="Comment">
+            	<input type="hidden" name="postId" value="<%= postDetail.getPostId() %>">
+            	<input type="hidden" name="commentId" value="<%= commentDetail.getId() %>">
+            	<button type="submit">삭제</button>
+            	</form>
+            	<% } %>
+            	</div>
+            <%}%>
             </div>
         </section>
     </main>

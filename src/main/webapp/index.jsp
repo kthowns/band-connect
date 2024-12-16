@@ -57,7 +57,7 @@
 				<%
 					if(user != null){
 						%>
-						<button onclick="window.location.href='/newRecruit'">글 작성</button>
+						<button class="comment-inline-submit-btn" onclick="window.location.href='/newRecruit'">글 작성</button>
 						<%
 					} 
 				%>
@@ -78,8 +78,8 @@
 									<%
 								}
 							int commentSize = 0;
-							if(post.getComments()!=null)
-								commentSize = post.getComments().size();
+							if(post.getCommentDetails()!=null)
+								commentSize = post.getCommentDetails().size();
 							%>
 						</p>
 						<p class="comment-count">댓글(<%= commentSize %>) 조회수(<%= post.getViews() %>)</p>
@@ -88,15 +88,6 @@
 				<%
 				}}
 				%>
-				<!-- 게시글 3 -->
-				<div class="card">
-					<h3>Pop Group Guitarist Wanted</h3>
-					<p>
-						<strong>세션:</strong> 기타2(완료)
-					</p>
-					<p class="comment-count">댓글(15)</p>
-					<p class="date">작성 날짜: 2024-11-28</p>
-				</div>
 			</div>
 		</section>
 	</main>

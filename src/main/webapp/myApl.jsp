@@ -43,7 +43,7 @@
                     <h3><%= aplDetail.getPost().getTitle()%></h3>
                     <p><strong>지원 항목:</strong> <%= aplDetail.getRecruit().getPosition() %></p>
                     <p class="date"><strong>날짜:</strong> <%= aplDetail.getApl().getCreatedAt().toString().substring(0, 16) %></p>
-                    <p><strong>승낙 상태:</strong> <%= status.getDescription() %></p>
+                    <p><strong>승인 상태:</strong> <%= status.getDescription() %></p>
                 </li>
             <%}%>
             </ul>

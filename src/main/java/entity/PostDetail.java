@@ -6,7 +6,7 @@ import java.util.List;
 public class PostDetail {
 	private Integer postId;
 	private String title;
-	private List<Comment> comments;
+	private List<CommentDetail> commentDetails;
 	private List<Recruit> recruits;
 	private Band band;
 	private Integer views;
@@ -14,8 +14,9 @@ public class PostDetail {
 	private Timestamp createdAt;
 	@Override
 	public String toString() {
-		return "PostDetail [postId=" + postId + ", title=" + title + ", comments=" + comments + ", recruits=" + recruits
-				+ ", band=" + band + ", views=" + views + ", content=" + content + ", createdAt=" + createdAt + "]";
+		return "PostDetail [postId=" + postId + ", title=" + title + ", commentDetails=" + commentDetails
+				+ ", recruits=" + recruits + ", band=" + band + ", views=" + views + ", content=" + content
+				+ ", createdAt=" + createdAt + "]";
 	}
 	public Integer getPostId() {
 		return postId;
@@ -29,11 +30,11 @@ public class PostDetail {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public List<Comment> getComments() {
-		return comments;
+	public List<CommentDetail> getCommentDetails() {
+		return commentDetails;
 	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
+	public void setCommentDetails(List<CommentDetail> commentDetails) {
+		this.commentDetails = commentDetails;
 	}
 	public List<Recruit> getRecruits() {
 		return recruits;

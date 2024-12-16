@@ -57,4 +57,14 @@ public class CommentRepository {
 		connUtil.setQuery("SELECT * FROM comments WHERE post_id = ?").setInt(1, postId);
 		return connUtil.requestForList(Comment.class);
 	}
+
+	public List<Comment> findByAuthorId(Integer authorId) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("SELECT * FROM comments WHERE author_id = ?").setInt(1, authorId);
+		return connUtil.requestForList(Comment.class);
+	}
+
+	public void deleteById(Integer commentId) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("DELETE FROM comments WHERE id = ?").setInt(1, commentId);
+		connUtil.requestUpdate(Comment.class);
+	}
 }

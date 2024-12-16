@@ -76,4 +76,25 @@ public class PostService {
 		});
 		return postDetails;
 	}
+	
+	public List<PostDetail> getPostDetailsByAuthorId(Integer authorId) throws ClassNotFoundException, SQLException{
+		List<PostDetail> postDetails = new ArrayList<PostDetail>();
+		List<Post> posts = postRepository.findByAuthorId(authorId);
+		posts.forEach((post) -> {
+			try {
+				PostDetail postDetail = new PostDetail();
+				Band band = bandRepository.findById(post.getBandId())
+						.orElseThrow(() -> new RuntimeException("Band not found"));
+				postDetail.setBand(band);
+				postDetail.setRecruits(recruitRepository.findByBandId(post.getBandId()));
+				postDetail.setTitle(post.getTitle());
+				postDetail.setCreatedAt(post.getCreatedAt());
+				postDetail.setContent(post.getContent());
+				postDetails.add(postDetail);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		return postDetails;
+	}
 }

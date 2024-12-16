@@ -42,7 +42,7 @@
 
         <div class="profile-actions">
             <a href="my-application.html" class="action-link">지원 폼 목록</a>
-            <a href="my-recruitment.html" class="action-link">구인 폼 목록</a>
+            <a href="/myRecruit" class="action-link">구인 폼 목록</a>
             <a href="my-comments.html" class="action-link">내가 쓴 댓글 보기</a>
         </div>
     </main>

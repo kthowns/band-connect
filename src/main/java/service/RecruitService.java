@@ -1,9 +1,9 @@
 package service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import entity.Recruit;
-import repository.BandRepository;
 import repository.RecruitRepository;
 
 public class RecruitService {
@@ -13,8 +13,13 @@ public class RecruitService {
 		return recruitRepository.add(recruit)
 				.orElseThrow(() -> new RuntimeException("Adding recruit failed"));
 	}
+
+	public List<Recruit> getRecruitsByBandId(Integer id) throws ClassNotFoundException, SQLException {
+		return recruitRepository.findByBandId(id);
+		
+	}
 	
-	public void validateDuplication(Integer bandId, String position) throws ClassNotFoundException, SQLException {
+	private void validateDuplication(Integer bandId, String position) throws ClassNotFoundException, SQLException {
 		recruitRepository.findBybandIdAndPosition(bandId, position)
 		.ifPresent((r) -> { throw new RuntimeException("Duplicated recruit"); });
 	}

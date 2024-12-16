@@ -20,6 +20,11 @@ public class BandRepository {
 		connUtil.setQuery("SELECT * FROM bands WHERE name = ?").setString(1, name);
 		return connUtil.request(Band.class);
 	}
+
+	public Optional<Band> findByLeaderId(Integer id) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("SELECT * FROM bands WHERE leader_id = ?").setInt(1,  id);
+		return connUtil.request(Band.class);
+	}
 	
 	public List<Band> findAll() throws ClassNotFoundException, SQLException {
 		connUtil.setQuery("SELECT * FROM bands");

@@ -17,4 +17,9 @@ public class BandService {
 		return bandRepository.findByName(name)
 				.orElseThrow(() -> new RuntimeException("Band not found"));
 	}
+
+	public Band getBandByLeaderId(Integer id) throws ClassNotFoundException, RuntimeException, SQLException {
+		return bandRepository.findByLeaderId(id)
+				.orElseThrow(() -> new RuntimeException("Band not found"));
+	}
 }

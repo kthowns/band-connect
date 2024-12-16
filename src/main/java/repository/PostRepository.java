@@ -23,6 +23,11 @@ public class PostRepository {
         return connUtil.requestForList(Post.class);
     }
 
+	public List<Post> findByAuthorId(Integer authorId) throws ClassNotFoundException, SQLException {
+        connUtil.setQuery("SELECT * FROM posts WHERE author_id = ?").setInt(1,  authorId);
+        return connUtil.requestForList(Post.class);
+	}
+
     // 포스트 추가
     public Optional<Post> add(Post post) throws ClassNotFoundException, SQLException {
         PreparedStatement stmt = connUtil.setQuery("INSERT INTO posts(author_id, band_id, title, content) VALUES(?, ?, ?, ?)");

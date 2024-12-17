@@ -82,8 +82,9 @@
 							<strong>세션:</strong>
 							<%
 								for(Recruit recruit : post.getRecruits()){
+									Boolean state = recruit.getAcceptedId() > 0;
 									%>
-									<%= recruit.getPosition() + " " %>
+									<%= state ? "" : recruit.getPosition()+" " %>
 									<%
 								}
 							int commentSize = 0;

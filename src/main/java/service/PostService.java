@@ -68,7 +68,7 @@ public class PostService {
 				.orElseThrow(() -> new RuntimeException("Adding post failed"));
 
 		for(int i=0; i<parts.length; i++) {
-			recruitRepository.findBybandIdAndPosition(userId, parts[i])
+			recruitRepository.findBybandIdAndPosition(band.getId(), parts[i])
 				.ifPresent((r) -> { throw new RuntimeException("이미 구인 중인 파트입니다 : "+r.getPosition()); });
 			Recruit recruit = new Recruit();
 			recruit.setBandId(band.getId());
@@ -89,24 +89,20 @@ public class PostService {
 		return post;
 	}
 	
-    private static List<String> extractHashtags(String str) {
-        // 정규 표현식을 사용하여 #으로 시작하는 단어를 추출
-        Pattern pattern = Pattern.compile("#\\w+");
-        Matcher matcher = pattern.matcher(str);
-        
-        List<String> hashtags = new ArrayList<>();
-        
-        // 매칭된 모든 항목을 리스트에 추가
-        while (matcher.find()) {
-            hashtags.add(matcher.group());
-        }
-        
-        System.out.println("Extracting hashtag : "+hashtags);
-        
-        // 리스트를 배열로 변환하여 반환
-        return hashtags;
-    }
-	
+	private static List<String> extractHashtags(String str) {
+	    List<String> hashtags = new ArrayList<>();
+	    String[] words = str.split(" "); // 공백 기준으로 문자열 분리
+	    
+	    for (String word : words) {
+	        if (word.startsWith("#") && word.length() > 1) {
+	            hashtags.add(word);
+	        }
+	    }
+
+	    System.out.println("Extracting hashtags: " + hashtags);
+	    return hashtags;
+	}
+
 	public PostDetail getPostDetailByPostId(Integer postId) throws ClassNotFoundException, RuntimeException, SQLException {
 		PostDetail postDetail = new PostDetail();
 			List<CommentDetail> commentDetails = new ArrayList();

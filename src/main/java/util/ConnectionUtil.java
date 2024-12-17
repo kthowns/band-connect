@@ -15,6 +15,7 @@ import entity.Apl;
 import entity.Band;
 import entity.Comment;
 import entity.Hashtag;
+import entity.MemberDetail;
 import entity.Post;
 import entity.Recruit;
 import entity.User;
@@ -66,7 +67,7 @@ public class ConnectionUtil {
 		this.conn.close();
 	}
 	
-	public <T> Integer requestInsert(Class<T> cls) throws SQLException {
+	public Integer requestInsert() throws SQLException {
 		Integer result = 0;
 		try {
 			this.pstmt.executeUpdate();
@@ -237,6 +238,15 @@ public class ConnectionUtil {
 				recruit.setAcceptedId(rs.getInt("accepted_id"));
 				recruit.setCreatedAt(rs.getTimestamp("created_at"));
 				return Optional.of(cls.cast(recruit));
+			}else if (cls.isAssignableFrom(MemberDetail.class)) {
+				MemberDetail md = new MemberDetail();
+				md.setId(rs.getInt("id"));
+				md.setBandId(rs.getInt("band_id"));
+				md.setName(rs.getString("name"));
+				md.setPosition(rs.getString("position"));
+				md.setAge(rs.getInt("age"));
+				md.setPhone(rs.getString("phone"));
+				return Optional.of(cls.cast(md));
 			}
 		} catch (Exception e) {
 			throw new SQLException("Response mapping error", e);

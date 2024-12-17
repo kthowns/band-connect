@@ -14,7 +14,7 @@
 		<div class="logo">🎵 BandConnect</div>
 		<nav>
 			<div class="nav-links">
-				<a href="index.html">홈</a> <a href="/login">로그인/회원가입</a>
+				<a href="/main">홈</a> <a href="/login">로그인/회원가입</a>
 			</div>
 		</nav>
 	</header>

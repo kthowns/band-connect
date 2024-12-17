@@ -41,7 +41,7 @@ public class RecruitRepository {
         stmt.setInt(1, recruit.getBandId());
         stmt.setString(2, recruit.getPosition());
         stmt.setInt(3, recruit.getPostId());
-        Integer id = connUtil.requestInsert(Recruit.class);
+        Integer id = connUtil.requestInsert();
         connUtil.setQuery("SELECT * FROM recruits WHERE id = ?").setInt(1, id);
         return connUtil.request(Recruit.class);
     }
@@ -52,7 +52,7 @@ public class RecruitRepository {
         stmt.setInt(1, recruit.getBandId());
         stmt.setString(2, recruit.getPosition());
         stmt.setInt(3, recruit.getPostId());
-        Integer id = connUtil_.requestInsert(Recruit.class);
+        Integer id = connUtil_.requestInsert();
         connUtil_.setQuery("SELECT * FROM recruits WHERE id = ?").setInt(1, id);
         return connUtil_.request(Recruit.class);
     }

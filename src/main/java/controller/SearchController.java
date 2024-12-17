@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -14,7 +15,9 @@ import service.PostService;
 @WebServlet("/search")
 public class SearchController extends HttpServlet {
 	private final PostService postService = new PostService();
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
 		try {
 			String hashtag = (String) request.getParameter("tag");
 			List<PostDetail> posts = postService.searchByHashtag(hashtag);

@@ -26,7 +26,7 @@ public class CommentRepository {
 		stmt.setInt(1, comment.getPostId());
 		stmt.setInt(2, comment.getAuthorId());
 		stmt.setString(3, comment.getContent());
-		Integer postId = connUtil.requestInsert(Comment.class);
+		Integer postId = connUtil.requestInsert();
 		connUtil.setQuery("SELECT * FROM comments WHERE id = ?").setInt(1, postId);
 		return connUtil.request(Comment.class);
 	}

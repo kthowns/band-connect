@@ -35,7 +35,7 @@ public class PostRepository {
         stmt.setInt(2, post.getBandId());
         stmt.setString(3, post.getTitle());
         stmt.setString(4, post.getContent());
-        Integer id = connUtil.requestInsert(Post.class);
+        Integer id = connUtil.requestInsert();
         connUtil.setQuery("SELECT * FROM posts WHERE id = ?").setInt(1, id);
         return connUtil.request(Post.class);
     }
@@ -47,7 +47,7 @@ public class PostRepository {
         stmt.setInt(2, post.getBandId());
         stmt.setString(3, post.getTitle());
         stmt.setString(4, post.getContent());
-        Integer id = connUtil_.requestInsert(Post.class);
+        Integer id = connUtil_.requestInsert();
         connUtil_.setQuery("SELECT * FROM posts WHERE id = ?").setInt(1, id);
         return connUtil_.request(Post.class);
     }

@@ -13,6 +13,8 @@ import service.PostService;
 @WebServlet("/remove")
 public class RemoveController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
 		String cls = (String) request.getParameter("cls");
 		try {
 			if(cls.equals("Comment")) {

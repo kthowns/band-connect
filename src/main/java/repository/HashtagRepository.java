@@ -28,7 +28,7 @@ public class HashtagRepository {
         PreparedStatement stmt = connUtil.setInsertQuery("INSERT INTO hashtags(post_id, hashtag) VALUES(?, ?)");
         stmt.setInt(1, hashtag.getPostId());
         stmt.setString(2, hashtag.getHashtag());
-        Integer id = connUtil.requestInsert(Hashtag.class);
+        Integer id = connUtil.requestInsert();
         connUtil.setQuery("SELECT * FROM hashtags WHERE id = ?").setInt(1, id);;
         return connUtil.request(Hashtag.class);
     }
@@ -38,7 +38,7 @@ public class HashtagRepository {
         PreparedStatement stmt = connUtil_.setInsertQuery("INSERT INTO hashtags(post_id, hashtag) VALUES(?, ?)");
         stmt.setInt(1, hashtag.getPostId());
         stmt.setString(2, hashtag.getHashtag());
-        Integer id = connUtil_.requestInsert(Hashtag.class);
+        Integer id = connUtil_.requestInsert();
         connUtil_.setQuery("SELECT * FROM hashtags WHERE id = ?").setInt(1, id);;
         return connUtil_.request(Hashtag.class);
     }

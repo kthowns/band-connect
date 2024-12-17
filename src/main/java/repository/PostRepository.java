@@ -114,4 +114,15 @@ public class PostRepository {
 		}
 		return 0;
 	}
+
+	public void deleteById(Integer postId) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("DELETE FROM posts WHERE id = ?").setInt(1, postId);
+		connUtil.requestUpdate(Post.class);
+	}
+
+	public List<Post> findByHashtag(String hashtag) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("SELECT * FROM posts p join hashtags h on p.id = h.post_id WHERE h.hashtag = ?")
+		.setString(1, hashtag);
+		return connUtil.requestForList(Post.class);
+	}
 }

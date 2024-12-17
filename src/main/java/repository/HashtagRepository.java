@@ -32,6 +32,16 @@ public class HashtagRepository {
         connUtil.setQuery("SELECT * FROM hashtags WHERE id = ?").setInt(1, id);;
         return connUtil.request(Hashtag.class);
     }
+    
+    // 해시태그 추가
+    public Optional<Hashtag> add(Hashtag hashtag, ConnectionUtil connUtil_) throws ClassNotFoundException, SQLException {
+        PreparedStatement stmt = connUtil_.setInsertQuery("INSERT INTO hashtags(post_id, hashtag) VALUES(?, ?)");
+        stmt.setInt(1, hashtag.getPostId());
+        stmt.setString(2, hashtag.getHashtag());
+        Integer id = connUtil_.requestInsert(Hashtag.class);
+        connUtil_.setQuery("SELECT * FROM hashtags WHERE id = ?").setInt(1, id);;
+        return connUtil_.request(Hashtag.class);
+    }
 
     // 해시태그 수정
     public Optional<Hashtag> update(Hashtag hashtag) throws ClassNotFoundException, SQLException {
@@ -56,4 +66,9 @@ public class HashtagRepository {
         }
         return Optional.empty();
     }
+
+	public List<Hashtag> findByPostId(Integer postId) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("SELECT * FROM hashtags WHERE post_id = ?").setInt(1, postId);
+		return connUtil.requestForList(Hashtag.class);
+	}
 }

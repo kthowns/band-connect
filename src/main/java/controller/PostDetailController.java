@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import entity.Hashtag;
 import entity.PostDetail;
 import service.AplService;
 import service.PostService;
@@ -27,6 +29,8 @@ public class PostDetailController extends HttpServlet {
 			postId = Integer.parseInt((String) request.getParameter("id"));
 			if(postId > 0) {
 				PostDetail postDetail = postService.getPostDetailByPostId(postId);
+				List<Hashtag> hashtags = postService.getHashtagsByPostId(postId);
+				postDetail.setHashtags(hashtags);
 				Integer applicantNumber = aplService.getApplicantNumber(postId);
 				request.setAttribute("postDetail", postDetail);
 				request.setAttribute("applicantNumber", applicantNumber);

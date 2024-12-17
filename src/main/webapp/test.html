@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구인 폼 관리 - BandConnect</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .session-status ul {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+            margin: 0;
+        }
+        .session-status li {
+            list-style-type: none;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>   
+    <header class="header">
+        <div class="logo">🎵 BandConnect</div>
+        <nav>
+            <div class="nav-links">
+                <a href="/main">홈</a>
+                <a href="/logout">로그아웃</a>
+                <a href="/profile">내 프로필</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="my-posts-section">
+            <h2>구인 폼 관리</h2>
+            <ul class="post-list">
+                <!-- 게시글 1 -->
+                <li class="post-card complete">
+                    <h3>밴드 급구</h3>
+                    <p><strong>작성 날짜:</strong> 2024-12-16 03:42</p>
+                    <p><strong>세션:</strong></p>
+                    <ul class="session-status">
+                        <!-- 기타 세션 -->
+                        <li>기타 
+                            <span class="status complete">모집 중</span>
+                            <ul>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('홍길동', 25, '서울', 'hong@example.com', '010-1234-5678', '밴드에 대한 열정이 큽니다.')">홍길동</div></li>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('김기리', 30, '대전', 'kim@example.com', '010-2222-3333', '기타 연주에 자신있습니다.')">김기리</div></li>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('김춘추', 27, '부산', 'kimchun@example.com', '010-3333-4444', '다양한 장르의 기타를 다룹니다.')">김춘추</div></li>
+                            </ul>
+                        </li>
+                        <!-- 보컬 세션 -->
+                        <li>보컬 
+                            <span class="status complete">모집 중</span>
+                            <ul>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('이수민', 22, '부산', 'lee@example.com', '010-9876-5432', '목소리가 독특하고 감성적입니다.')">이수민</div></li>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('김하늘', 24, '인천', 'kim@example.com', '010-5678-4321', '사운드의 밸런스를 중요시합니다.')">김하늘</div></li>
+                            </ul>
+                        </li>
+                        <!-- 드럼 세션 -->
+                        <li>드럼
+                            <span class="status complete">모집 중</span>
+                            <ul>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('정수현', 26, '서울', 'jung@example.com', '010-1111-2222', '락과 재즈를 모두 소화 가능한 드러머입니다.')">정수현</div></li>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('이준호', 30, '경기', 'leejunho@example.com', '010-3333-4444', '강한 그루브와 테크니컬한 플레이가 특징입니다.')">이준호</div></li>
+                            </ul>
+                        </li>
+                        <!-- 베이스 세션 -->
+                        <li>베이스
+                            <span class="status complete">모집 중</span>
+                            <ul>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('김지훈', 29, '서울', 'kimjihoon@example.com', '010-5555-6666', '다양한 장르의 베이스 연주가 가능합니다.')">김지훈</div></li>
+                                <li><div class="applicant-name" onclick="showApplicantDetails('최민호', 27, '인천', 'choi@example.com', '010-7777-8888', '독특한 사운드와 창의적인 연주를 자랑합니다.')">최민호</div></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <div id="applicant-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <h3>지원자 상세 내용</h3>
+            <p><strong>이름:</strong> <span id="applicant-name"></span></p>
+            <p><strong>나이:</strong> <span id="applicant-age"></span></p>
+            <p><strong>지역:</strong> <span id="applicant-location"></span></p>
+            <p><strong>이메일:</strong> <span id="applicant-email"></span></p>
+            <p><strong>전화번호:</strong> <span id="applicant-phone"></span></p>
+            <p><strong>소개:</strong> <span id="applicant-intro"></span></p>
+            <button class="accept-btn" onclick="acceptApplicant()">수락</button>
+            <button class="reject-btn" onclick="rejectApplicant()">거절</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2024 BandConnect. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function showApplicantDetails(name, age, location, email, phone, intro) {
+            document.getElementById('applicant-name').textContent = name;
+            document.getElementById('applicant-age').textContent = age;
+            document.getElementById('applicant-location').textContent = location;
+            document.getElementById('applicant-email').textContent = email;
+            document.getElementById('applicant-phone').textContent = phone;
+            document.getElementById('applicant-intro').textContent = intro;
+            document.getElementById('applicant-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('applicant-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

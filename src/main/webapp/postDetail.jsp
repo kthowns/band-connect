@@ -2,6 +2,7 @@
 <%@page import="entity.PostDetail"%>
 <%@page import="entity.Recruit"%>
 <%@page import="entity.Comment"%>
+<%@page import="entity.Hashtag"%>
 <%@page import="entity.CommentDetail"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -52,6 +53,13 @@
         <!-- 게시글 카드 -->
         <section class="post-card">
             <h1 class="post-title"><%= postDetail.getTitle() %></h1>
+            <% if(user != null && postDetail.getAuthorId() == user.getId()){ %>
+            <form method="post" action="/remove">
+            	<input type="hidden" name="cls" value="Post">
+            	<input type="hidden" name="postId" value="<%= postDetail.getPostId() %>">
+            	<button type="submit">삭제</button>
+            </form>
+            <% } %>
             <div class="post-meta">
                 <span class="date">작성일: <%= postDetail.getCreatedAt().toString().substring(0, 16) %></span> | 
                 <span class="views">조회수: <%= postDetail.getViews() %></span> | 
@@ -61,6 +69,12 @@
             <p class="post-content">
 				<%= postDetail.getContent() %>
             </p>
+            <% String hashtag = "";
+            	for(Hashtag tag : postDetail.getHashtags()){
+            		hashtag += tag.getHashtag() + " ";
+            	}
+            %>
+            <div class="hashtag"><%= hashtag %></div>
             <ul class="session-status">
                     <%
                     	for(Recruit recruit : postDetail.getRecruits()){ 

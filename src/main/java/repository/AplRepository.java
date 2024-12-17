@@ -36,8 +36,10 @@ public class AplRepository {
         stmt.setInt(6, apl.getAge());
         stmt.setString(7, apl.getLocation());
         stmt.setString(8, apl.getPhone());
-        Integer id = connUtil.requestUpdate(Apl.class);
-        connUtil.setQuery("SELECT * FROM apls WHERE id = ?").setInt(1, id);
+        connUtil.requestUpdate(Apl.class);
+        PreparedStatement stmt_ = connUtil.setQuery("SELECT * FROM apls WHERE applicant_id = ? AND recruit_id = ?");
+        stmt_.setInt(1, apl.getApplicantId());
+        stmt_.setInt(2, apl.getRecruitId());
         return connUtil.request(Apl.class);
     }
 
@@ -80,5 +82,30 @@ public class AplRepository {
 	public List<Apl> findByApplicantId(Integer applicantId) throws ClassNotFoundException, SQLException {
         connUtil.setQuery("SELECT * FROM apls WHERE applicant_id = ?").setInt(1, applicantId);
         return connUtil.requestForList(Apl.class);
+	}
+
+	public List<Apl> findByPostId(Integer postId) throws ClassNotFoundException, SQLException {
+		connUtil.setQuery("SELECT a.applicant_id, a.recruit_id, a.status, a.name, a.age, a.location, a.phone, a.position, a.description, a.created_at "
+				+ "FROM apls a JOIN recruits r ON a.recruit_id = r.id JOIN posts p ON p.id = r.post_id "
+				+ "WHERE p.id = ?").setInt(1, postId);
+		return connUtil.requestForList(Apl.class);
+	}
+
+	public void accept(Integer recruitId, Integer applicantId) throws ClassNotFoundException, SQLException {
+		PreparedStatement pstmt = connUtil.setQuery("UPDATE apls SET status = 'ACCEPTED' WHERE recruit_id = ? AND applicant_id = ?");
+		pstmt.setInt(1, recruitId);
+		pstmt.setInt(2, applicantId);
+		connUtil.requestUpdate(Apl.class);
+		PreparedStatement pstmt_ = connUtil.setQuery("UPDATE apls SET status = 'CLOSED' WHERE recruit_id != ? OR applicant_id != ?");
+		pstmt_.setInt(1, recruitId);
+		pstmt_.setInt(2, applicantId);
+		connUtil.requestUpdate(Apl.class);
+	}
+
+	public void reject(Integer recruitId, Integer applicantId) throws ClassNotFoundException, SQLException {
+		PreparedStatement pstmt = connUtil.setQuery("UPDATE apls SET status = 'REJECTED' WHERE recruit_id = ? AND applicant_id = ?");
+		pstmt.setInt(1, recruitId);
+		pstmt.setInt(2, applicantId);
+		connUtil.requestUpdate(Apl.class);
 	}
 }

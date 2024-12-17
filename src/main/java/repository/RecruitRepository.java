@@ -109,4 +109,11 @@ public class RecruitRepository {
         }
         return Optional.empty();
     }
+
+	public void accept(Integer recruitId, Integer applicantId) throws ClassNotFoundException, SQLException {
+		PreparedStatement pstmt = connUtil.setQuery("UPDATE recruits SET accepted_id = ? WHERE id = ?");
+		pstmt.setInt(1, applicantId);
+		pstmt.setInt(2, recruitId);
+		connUtil.requestUpdate(Recruit.class);
+	}
 }

@@ -3,17 +3,20 @@ package service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import entity.Band;
 import entity.Comment;
 import entity.CommentDetail;
+import entity.Hashtag;
 import entity.Post;
 import entity.PostDetail;
 import entity.Recruit;
 import entity.User;
 import repository.BandRepository;
 import repository.CommentRepository;
+import repository.HashtagRepository;
 import repository.PostRepository;
 import repository.RecruitRepository;
 import repository.UserRepository;
@@ -25,23 +28,36 @@ public class PostService {
 	private final PostRepository postRepository = new PostRepository();
 	private final CommentRepository commentRepository = new CommentRepository();
 	private final UserRepository userRepository = new UserRepository();
+	private final HashtagRepository hashtagRepository = new HashtagRepository();
 	
-	public Post createPost(Integer userId, String title, String bandName, String content, String[] parts)
+	public List<PostDetail> searchByHashtag(String hashtag) throws ClassNotFoundException, SQLException{
+		List<String> hashtags = extractHashtags(hashtag);
+		List<PostDetail> postDetails = new ArrayList();
+		for(String tag : hashtags) {
+			for(Post post : postRepository.findByHashtag(tag)) {
+				PostDetail postDetail = getPostDetailByPostId(post.getId());
+				System.out.println("hashtag Found : "+postDetail);
+				if(!postDetails.contains(postDetail)) {
+					postDetails.add(postDetail);
+				}
+			};
+		}
+		return postDetails;
+	}
+	
+	public Post createPost(Integer userId, String title, String bandName, String content, String[] parts, String hashtag)
 			throws ClassNotFoundException, SQLException {
 		ConnectionUtil connUtil = new ConnectionUtil();
 		connUtil.openTransactional();
 
-		Optional<Band> optBand = bandRepository.findByName(bandName);
-		Band band;
-		if (optBand.isEmpty()) {
-			Band band_ = new Band();
-			band_.setLeaderId(userId);
-			band_.setName(bandName);
-			band_.setDescription("");
-			band = bandRepository.add(band_, connUtil).orElseThrow(() -> new RuntimeException("Adding band failed"));
-		} else {
-			band = optBand.get();
-		}
+		bandRepository.findByName(bandName)
+		.ifPresent((b) -> {throw new RuntimeException("이미 해당하는 밴드의 구인글이 존재합니다");});
+		
+		Band band = new Band();
+		band.setLeaderId(userId);
+		band.setName(bandName);
+		band.setDescription("");
+		band = bandRepository.add(band, connUtil).orElseThrow(() -> new RuntimeException("Adding band failed"));
 		
 		Post post_ = new Post();
 		post_.setTitle(title);
@@ -61,9 +77,35 @@ public class PostService {
 			recruitRepository.add(recruit, connUtil);
 		}
 		
+		List<String> hashtags = extractHashtags(hashtag);
+		for(String tag : hashtags) {
+			Hashtag htag = new Hashtag();
+			htag.setHashtag(tag);
+			htag.setPostId(post.getId());
+			hashtagRepository.add(htag, connUtil);
+		}
+		
 		connUtil.commitTransactional();
 		return post;
 	}
+	
+    private static List<String> extractHashtags(String str) {
+        // 정규 표현식을 사용하여 #으로 시작하는 단어를 추출
+        Pattern pattern = Pattern.compile("#\\w+");
+        Matcher matcher = pattern.matcher(str);
+        
+        List<String> hashtags = new ArrayList<>();
+        
+        // 매칭된 모든 항목을 리스트에 추가
+        while (matcher.find()) {
+            hashtags.add(matcher.group());
+        }
+        
+        System.out.println("Extracting hashtag : "+hashtags);
+        
+        // 리스트를 배열로 변환하여 반환
+        return hashtags;
+    }
 	
 	public PostDetail getPostDetailByPostId(Integer postId) throws ClassNotFoundException, RuntimeException, SQLException {
 		PostDetail postDetail = new PostDetail();
@@ -84,8 +126,11 @@ public class PostService {
 					.orElseThrow(() -> new RuntimeException("Post not found"));
 			Band band = bandRepository.findById(post.getBandId())
 					.orElseThrow(() -> new RuntimeException("Band not found"));
+			List<Hashtag> hashtags = this.getHashtagsByPostId(postId);
 			postDetail.setPostId(post.getId());
 			postDetail.setBand(band);
+			postDetail.setHashtags(hashtags);
+			postDetail.setAuthorId(post.getAuthorId());
 			postDetail.setRecruits(recruitRepository.findByBandId(post.getBandId()));
 			postDetail.setTitle(post.getTitle());
 			postDetail.setViews(post.getViews());
@@ -124,5 +169,13 @@ public class PostService {
 	
 	public Integer increaseViews(Integer postId) throws ClassNotFoundException, SQLException {
 		return postRepository.increaseViews(postId);
+	}
+
+	public void deleteById(Integer postId) throws ClassNotFoundException, SQLException {
+		postRepository.deleteById(postId);
+	}
+
+	public List<Hashtag> getHashtagsByPostId(Integer postId) throws ClassNotFoundException, SQLException {
+		return hashtagRepository.findByPostId(postId);
 	}
 }

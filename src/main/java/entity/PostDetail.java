@@ -2,12 +2,15 @@ package entity;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 
 public class PostDetail {
 	private Integer postId;
+	private Integer authorId;
 	private String title;
 	private List<CommentDetail> commentDetails;
 	private List<Recruit> recruits;
+	private List<Hashtag> hashtags;
 	private Band band;
 	private Integer views;
 	private String content;
@@ -17,6 +20,43 @@ public class PostDetail {
 		return "PostDetail [postId=" + postId + ", title=" + title + ", commentDetails=" + commentDetails
 				+ ", recruits=" + recruits + ", band=" + band + ", views=" + views + ", content=" + content
 				+ ", createdAt=" + createdAt + "]";
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(authorId, band, commentDetails, content, createdAt, hashtags, postId, recruits, title,
+				views);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PostDetail other = (PostDetail) obj;
+		return Objects.equals(authorId, other.authorId) && Objects.equals(band, other.band)
+				&& Objects.equals(commentDetails, other.commentDetails) && Objects.equals(content, other.content)
+				&& Objects.equals(createdAt, other.createdAt) && Objects.equals(hashtags, other.hashtags)
+				&& Objects.equals(postId, other.postId) && Objects.equals(recruits, other.recruits)
+				&& Objects.equals(title, other.title) && Objects.equals(views, other.views);
+	}
+
+	public List<Hashtag> getHashtags() {
+		return hashtags;
+	}
+
+	public void setHashtags(List<Hashtag> hashtags) {
+		this.hashtags = hashtags;
+	}
+
+	public Integer getAuthorId() {
+		return authorId;
+	}
+	public void setAuthorId(Integer authorId) {
+		this.authorId = authorId;
 	}
 	public Integer getPostId() {
 		return postId;

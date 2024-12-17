@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import entity.Comment;
 import service.CommentService;
+import service.PostService;
 
 @WebServlet("/remove")
 public class RemoveController extends HttpServlet {
@@ -21,6 +21,11 @@ public class RemoveController extends HttpServlet {
 				Integer postId = Integer.parseInt((String) request.getParameter("postId"));
 				commentService.deleteCommentById(commentId);
 				response.sendRedirect("/postDetail?id="+postId);
+			}else if(cls.equals("Post")) {
+				PostService postService = new PostService();
+				Integer postId = Integer.parseInt((String) request.getParameter("postId"));
+				postService.deleteById(postId);
+				response.sendRedirect("/main");
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

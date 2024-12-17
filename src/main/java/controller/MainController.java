@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import entity.Post;
 import entity.PostDetail;
+import repository.PostRepository;
 import service.PostService;
 import service.UserService;
 
@@ -25,14 +27,16 @@ public class MainController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html; charset=UTF-8");
 		try {
-			HttpSession session = request.getSession();
 			List<PostDetail> posts = postService.getPostDetails();
-			session.setAttribute("posts", posts);
+			for(PostDetail post : posts) {
+				post.setHashtags(postService.getHashtagsByPostId(post.getPostId()));
+			}
+			request.setAttribute("posts", posts);
 			System.out.println(posts);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/main.jsp");
 		dispatcher.forward(request, response);
 	}
 }

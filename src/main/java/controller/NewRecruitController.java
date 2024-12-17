@@ -34,18 +34,16 @@ public class NewRecruitController extends HttpServlet {
 		String title = (String) request.getParameter("title");
 		String bandName = (String) request.getParameter("bandName");
 		String content = (String) request.getParameter("content");
+		String hashtag = (String) request.getParameter("hashtag");
 		String[] parts = request.getParameterValues("parts[]");
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		System.out.println(title + "/"+bandName+"/"+content+"/"+parts);
 		try {
-			postService.createPost(user.getId(), title, bandName, content, parts);
-			response.sendRedirect("/main");
+			postService.createPost(user.getId(), title, bandName, content, parts, hashtag);
 		} catch (Exception e) {
-			request.setAttribute("message", e.getMessage());
-		} finally {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/newRecruit.jsp");
-			dispatcher.forward(request, response);
+			session.setAttribute("message", e.getMessage());
 		}
+		response.sendRedirect("/main");
 	}
 }

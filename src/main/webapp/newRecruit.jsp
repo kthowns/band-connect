@@ -42,9 +42,9 @@
 					</div>
 				</div>
 				<div class="card-field">
-					<label for="title">밴드 이름</label>
+					<label for="bandName">밴드 이름</label>
 					<div class="input-box">
-						<input type="text"
+						<input type="text" id="bandName"
 							name="bandName" placeholder="밴드 이름"><br>
 					</div>
 				</div>
@@ -55,6 +55,14 @@
 					<div class="textarea-box">
 						<textarea id="content" name="content" placeholder="내용을 입력하세요"
 							required></textarea>
+					</div>
+				</div>
+				
+				<div class="card-field">
+					<label for="hashtag">태그</label>
+					<div class="input-box">
+						<input type="text" id="hashtag"
+							name="hashtag" placeholder="#태그"><br>
 					</div>
 				</div>
 

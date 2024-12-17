@@ -17,8 +17,24 @@ public class AplService {
 	private final PostRepository postRepository = new PostRepository();
 	private final RecruitRepository recruitRepository = new RecruitRepository();
 
+	public List<Apl> getAplByPostAuthorId(Integer authorId) throws ClassNotFoundException, SQLException{
+		List<Apl> apls = new ArrayList();
+		List<Post> posts = postRepository.findByAuthorId(authorId);
+		for(Post post : posts) {
+			List<Apl> apls_ = this.getAplByPostId(post.getId());
+			for(Apl apl : apls_) {
+				apls.add(apl);
+			}
+		}
+		return apls;
+	}
+	
 	public List<Apl> getAplByApplicantId(Integer applicantId) throws ClassNotFoundException, SQLException{
 		return aplRepository.findByApplicantId(applicantId);
+	}
+	
+	public List<Apl> getAplByPostId(Integer postId) throws ClassNotFoundException, SQLException{
+		return aplRepository.findByPostId(postId);
 	}
 	
 	public List<AplDetail> getAplDetails(Integer userId) throws ClassNotFoundException, SQLException{
@@ -51,5 +67,13 @@ public class AplService {
 
 	public Integer getApplicantNumber(Integer postId) throws ClassNotFoundException, SQLException {
 		return aplRepository.getApplicantNumber(postId);
+	}
+
+	public void accept(Integer recruitId, Integer applicantId) throws ClassNotFoundException, SQLException {
+		aplRepository.accept(recruitId, applicantId);
+	}
+
+	public void reject(Integer recruitId, Integer applicantId) throws ClassNotFoundException, SQLException {
+		aplRepository.reject(recruitId, applicantId);
 	}
 }

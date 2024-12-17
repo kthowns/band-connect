@@ -11,13 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import entity.Apl;
 import entity.PostDetail;
 import entity.User;
+import service.AplService;
 import service.PostService;
 
 @WebServlet("/myRecruit")
 public class MyRecruitController extends HttpServlet {
 	private final PostService postService = new PostService();
+	private final AplService aplService = new AplService();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -26,7 +29,12 @@ public class MyRecruitController extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		try{
 			List<PostDetail> posts = postService.getPostDetailsByAuthorId(user.getId());
+			List<Apl> apls = aplService.getAplByPostAuthorId(user.getId());
+			for(Apl apl : apls) {
+				System.out.println(apl.getName() + " / " + apl.getApplicantId() + " / " + apl.getRecruitId());
+			}
 			request.setAttribute("posts", posts);
+			request.setAttribute("apls", apls);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

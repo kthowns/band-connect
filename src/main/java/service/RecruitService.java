@@ -28,4 +28,8 @@ public class RecruitService {
 		recruitRepository.findBybandIdAndPosition(bandId, position)
 		.ifPresent((r) -> { throw new RuntimeException("Duplicated recruit"); });
 	}
+
+	public void accept(Integer recruitId, Integer applicantId) throws ClassNotFoundException, SQLException {
+		recruitRepository.accept(recruitId, applicantId);
+	}
 }

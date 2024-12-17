@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내 밴드 - BandConnect</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 스타일 수정 - 각 세션별로 줄 바꾸기 */
+        .band-details-content p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>   
+    <header class="header">
+        <div class="logo">🎵 BandConnect</div>
+        <nav>
+            <div class="nav-links">
+                <a href="/main">홈</a>
+                <a href="/logout">로그아웃</a>
+                <a href="/profile">내 프로필</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="my-bands-section">
+            <h2>내 밴드</h2>
+            <ul class="post-list">
+                <li class="post-card complete" onclick="showBandDetails('드라코스', '홍길동/24/010-1234-1234', '이수민/22/010-9876-5432', '', '', '홍길동')">
+                    <h3>드라코스</h3>
+                    <p><strong>밴드 설명:</strong> 다양한 장르의 음악을 연주하는 팀입니다.</p>
+                </li>
+                <li class="post-card complete" onclick="showBandDetails('오아시스', '김기리/30/010-2222-3333', '김하늘/24/010-5678-4321', '', '', '김기리')">
+                    <h3>오아시스</h3>
+                    <p><strong>밴드 설명:</strong> 록과 발라드를 주로 하는 팀입니다.</p>
+                </li>
+                <li class="post-card complete" onclick="showBandDetails('우즈', '김춘추/27/010-3333-4444', '', '정수현/26/010-1111-2222', '', '김춘추')">
+                    <h3>우즈</h3>
+                    <p><strong>밴드 설명:</strong> 그루브와 리듬을 중요시하는 밴드입니다.</p>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+
+    <!-- Band Details Modal -->
+    <div id="applicant-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <h3>밴드 상세 내용</h3>
+        <p><strong>밴드 이름:</strong> <span id="band-name"></span></p>
+
+        <div class="session">
+            <p><strong>기타:</strong> <span id="guitar-name"></span> (<span id="guitar-age"></span>, <span id="guitar-phone"></span>)</p>
+        </div>
+        <div class="session">
+            <p><strong>보컬:</strong> <span id="vocal-name"></span> (<span id="vocal-age"></span>, <span id="vocal-phone"></span>)</p>
+        </div>
+        <div class="session">
+            <p><strong>드럼:</strong> <span id="drum-name"></span> (<span id="drum-age"></span>, <span id="drum-phone"></span>)</p>
+        </div>
+        <div class="session">
+            <p><strong>베이스:</strong> <span id="bass-name"></span> (<span id="bass-age"></span>, <span id="bass-phone"></span>)</p>
+        </div>
+        <div class="session">
+            <p><strong>리더:</strong> <span id="band-leader"></span></p>
+        </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2024 BandConnect. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // 밴드 상세 내용 모달을 띄우는 함수
+        function showBandDetails(bandName, guitarInfo, vocalInfo, drumInfo, bassInfo, leader) {
+            document.getElementById('band-name').textContent = bandName;
+
+            const guitarDetails = guitarInfo.split('/');
+            document.getElementById('guitar-name').textContent = guitarDetails[0];
+            document.getElementById('guitar-age').textContent = guitarDetails[1];
+            document.getElementById('guitar-phone').textContent = guitarDetails[2];
+
+            const vocalDetails = vocalInfo.split('/');
+            document.getElementById('vocal-name').textContent = vocalDetails[0];
+            document.getElementById('vocal-age').textContent = vocalDetails[1];
+            document.getElementById('vocal-phone').textContent = vocalDetails[2];
+
+            const drumDetails = drumInfo.split('/');
+            document.getElementById('drum-name').textContent = drumDetails[0];
+            document.getElementById('drum-age').textContent = drumDetails[1];
+            document.getElementById('drum-phone').textContent = drumDetails[2];
+
+            const bassDetails = bassInfo.split('/');
+            document.getElementById('bass-name').textContent = bassDetails[0];
+            document.getElementById('bass-age').textContent = bassDetails[1];
+            document.getElementById('bass-phone').textContent = bassDetails[2];
+
+            document.getElementById('band-leader').textContent = leader;
+            document.getElementById('applicant-modal').style.display = 'flex'; // 모달 보이기
+        }
+
+        // 모달을 닫는 함수
+        function closeModal() {
+            document.getElementById('applicant-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@ package code;
 public enum ApplyStatus {
 	APPLIED("지원"),
 	REJECTED("거절"),
-	EXCEPTED("수락"),
+	ACCEPTED("수락"),
 	CLOSED("마감");
 	
 	ApplyStatus (String description){
@@ -11,4 +11,8 @@ public enum ApplyStatus {
 	}
 	
 	private final String description;
+	
+	public String getDescription() {
+		return description;
+	}
 }

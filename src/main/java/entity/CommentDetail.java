@@ -2,12 +2,11 @@ package entity;
 
 import java.sql.Timestamp;
 
-public class Recruit {
+public class CommentDetail {
 	private Integer id;
-	private Integer bandId;
 	private Integer postId;
-	private String position;
-	private Integer acceptedId;
+	private User author;
+	private String content;
 	private Timestamp createdAt;
 	public Integer getId() {
 		return id;
@@ -21,23 +20,17 @@ public class Recruit {
 	public void setPostId(Integer postId) {
 		this.postId = postId;
 	}
-	public Integer getBandId() {
-		return bandId;
+	public User getAuthor() {
+		return author;
 	}
-	public void setBandId(Integer bandId) {
-		this.bandId = bandId;
+	public void setAuthor(User author) {
+		this.author = author;
 	}
-	public String getPosition() {
-		return position;
+	public String getContent() {
+		return content;
 	}
-	public void setPosition(String position) {
-		this.position = position;
-	}
-	public Integer getAcceptedId() {
-		return acceptedId;
-	}
-	public void setAcceptedId(Integer acceptedId) {
-		this.acceptedId = acceptedId;
+	public void setContent(String content) {
+		this.content = content;
 	}
 	public Timestamp getCreatedAt() {
 		return createdAt;
@@ -45,6 +38,5 @@ public class Recruit {
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
-	
 	
 }

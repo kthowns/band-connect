@@ -3,3 +3,5 @@
 김태현 : PM, Server, DB
 
 김가람 : UI/UX, Front
+
+Used JDBC driver : mysql-connector-j-9.1.0

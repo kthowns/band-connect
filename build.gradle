@@ -21,7 +21,7 @@ dependencies {
     implementation 'javax.servlet:jstl:1.2'
 
     // MySQL Connector
-    implementation 'com.mysql:mysql-connector-j:8.3.0'
+    implementation 'com.mysql:mysql-connector-j:9.1.0'
 }
 
 gretty {

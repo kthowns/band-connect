@@ -96,7 +96,7 @@ public class AplRepository {
 		pstmt.setInt(1, recruitId);
 		pstmt.setInt(2, applicantId);
 		connUtil.requestUpdate(Apl.class);
-		PreparedStatement pstmt_ = connUtil.setQuery("UPDATE apls SET status = 'CLOSED' WHERE recruit_id != ? OR applicant_id != ?");
+		PreparedStatement pstmt_ = connUtil.setQuery("UPDATE apls SET status = 'CLOSED' WHERE recruit_id = ? AND applicant_id != ?");
 		pstmt_.setInt(1, recruitId);
 		pstmt_.setInt(2, applicantId);
 		connUtil.requestUpdate(Apl.class);

@@ -1,0 +1,124 @@
+/* --- Main Page Layout --- */
+main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* --- Search Section (태그 검색) --- */
+.section h2 {
+    font-size: 1.8rem;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+}
+
+.tag-search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.tag-search form {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    gap: 0; /* 검색창과 버튼 밀착 */
+}
+
+.tag-search input {
+    flex: 1;
+    padding: 0.8rem 1.2rem;
+    border: 2px solid #4CAF50;
+    border-radius: 30px 0 0 30px;
+    font-size: 1rem;
+    outline: none;
+    transition: box-shadow 0.3s;
+}
+
+.tag-search input:focus {
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+}
+
+.tag-search-btn {
+    padding: 0.8rem 1.8rem;
+    background-color: #4CAF50;
+    color: white;
+    border: 2px solid #4CAF50;
+    border-radius: 0 30px 30px 0;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.tag-search-btn:hover {
+    background-color: #45a049;
+}
+
+/* --- Content Header (글 작성 버튼 구역) --- */
+.card-container {
+    text-align: left;
+}
+
+.comment-inline-submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    float: right; /* 버튼을 오른쪽으로 */
+}
+
+/* --- Post Cards (메인 특화) --- */
+.card.clickable {
+    clear: both; /* 버튼 float 해제 */
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.card.clickable:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    border-color: #4CAF50;
+}
+
+.card h3 {
+    display: inline-block;
+    color: #2e7d32;
+    margin-right: 10px;
+}
+
+/* 해시태그 디자인 */
+.hashtag {
+    display: inline-block;
+    color: #3b82f6;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.card p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    color: #475569;
+}
+
+.comment-count {
+    font-weight: bold;
+    color: #4CAF50 !important;
+    font-size: 0.85rem !important;
+}
+
+.date {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 10px;
+    text-align: right;
+}

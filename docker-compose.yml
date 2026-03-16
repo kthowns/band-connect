@@ -1,8 +1,8 @@
 version: '3.8'
 services:
   band-db:
-    image: mysql:8.0
     container_name: band-db
+    image: mysql:8.0
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
@@ -10,7 +10,7 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - db-data:/var/lib/mysql
+      - band-db-data:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 5s
@@ -20,6 +20,7 @@ services:
       - band-net
 
   band-app:
+    container_name: band-app
     image: ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:latest
     env_file:
       - .env
@@ -33,3 +34,6 @@ services:
 networks:
   band-net:
     external: true
+
+volumes:
+  band-db-data:

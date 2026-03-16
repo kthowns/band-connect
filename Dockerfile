@@ -11,7 +11,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew clean war --no-daemon
 
 # 2단계: 실행 스테이지 (Tomcat 9)
-FROM tomcat:9.0-jdk17-openjdk-slim
+FROM tomcat:9.0-jre17-temurin-focal
 
 # 빌드 스테이지에서 생성된 war 파일을 Tomcat의 webapps 폴더로 복사
 # ROOT.war로 이름을 바꾸면 접속 시 경로 뒤에 프로젝트명을 붙이지 않아도 됩니다 (예: localhost:8082/)

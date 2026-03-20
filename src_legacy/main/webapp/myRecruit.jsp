@@ -58,7 +58,7 @@
 
                 <div class="recruit-container">
                     <p class="recruit-subtitle"><strong>파트별 모집 현황</strong></p>
-                    <ul class="session-apl">
+                    <ul class="session-application">
                         <% for (Recruit recruit : post.getRecruits()) {
                             boolean isClosed = recruit.getAcceptedId() > 0; %>
                         <li class="session-item">
@@ -73,10 +73,10 @@
                                 <%
                                     boolean hasApplicant = false;
                                     if (apls != null) {
-                                        for (Apl apl : apls) {
-                                            if (apl.getRecruitId().equals(recruit.getId())) {
+                                        for (Apl application : apls) {
+                                            if (application.getRecruitId().equals(recruit.getId())) {
                                                 hasApplicant = true;
-                                                String statusName = apl.getStatus().name();
+                                                String statusName = application.getStatus().name();
                                                 String itemClass = "applicant-name";
 
                                                 if (statusName.equals("ACCEPTED")) itemClass += " accepted decided";
@@ -87,17 +87,17 @@
                                 <li>
                                     <div class="<%= itemClass %>"
                                          onclick="showApplicantDetails(
-                                                 '<%= apl.getRecruitId() %>',
-                                                 '<%= apl.getApplicantId() %>',
-                                                 '<%= apl.getName() %>',
-                                                 '<%= apl.getAge() %>',
-                                                 '<%= apl.getLocation() %>',
-                                                 '<%= apl.getPhone() %>',
-                                                 '<%= apl.getDescription() %>',
-                                                 '<%= apl.getStatus().getDescription() %>',
-                                                 '<%= apl.getStatus().name() %>'
+                                                 '<%= application.getRecruitId() %>',
+                                                 '<%= application.getApplicantId() %>',
+                                                 '<%= application.getName() %>',
+                                                 '<%= application.getAge() %>',
+                                                 '<%= application.getLocation() %>',
+                                                 '<%= application.getPhone() %>',
+                                                 '<%= application.getDescription() %>',
+                                                 '<%= application.getStatus().getDescription() %>',
+                                                 '<%= application.getStatus().name() %>'
                                                  )">
-                                        👤 <%= apl.getName() %>
+                                        👤 <%= application.getName() %>
                                         <% if (statusName.equals("ACCEPTED")) { %> <span
                                             class="mini-tag">✔️</span> <% } %>
                                         <% if (statusName.equals("REJECTED")) { %> <span

@@ -1,37 +1,44 @@
 plugins {
-    id 'java'
-    id 'war'
-    id 'org.gretty' version '3.1.1'
+	id 'java'
+	id 'org.springframework.boot' version '3.5.12'
+	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'code'
-version = '1.0-SNAPSHOT'
-sourceCompatibility = '17'
+group = 'com.kthowns'
+version = '0.0.1-SNAPSHOT'
+description = 'bandconnect'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    // Servlet & JSP API (Tomcat에서 제공하므로 providedCompile 사용)
-    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
-    providedCompile 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.3'
-    
-    // JSTL (JSP에서 태그 라이브러리 사용 시 필요)
-    implementation 'javax.servlet:jstl:1.2'
-
-    // MySQL Connector
-    implementation 'com.mysql:mysql-connector-j:9.1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-gretty {
-    contextPath = '/'
-    servletContainer = 'tomcat9'
-    httpPort = 8080
-    // 소스 변경 시 자동 재시작 설정 (선택 사항)
-    managedClassReload = false
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+tasks.named('test') {
+	useJUnitPlatform()
 }

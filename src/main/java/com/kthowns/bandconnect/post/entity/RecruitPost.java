@@ -1,0 +1,50 @@
+package com.kthowns.bandconnect.post.entity;
+
+import com.kthowns.bandconnect.band.entity.Band;
+import com.kthowns.bandconnect.user.entity.User;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+@Table(name = "recruit_posts")
+@EntityListeners(AuditingEntityListener.class)
+public class RecruitPost {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    private User author;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "band_id")
+    private Band band;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "content", nullable = false)
+    private String content;
+
+    @Column(name = "views")
+    private Long views;
+
+    @Column(name = "created_at")
+    @CreatedDate
+    private LocalDateTime createdAt;
+}

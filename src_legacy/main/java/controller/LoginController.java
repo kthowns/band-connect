@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import entity.User;
 import service.UserService;
 
-@WebServlet("/login")
+//@WebServlet("/login")
 public class LoginController extends HttpServlet {
 	private final UserService userService = new UserService();
 

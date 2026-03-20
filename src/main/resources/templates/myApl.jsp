@@ -18,8 +18,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>지원 폼 관리</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="styles/styles-myApl.css">
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="../static/css/styles-myApl.css">
 </head>
 <body>
 <header class="header">

@@ -27,23 +27,5 @@ public class NewRecruitController extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
 		response.sendRedirect("/newRecruit.jsp");
 	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-		String title = (String) request.getParameter("title");
-		String bandName = (String) request.getParameter("bandName");
-		String content = (String) request.getParameter("content");
-		String hashtag = (String) request.getParameter("hashtag");
-		String[] parts = request.getParameterValues("parts[]");
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
-		System.out.println(title + "/"+bandName+"/"+content+"/"+parts);
-		try {
-			postService.createPost(user.getId(), title, bandName, content, parts, hashtag);
-		} catch (Exception e) {
-			session.setAttribute("message", e.getMessage());
-		}
-		response.sendRedirect("/main");
-	}
+
 }

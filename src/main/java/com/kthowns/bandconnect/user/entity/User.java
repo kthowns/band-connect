@@ -33,7 +33,7 @@ public class User implements UserDetails {
     private String username;
 
     @JsonIgnore
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @CreatedDate
@@ -42,6 +42,6 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return null;
     }
 }

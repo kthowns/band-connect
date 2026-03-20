@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - BandConnect</title>
+    <!-- static 폴더 기준이므로 /css/... 로 호출 -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="header">
+    <div class="logo">🎵 BandConnect</div>
+    <nav>
+        <div class="nav-links">
+            <a th:href="@{/}">홈</a>
+            <a th:href="@{/login}">로그인/회원가입</a>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section class="register-section">
+        <!-- th:action을 통해 컨텍스트 루트 포함 경로 자동 생성 -->
+        <form class="form" method="post" th:action="@{/signup}" th:object="${signupRequest}" id="registerForm">
+            <h1>회원가입</h1>
+
+            <label for="username">아이디</label>
+            <input type="text" th:field="*{username}" placeholder="아이디를 입력하세요">
+            <p class="error-text" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+
+            <label for="email">이메일</label>
+            <input type="email" th:field="*{email}" placeholder="이메일을 입력하세요">
+            <p class="error-text" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+
+            <label for="password">비밀번호</label>
+            <input type="password" th:field="*{password}" placeholder="비밀번호를 입력하세요">
+            <p class="error-text" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
+            <!-- 비밀번호 확인은 DTO에 필드가 없다면 name으로만 처리하거나 DTO에 추가해줘! -->
+            <label for="confirm-password">비밀번호 확인</label>
+            <input type="password" id="confirm-password" name="confirmPassword" placeholder="비밀번호를 다시 입력하세요">
+
+            <button type="submit">회원가입</button>
+
+            <p class="sign-up-text">이미 계정이 있으신가요? <a th:href="@{/login}">로그인하기</a></p>
+        </form>
+    </section>
+</main>
+
+<script th:inline="javascript">
+    /* 서버에서 보낸 메시지(중복 아이디 등) 알럿 처리 */
+    /*<![CDATA[*/
+    const serverMessage = [[${message}]];
+    if (serverMessage) {
+        alert(serverMessage);
+    }
+    /*]]>*/
+
+    /* 클라이언트 사이드 유효성 검사 로직 */
+    document.getElementById("registerForm").addEventListener("submit", function (event) {
+        const username = document.getElementById("username").value;
+        if (username.length < 3) {
+            alert("아이디는 최소 3자 이상이어야 합니다.");
+            event.preventDefault();
+            return;
+        }
+
+        const email = document.getElementById("email").value;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(email)) {
+            alert("유효한 이메일 주소를 입력하세요.");
+            event.preventDefault();
+            return;
+        }
+
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm-password").value;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            alert("비밀번호는 최소 8자 이상이고, 숫자와 문자를 포함해야 합니다.");
+            event.preventDefault();
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("비밀번호가 일치하지 않습니다.");
+            event.preventDefault();
+            return;
+        }
+    });
+</script>
+
+<footer class="footer">
+    <p>© 2026 BandConnect. All Rights Reserved.</p>
+</footer>
+</body>
+</html>

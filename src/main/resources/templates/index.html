@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BandConnect</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/styles-main.css}">
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">🎵 BandConnect</div>
+    <nav>
+        <div class="nav-links">
+            <a th:href="@{/}">홈</a>
+            <!-- 세션 유저 존재 여부에 따른 조건부 렌더링 -->
+            <th:block sec:authorize="isAuthenticated()">
+                <form id="logoutForm" th:action="@{/logout}" method="post"></form>
+                <a href="#" onclick="document.getElementById('logoutForm').submit(); return false;">
+                    로그아웃
+                </a>
+
+                <a th:href="@{/profile}">내 프로필</a>
+            </th:block>
+
+            <th:block sec:authorize="isAnonymous()">
+                <a th:href="@{/login}">로그인/회원가입</a>
+            </th:block>
+        </div>
+    </nav>
+</header>
+
+<!-- Alert 메시지 처리 -->
+<script th:if="${session.message != null}" th:inline="javascript">
+    alert([[${session.message}]]);
+</script>
+
+<main>
+    <section id="search" class="section">
+        <h2>🎸 우리 밴드에 꼭 맞는 멤버 찾기</h2>
+        <div class="tag-search">
+            <form method="post" th:action="@{/search}">
+                <input type="text" id="tag" name="tag" placeholder="장르나 악기를 입력하세요 (예: #밴드 #기타)" required>
+                <button type="submit" class="tag-search-btn">검색</button>
+            </form>
+        </div>
+
+        <div class="card-container">
+            <div class="content-header">
+                <h3>최신 구인 소식</h3>
+                <button sec:authorize="isAuthenticated()"
+                        class="comment-inline-submit-btn"
+                        th:onclick="|location.href='@{/newRecruit}'|">글 작성
+                </button>
+            </div>
+
+            <!-- 게시글이 없을 때 (Empty State) -->
+            <div class="no-posts" th:if="${#lists.isEmpty(posts)}">
+                <p>등록된 구인글이 없습니다. 첫 소식을 올려보세요!</p>
+            </div>
+
+            <!-- 게시글 리스트 반복문 -->
+            <div class="card clickable"
+                 th:unless="${#lists.isEmpty(posts)}"
+                 th:each="post : ${posts}"
+                 th:onclick="|redirectToDetail('${post.postId}')|">
+
+                <div class="card-title-row">
+                    <h3 th:text="${post.title}">게시글 제목</h3>
+                    <!-- 해시태그 가공: 리스트를 문자열로 합침 -->
+                    <span class="hashtag">
+                        <th:block th:each="tag : ${post.hashtags}" th:text="${tag.hashtag} + ' '"></th:block>
+                    </span>
+                </div>
+
+                <p><strong>밴드명 :</strong> [[${post.band.name}]]</p>
+                <p>
+                    <strong>모집 파트:</strong>
+                    <!-- 모집 중인 파트 필터링 및 출력 -->
+                    <th:block th:each="recruit : ${post.recruits}" th:if="${recruit.acceptedId <= 0}">
+                        <span class="recruit-badge" th:text="${recruit.position}">기타</span>
+                    </th:block>
+
+                    <!-- 모든 파트가 마감되었는지 확인 (모든 acceptedId > 0 인 경우) -->
+                    <span class="status-tag complete"
+                          th:if="${#lists.allMatch(post.recruits, r -> r.acceptedId > 0)}">모집 마감</span>
+                </p>
+
+                <div class="card-footer">
+                    <span class="comment-count">
+                        댓글 [[${post.commentDetails != null ? post.commentDetails.size() : 0}]]
+                        · 조회수 [[${post.views}]]
+                    </span>
+                    <!-- 날짜 포맷팅 (Temporal 객체인 경우 #temporals, Date인 경우 #dates 사용) -->
+                    <span class="date"
+                          th:text="'작성일: ' + ${#strings.substring(post.createdAt, 0, 16)}">작성일: 2026-03-20</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script th:inline="javascript">
+    function redirectToDetail(postId) {
+        // 타임리프 URL 문법을 사용해 안전하게 경로 생성
+        const detailUrl = /*[[@{/postDetail}]]*/ '/postDetail';
+        window.location.href = detailUrl + '?id=' + encodeURIComponent(postId);
+    }
+</script>
+
+<footer class="footer">
+    <p>© 2026 BandConnect. Connecting Musicians Everywhere!</p>
+</footer>
+</body>
+</html>

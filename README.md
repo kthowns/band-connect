@@ -17,16 +17,16 @@
 ## 🛠️ Modernization Key Points (주요 개선 사항)
 
 ### 1. Architecture: Monolithic ➡️ Layered
-- **As-Is:** Servlet 하나에 비즈니스 로직과 DB 접근 로직이 혼재된 구조.
-- **To-Be:** `Controller - Service - Repository - Entity` 계층 분리를 통해 관심사 분리(SoC) 및 유지보수성 향상.
+- **As-Is:** Servlet 하나에 비즈니스 로직과 DB 접근 로직이 혼재된 구조
+- **To-Be:** `Controller - Service - Repository - Entity` 계층 분리를 통해 관심사 분리(SoC) 및 유지보수성 향상
 
 ### 2. View Engine: JSP ➡️ Thymeleaf
-- **As-Is:** 스파게티 코드가 발생하기 쉬운 Scriptlet 기반 JSP.
-- **To-Be:** Natural Template 특성을 가진 **Thymeleaf** 도입으로 퍼블리싱 생산성 및 가독성 확보.
+- **As-Is:** 스파게티 코드가 발생하기 쉬운 Scriptlet 기반 JSP
+- **To-Be:** Natural Template 특성을 가진 **Thymeleaf** 도입으로 퍼블리싱 생산성 및 가독성 확보
 
 ### 3. Data Access: JDBC ➡️ Spring Data JPA
-- **As-Is:** 반복적인 SQL 작성 및 자원 반납(close) 노가다 발생.
-- **To-Be:** **JPA** 도입으로 객체 지향적인 데이터 핸들링 및 `default_batch_fetch_size` 설정을 통한 N+1 문제 최적화.
+- **As-Is:** 반복적인 SQL 작성 및 자원 반납(close)
+- **To-Be:** **JPA** 도입으로 객체 지향적인 데이터 핸들링
 
 ---
 

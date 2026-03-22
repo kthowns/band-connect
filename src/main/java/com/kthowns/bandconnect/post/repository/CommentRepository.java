@@ -22,4 +22,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             " JOIN FETCH c.author" +
             " WHERE c.id = :id")
     Optional<Comment> findByIdWithAuthor(@Param("id") Long id);
+
+    List<Comment> findByAuthor_Id(Long authorId);
 }

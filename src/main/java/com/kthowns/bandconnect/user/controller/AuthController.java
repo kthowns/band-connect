@@ -23,13 +23,13 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "auth/login";
     }
 
     @GetMapping("/signup")
     public String signupPage(Model model) {
         model.addAttribute("signupRequest", new SignupRequest());
-        return "signup";
+        return "auth/signup";
     }
 
     @PostMapping("/signup")
@@ -39,7 +39,7 @@ public class AuthController {
             RedirectAttributes rttr
     ) {
         if (bindingResult.hasErrors()) {
-            return "signup";
+            return "auth/signup";
         }
         try {
             userService.signup(request);

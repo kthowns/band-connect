@@ -1,6 +1,5 @@
 package com.kthowns.bandconnect.recruit.entity;
 
-import com.kthowns.bandconnect.band.entity.Band;
 import com.kthowns.bandconnect.post.entity.RecruitPost;
 import com.kthowns.bandconnect.user.entity.User;
 import jakarta.persistence.*;

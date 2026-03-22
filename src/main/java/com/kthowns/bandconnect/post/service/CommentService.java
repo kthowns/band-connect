@@ -3,6 +3,7 @@ package com.kthowns.bandconnect.post.service;
 import com.kthowns.bandconnect.common.exception.CustomException;
 import com.kthowns.bandconnect.common.exception.CustomResponseCode;
 import com.kthowns.bandconnect.post.dto.AddCommentRequest;
+import com.kthowns.bandconnect.post.dto.CommentDto;
 import com.kthowns.bandconnect.post.entity.Comment;
 import com.kthowns.bandconnect.post.entity.RecruitPost;
 import com.kthowns.bandconnect.post.repository.CommentRepository;
@@ -11,6 +12,8 @@ import com.kthowns.bandconnect.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +45,10 @@ public class CommentService {
         }
 
         commentRepository.deleteById(id);
+    }
+
+    public List<CommentDto> getComments(Long authorId) {
+        return commentRepository.findByAuthor_Id(authorId).stream()
+                .map(CommentDto::fromEntity).toList();
     }
 }

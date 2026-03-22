@@ -116,7 +116,6 @@ public class PostService {
                         PostApplicantCount::getCount
                 ));
 
-
         return recruitPosts.stream()
                 .map((recruitPost) ->
                         RecruitPostDetail.builder()

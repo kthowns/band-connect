@@ -1,17 +1,4 @@
-<%@page import="entity.User" %>
-<%@page import="entity.PostDetail" %>
-<%@page import="entity.Recruit" %>
-<%@page import="entity.Comment" %>
-<%@page import="entity.Apl" %>
-<%@page import="entity.Post" %>
-<%@page import="entity.AplDetail" %>
-<%@page import="code.ApplyStatus" %>
-<%@page import="java.util.List" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
 
-<% User user = (User) session.getAttribute("user"); %>
-<% List<AplDetail> aplDetails = (List<AplDetail>) request.getAttribute("aplDetails"); %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>

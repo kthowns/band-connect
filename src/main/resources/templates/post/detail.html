@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${postDetail.title}">BandConnect - 게시글 상세</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header th:replace="~{fragments/navBar :: navBar}"></header>
+
+<main class="post-container">
+    <!-- 게시글 카드 -->
+    <section class="post-card">
+        <div class="post-header-row">
+            <h1 class="post-title" th:text="${postDetail.title}">게시글 제목</h1>
+
+            <!-- 작성자 본인에게만 삭제 버튼 노출 -->
+            <form th:if="${user != null and postDetail.author.id == user.id}"
+                  th:action="@{/remove}" method="post" class="delete-form">
+                <input type="hidden" name="cls" value="Post">
+                <input type="hidden" name="postId" th:value="${postDetail.id}">
+                <button type="submit" class="delete-btn" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+            </form>
+        </div>
+
+        <div class="post-meta">
+            <span class="date" th:text="|작성일: ${#strings.substring(postDetail.createdAt, 0, 16)}|">작성일</span> |
+            <span class="views" th:text="|조회수: ${postDetail.views}|">조회수</span> |
+            <span class="applicants" th:text="|지원자 수: ${postDetail.applicantsCount}|">지원자 수</span>
+            <p><strong th:text="|밴드명 : ${postDetail.band.name}|">밴드명</strong></p>
+        </div>
+
+        <p class="post-content" th:text="${postDetail.content}">게시글 본문 내용</p>
+
+        <!-- 해시태그 목록 -->
+        <div class="hashtag">
+            <span th:each="tag : ${postDetail.hashtags}" th:text="|${tag.name} |">#태그 </span>
+        </div>
+
+        <!-- 모집 현황 리스트 -->
+        <ul class="session-status">
+            <li th:each="recruit : ${postDetail.recruits}">
+                <span th:text="${recruit.position}">기타</span>
+                <!-- acceptedId > 0 이면 마감 클래스 추가 -->
+                <span th:classappend="${recruit.member != null} ? 'complete' : ''"
+                      class="status"
+                      th:text="${recruit.member != null ? '마감' : '모집 중'}">모집 중</span>
+            </li>
+        </ul>
+
+        <button class="apply-btn" onclick="openModal()">지원하기</button>
+    </section>
+
+    <!-- 댓글 섹션 -->
+    <section class="comments-section">
+        <h2>댓글</h2>
+
+        <!-- 로그인한 사용자만 댓글 작성 가능 -->
+        <form sec:authorize="isAuthenticated()" th:action="@{/posts/{id}/comment/write(id=${postDetail.id})}"
+              method="post">
+            <input type="text" name="content" id="comment-inline" class="comment-inline-input"
+                   placeholder="댓글을 입력하세요" required>
+            <button type="submit" class="comment-inline-submit-btn">게시</button>
+        </form>
+
+        <div class="comments-list">
+            <div th:each="comment : ${postDetail.comments}" class="comment">
+                <div class="comment-header">
+                    <strong th:text="|${comment.author.username}:|">유저명:</strong>
+                    <span th:text="${#strings.substring(comment.createdAt, 0, 16)}">작성일</span>
+                </div>
+                <p th:text="${comment.content}">댓글 내용</p>
+
+                <!-- 댓글 작성자 본인 삭제 버튼 -->
+                <form th:if="${user != null and comment.author.id == user.id}"
+                      th:action="@{/remove}" method="post">
+                    <input type="hidden" name="cls" value="Comment">
+                    <input type="hidden" name="postId" th:value="${postDetail.id}">
+                    <input type="hidden" name="commentId" th:value="${comment.id}">
+                    <button type="submit" class="delete-btn-sm">삭제</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- 지원 모달 -->
+<div id="applyModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>지원 폼</h2>
+        <form id="application-form" class="form" th:action="@{/apply}" method="post">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
+
+            <label for="age">나이</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="location">지역</label>
+            <input type="text" id="location" name="location" required>
+
+            <label for="position">파트</label>
+            <select id="position" name="position" required>
+                <!-- 마감되지 않은 파트만 셀렉트 박스에 노출 -->
+                <option th:each="recruit : ${postDetail.recruits}"
+                        th:if="${recruit.member == null}"
+                        th:value="${recruit.position}"
+                        th:text="${recruit.position}">파트명
+                </option>
+            </select>
+
+            <label for="phone">전화번호</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="description">소개</label>
+            <textarea id="description" name="description" rows="4" placeholder="자기소개를 입력하세요" required></textarea>
+
+            <input type="hidden" name="postId" th:value="${postDetail.id}">
+            <input type="hidden" name="bandId" th:value="${postDetail.band.id}">
+            <input type="hidden" name="applicantId" th:value="${user != null ? user.id : 0}">
+
+            <button type="submit">제출하기</button>
+        </form>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script th:inline="javascript">
+    function openModal() {
+        /*<![CDATA[*/
+        const isAuthenticated = [[${user != null
+    }]]
+        ;
+        if (isAuthenticated) {
+            document.getElementById('applyModal').style.display = 'block';
+        } else {
+            alert("로그인 후 이용해주세요.");
+            location.href = /*[[@{/login}]]*/ '/login';
+        }
+        /*]]>*/
+    }
+
+    function closeModal() {
+        document.getElementById('applyModal').style.display = 'none';
+    }
+</script>
+</body>
+</html>

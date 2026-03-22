@@ -1,17 +1,12 @@
 package com.kthowns.bandconnect.user.service;
 
-import com.kthowns.bandconnect.common.exception.CustomErrorCode;
+import com.kthowns.bandconnect.common.exception.CustomResponseCode;
 import com.kthowns.bandconnect.common.exception.CustomException;
 import com.kthowns.bandconnect.user.dto.SignupRequest;
-import com.kthowns.bandconnect.user.dto.UserDto;
 import com.kthowns.bandconnect.user.entity.User;
 import com.kthowns.bandconnect.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +21,11 @@ public class UserService {
     @Transactional
     public void signup(SignupRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new CustomException(CustomErrorCode.DUPLICATED_USERNAME);
+            throw new CustomException(CustomResponseCode.DUPLICATED_USERNAME);
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new CustomException(CustomErrorCode.DUPLICATED_EMAIL);
+            throw new CustomException(CustomResponseCode.DUPLICATED_EMAIL);
         }
 
         User user = User.builder()

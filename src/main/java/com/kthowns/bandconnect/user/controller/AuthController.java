@@ -1,7 +1,7 @@
 package com.kthowns.bandconnect.user.controller;
 
-import com.kthowns.bandconnect.common.exception.CustomErrorCode;
 import com.kthowns.bandconnect.common.exception.CustomException;
+import com.kthowns.bandconnect.common.exception.CustomResponseCode;
 import com.kthowns.bandconnect.user.dto.SignupRequest;
 import com.kthowns.bandconnect.user.service.UserService;
 import jakarta.validation.Valid;
@@ -43,13 +43,15 @@ public class AuthController {
         }
         try {
             userService.signup(request);
-            rttr.addFlashAttribute("message", "회원가입이 완료되었습니다. 로그인해주세요.");
+            rttr.addFlashAttribute("message", CustomResponseCode.SIGNUP_SUCCESS);
             return "redirect:/login";
         } catch (CustomException e) {
+            log.error(e.getMessage());
             rttr.addFlashAttribute("message", e.getMessage());
             return "redirect:/signup";
         } catch (Exception e) {
-            rttr.addFlashAttribute("message", CustomErrorCode.INTERNAL_SERVER_ERROR.getMessage());
+            log.error(e.getMessage());
+            rttr.addFlashAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
             return "redirect:/signup";
         }
     }

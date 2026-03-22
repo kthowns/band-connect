@@ -23,6 +23,8 @@ public class SecurityConfig {
                             .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                             .requestMatchers("/error").permitAll()
                             .requestMatchers("/login", "/", "/signup").permitAll()
+                            .requestMatchers("/posts/**").permitAll()
+                            .requestMatchers("/posts/*/comment/write", "/posts/write").authenticated()
                             .anyRequest().authenticated();
                 })
                 .formLogin(form -> form

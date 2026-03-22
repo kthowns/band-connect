@@ -30,7 +30,7 @@ public class Band {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "leader_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User leader;

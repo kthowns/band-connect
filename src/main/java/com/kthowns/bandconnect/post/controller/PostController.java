@@ -1,37 +1,88 @@
 package com.kthowns.bandconnect.post.controller;
 
-import jakarta.servlet.http.HttpSession;
+import com.kthowns.bandconnect.band.dto.BandDto;
+import com.kthowns.bandconnect.band.service.BandService;
+import com.kthowns.bandconnect.common.exception.CustomException;
+import com.kthowns.bandconnect.common.exception.CustomResponseCode;
+import com.kthowns.bandconnect.post.dto.AddPostRequest;
+import com.kthowns.bandconnect.post.dto.RecruitPostDetail;
+import com.kthowns.bandconnect.post.facade.PostFacade;
+import com.kthowns.bandconnect.post.service.PostService;
+import com.kthowns.bandconnect.user.entity.User;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
+    private final PostService postService;
+    private final BandService bandService;
+    private final PostFacade postFacade;
+
+    @GetMapping("/{id}")
+    public String postDetail(
+            Model model,
+            @PathVariable @Nullable Long id,
+            @AuthenticationPrincipal User user
+    ) {
+        if (id == null) {
+            return "redirect:/";
+        }
+
+        try {
+            RecruitPostDetail postDetail = postFacade.getRecruitPostDetail(id);
+            model.addAttribute("postDetail", postDetail);
+            model.addAttribute("user", user);
+            return "post/detail";
+        } catch (Exception e) {
+            return "redirect:/";
+        }
+    }
+
     @GetMapping("/write")
-    public String write() {
+    public String writePost(
+            Model model,
+            @AuthenticationPrincipal User user
+    ) {
+        List<BandDto> myBands = bandService.getMyBands(user)
+                .stream().map(BandDto::fromEntity).toList();
+        model.addAttribute("bands", myBands);
         return "post/write";
     }
 
     @PostMapping("/write")
     public String writePost(
-            HttpSession session
+            @ModelAttribute AddPostRequest request,
+            @AuthenticationPrincipal User user,
+            RedirectAttributes rttr,
+            BindingResult bindingResult
     ) {
-        String title = (String) request.getParameter("title");
-        String bandName = (String) request.getParameter("bandName");
-        String content = (String) request.getParameter("content");
-        String hashtag = (String) request.getParameter("hashtag");
-        String[] parts = request.getParameterValues("parts[]");
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        try {
-            postService.createPost(user.getId(), title, bandName, content, parts, hashtag);
-        } catch (Exception e) {
-            session.setAttribute("message", e.getMessage());
+        if (bindingResult.hasErrors()) {
+            return "post/write";
         }
-        response.sendRedirect("/main");
+        try {
+            postFacade.createPost(request, user);
+            rttr.addFlashAttribute("message", CustomResponseCode.POST_ADD_SUCCESS.getMessage());
+            return "redirect:/";
+        } catch (CustomException e) {
+            log.error(e.getMessage());
+            rttr.addFlashAttribute("message", e.getMessage());
+            return "redirect:/posts/write";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            rttr.addFlashAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
+            return "redirect:/posts/write";
+        }
     }
 }

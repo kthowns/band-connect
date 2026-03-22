@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BandConnect - Profile</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="header" th:replace="~{fragments/navBar :: navBar}"></header>
+
+<main class="profile-section">
+    <h1>My Profile</h1>
+
+    <div class="profile-info" th:if="${user != null}" th:object="${user}">
+        <p><strong>이름:</strong> <span th:text="*{username}">이름 없음</span></p>
+        <p><strong>이메일:</strong> <span th:text="*{email}">이메일 없음</span></p>
+    </div>
+
+    <div class="profile-actions">
+        <a th:href="@{/myApl}" class="action-link">지원 폼 목록</a>
+        <a th:href="@{/myRecruit}" class="action-link">구인 폼 목록</a>
+        <a th:href="@{/myComment}" class="action-link">내가 쓴 댓글 보기</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

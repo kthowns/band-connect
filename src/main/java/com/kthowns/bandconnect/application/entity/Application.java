@@ -1,6 +1,7 @@
 package com.kthowns.bandconnect.application.entity;
 
 import com.kthowns.bandconnect.application.type.ApplyStatus;
+import com.kthowns.bandconnect.recruit.entity.Recruit;
 import com.kthowns.bandconnect.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +26,12 @@ public class Application {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER) // 지원서에서 사용자 정보는 항상 사용하므로
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recruit_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Recruit recruit;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User applicant;

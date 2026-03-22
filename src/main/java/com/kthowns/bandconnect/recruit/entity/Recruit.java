@@ -28,11 +28,6 @@ public class Recruit {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "band_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Band band;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private RecruitPost recruitPost;

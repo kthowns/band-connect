@@ -29,7 +29,7 @@ public class Comment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private RecruitPost post;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User author;

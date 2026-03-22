@@ -10,6 +10,7 @@ import com.kthowns.bandconnect.post.facade.PostFacade;
 import com.kthowns.bandconnect.post.service.PostService;
 import com.kthowns.bandconnect.user.entity.User;
 import jakarta.annotation.Nullable;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +35,8 @@ public class PostController {
     public String postDetail(
             Model model,
             @PathVariable @Nullable Long id,
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal User user,
+            HttpServletRequest request
     ) {
         if (id == null) {
             return "redirect:/";
@@ -44,6 +46,7 @@ public class PostController {
             RecruitPostDetail postDetail = postFacade.getRecruitPostDetail(id);
             model.addAttribute("postDetail", postDetail);
             model.addAttribute("user", user);
+            model.addAttribute("currentUri", request.getRequestURI());
             return "post/detail";
         } catch (Exception e) {
             return "redirect:/";
@@ -83,6 +86,22 @@ public class PostController {
             log.error(e.getMessage());
             rttr.addFlashAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
             return "redirect:/posts/write";
+        }
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deletePost(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User user,
+            RedirectAttributes rttr
+    ) {
+        try {
+            postService.deletePost(id, user);
+            rttr.addFlashAttribute("message", CustomResponseCode.POST_DELETE_SUCCESS.getMessage());
+            return "redirect:/";
+        } catch (Exception e) {
+            rttr.addFlashAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
+            return "redirect:/posts/" + id;
         }
     }
 }

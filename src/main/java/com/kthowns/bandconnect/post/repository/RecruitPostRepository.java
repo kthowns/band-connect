@@ -50,6 +50,11 @@ public interface RecruitPostRepository extends JpaRepository<RecruitPost, Long> 
             " JOIN FETCH rp.author")
     List<RecruitPost> findAllWithBandAndAuthor();
 
+    @Query("SELECT rp FROM RecruitPost rp" +
+            " JOIN FETCH rp.author" +
+            " WHERE rp.id = :id")
+    Optional<RecruitPost> findByIdWithAuthor(@Param("id") Long id);
+
     @Modifying
     @Query("UPDATE RecruitPost rp SET rp.views = rp.views + 1 WHERE rp.id = :id")
     void incrementViews(@Param("id") Long id);

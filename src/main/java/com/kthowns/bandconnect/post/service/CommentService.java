@@ -31,4 +31,16 @@ public class CommentService {
                         .build()
         );
     }
+
+    @Transactional
+    public void deleteComment(Long id, User user) {
+        Comment comment = commentRepository.findByIdWithAuthor(id)
+                .orElseThrow(() -> new CustomException(CustomResponseCode.COMMENT_NOT_FOUND));
+
+        if (!comment.getAuthor().getId().equals(user.getId())) {
+            throw new CustomException(CustomResponseCode.FORBIDDEN);
+        }
+
+        commentRepository.deleteById(id);
+    }
 }

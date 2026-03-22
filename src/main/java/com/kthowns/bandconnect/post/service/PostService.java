@@ -158,4 +158,16 @@ public class PostService {
                         .build()
         );
     }
+
+    @Transactional
+    public void deletePost(Long postId, User user) {
+        RecruitPost recruitPost = recruitPostRepository.findByIdWithAuthor(postId)
+                .orElseThrow(() -> new CustomException(CustomResponseCode.POST_NOT_FOUND));
+
+        if (!recruitPost.getAuthor().getId().equals(user.getId())) {
+            throw new CustomException(CustomResponseCode.FORBIDDEN);
+        }
+
+        recruitPostRepository.delete(recruitPost);
+    }
 }

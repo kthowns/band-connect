@@ -1,5 +1,6 @@
 package com.kthowns.bandconnect.application.repository;
 
+import com.kthowns.bandconnect.application.dto.ApplicationDto;
 import com.kthowns.bandconnect.application.dto.PostApplicantCount;
 import com.kthowns.bandconnect.application.entity.Application;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     List<PostApplicantCount> countByRecruitPostIds(@Param("postIds") List<Long> postIds);
 
     Long countByRecruitRecruitPost_Id(Long recruitPostId);
+
+    List<Application> findByApplicant_Id(Long applicantId);
 }

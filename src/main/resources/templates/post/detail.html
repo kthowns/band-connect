@@ -92,7 +92,7 @@
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <h2>지원 폼</h2>
-        <form id="application-form" class="form" th:action="@{/apply}" method="post">
+        <form id="application-form" class="form" th:action="@{/recruits/apply}" method="post">
             <label for="name">이름</label>
             <input type="text" id="name" name="name" placeholder="이름을 입력하세요" required>
 
@@ -102,12 +102,12 @@
             <label for="location">지역</label>
             <input type="text" id="location" name="location" required>
 
-            <label for="position">파트</label>
-            <select id="position" name="position" required>
+            <label for="recruitId">파트</label>
+            <select id="recruitId" name="recruitId" required>
                 <!-- 마감되지 않은 파트만 셀렉트 박스에 노출 -->
                 <option th:each="recruit : ${postDetail.recruits}"
                         th:if="${recruit.member == null}"
-                        th:value="${recruit.position}"
+                        th:value="${recruit.id}"
                         th:text="${recruit.position}">파트명
                 </option>
             </select>
@@ -118,9 +118,7 @@
             <label for="description">소개</label>
             <textarea id="description" name="description" rows="4" placeholder="자기소개를 입력하세요" required></textarea>
 
-            <input type="hidden" name="postId" th:value="${postDetail.id}">
-            <input type="hidden" name="bandId" th:value="${postDetail.band.id}">
-            <input type="hidden" name="applicantId" th:value="${user != null ? user.id : 0}">
+            <input type="hidden" name="returnUri" th:value="${currentUri}">
 
             <button type="submit">제출하기</button>
         </form>

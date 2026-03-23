@@ -43,7 +43,7 @@ public class AuthController {
         }
         try {
             userService.signup(request);
-            rttr.addFlashAttribute("message", CustomResponseCode.SIGNUP_SUCCESS);
+            rttr.addFlashAttribute("message", CustomResponseCode.SIGNUP_SUCCESS.getMessage());
             return "redirect:/login";
         } catch (CustomException e) {
             log.error(e.getMessage());

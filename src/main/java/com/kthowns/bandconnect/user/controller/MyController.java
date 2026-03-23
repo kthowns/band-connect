@@ -1,5 +1,7 @@
 package com.kthowns.bandconnect.user.controller;
 
+import com.kthowns.bandconnect.application.dto.ApplicationDto;
+import com.kthowns.bandconnect.application.service.ApplicationService;
 import com.kthowns.bandconnect.post.dto.CommentDto;
 import com.kthowns.bandconnect.post.service.CommentService;
 import com.kthowns.bandconnect.user.entity.User;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequestMapping("/my")
 public class MyController {
     private final CommentService commentService;
+    private final ApplicationService applicationService;
 
     @GetMapping("/profile")
     public String profile(
@@ -35,5 +38,15 @@ public class MyController {
         List<CommentDto> comments = commentService.getComments(user.getId());
         model.addAttribute("comments", comments);
         return "my/comments";
+    }
+
+    @GetMapping("/applications")
+    public String applications(
+            Model model,
+            @AuthenticationPrincipal User user
+    ) {
+        List<ApplicationDto> applications = applicationService.getApplications(user.getId());
+        model.addAttribute("applications", applications);
+        return "my/applications";
     }
 }

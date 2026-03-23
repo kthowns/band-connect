@@ -69,6 +69,7 @@ public class PostController {
             @ModelAttribute AddPostRequest request,
             @AuthenticationPrincipal User user,
             RedirectAttributes rttr,
+            Model model,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
@@ -80,12 +81,12 @@ public class PostController {
             return "redirect:/";
         } catch (CustomException e) {
             log.error(e.getMessage());
-            rttr.addFlashAttribute("message", e.getMessage());
-            return "redirect:/posts/write";
+            model.addAttribute("message", e.getMessage());
+            return "post/write";
         } catch (Exception e) {
             log.error(e.getMessage());
-            rttr.addFlashAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
-            return "redirect:/posts/write";
+            model.addAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
+            return "post/write";
         }
     }
 

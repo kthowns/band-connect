@@ -36,6 +36,7 @@ public class AuthController {
     public String signupProcess(
             @ModelAttribute("signupRequest") @Valid SignupRequest request,
             BindingResult bindingResult,
+            Model model,
             RedirectAttributes rttr
     ) {
         if (bindingResult.hasErrors()) {
@@ -47,12 +48,12 @@ public class AuthController {
             return "redirect:/login";
         } catch (CustomException e) {
             log.error(e.getMessage());
-            rttr.addFlashAttribute("message", e.getMessage());
-            return "redirect:/signup";
+            model.addAttribute("message", e.getMessage());
+            return "auth/signup";
         } catch (Exception e) {
             log.error(e.getMessage());
-            rttr.addFlashAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
-            return "redirect:/signup";
+            model.addAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
+            return "auth/signup";
         }
     }
 }

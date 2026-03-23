@@ -70,7 +70,7 @@
                     </span>
 
                     <span class="date" th:if="${post.createdAt != null}"
-                          th:text="'작성일: ' + ${#strings.substring(post.createdAt, 0, 16)}"></span>
+                          th:text="'작성일: ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
                 </div>
             </div>
         </div>

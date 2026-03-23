@@ -1,16 +1,15 @@
 package com.kthowns.bandconnect.post.service;
 
+import com.kthowns.bandconnect.application.dto.ApplicationDto;
 import com.kthowns.bandconnect.application.dto.PostApplicantCount;
+import com.kthowns.bandconnect.application.entity.Application;
 import com.kthowns.bandconnect.application.repository.ApplicationRepository;
 import com.kthowns.bandconnect.band.dto.BandDto;
 import com.kthowns.bandconnect.band.entity.Band;
 import com.kthowns.bandconnect.band.repository.BandRepository;
 import com.kthowns.bandconnect.common.exception.CustomException;
 import com.kthowns.bandconnect.common.exception.CustomResponseCode;
-import com.kthowns.bandconnect.post.dto.CommentDto;
-import com.kthowns.bandconnect.post.dto.HashtagDto;
-import com.kthowns.bandconnect.post.dto.RecruitPostDetail;
-import com.kthowns.bandconnect.post.dto.RecruitPostSearch;
+import com.kthowns.bandconnect.post.dto.*;
 import com.kthowns.bandconnect.post.entity.Comment;
 import com.kthowns.bandconnect.post.entity.Hashtag;
 import com.kthowns.bandconnect.post.entity.PostHashtag;
@@ -18,12 +17,14 @@ import com.kthowns.bandconnect.post.entity.RecruitPost;
 import com.kthowns.bandconnect.post.repository.CommentRepository;
 import com.kthowns.bandconnect.post.repository.PostHashtagRepository;
 import com.kthowns.bandconnect.post.repository.RecruitPostRepository;
+import com.kthowns.bandconnect.recruit.dto.RecruitDetail;
 import com.kthowns.bandconnect.recruit.dto.RecruitDto;
 import com.kthowns.bandconnect.recruit.entity.Recruit;
 import com.kthowns.bandconnect.recruit.repository.RecruitRepository;
 import com.kthowns.bandconnect.user.dto.UserDto;
 import com.kthowns.bandconnect.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -138,6 +140,52 @@ public class PostService {
                                 .comments(commentMap.getOrDefault(recruitPost.getId(), List.of())
                                         .stream().map(CommentDto::fromEntity)
                                         .toList())
+                                .build()
+                ).toList();
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<PostWithRecruits> getMyPostsWithRecruits(Long userId) {
+        List<RecruitPost> recruitPosts = recruitPostRepository.findByAuthorIdWithBand(userId);
+        List<Long> recruitPostIds = recruitPosts.stream()
+                .map(RecruitPost::getId).toList();
+
+        if (recruitPostIds.isEmpty()) {
+            return List.of();
+        }
+
+        List<Recruit> recruits = recruitRepository.findByRecruitPostIds(recruitPostIds);
+        List<Long> recruitIds = recruits.stream()
+                .map(Recruit::getId).toList();
+
+        List<Application> applications = applicationRepository.findByRecruit_IdIn(recruitIds);
+        Map<Long, List<Application>> applicationsMap = applications.stream()
+                .collect(Collectors.groupingBy((app) -> app.getRecruit().getId()));
+
+        List<RecruitDetail> recruitDetails = recruits.stream()
+                .map((recruit) -> RecruitDetail.builder()
+                        .id(recruit.getId())
+                        .member(recruit.getMember() != null ? UserDto.fromEntity(recruit.getMember()) : null)
+                        .position(recruit.getPosition())
+                        .createdAt(recruit.getCreatedAt())
+                        .post(RecruitPostDto.fromEntity(recruit.getRecruitPost()))
+                        .applications(
+                                applicationsMap.getOrDefault(recruit.getId(), List.of()).stream()
+                                        .map(ApplicationDto::fromEntity).toList()
+                        )
+                        .build()).toList();
+        Map<Long, List<RecruitDetail>> recruitDetailsMap = recruitDetails.stream()
+                .collect(Collectors.groupingBy((rd) -> rd.getPost().getId()));
+
+        return recruitPosts.stream()
+                .map((recruitPost) ->
+                        PostWithRecruits.builder()
+                                .id(recruitPost.getId())
+                                .bandName(recruitPost.getBand().getName())
+                                .title(recruitPost.getTitle())
+                                .createdAt(recruitPost.getCreatedAt())
+                                .recruits(recruitDetailsMap.getOrDefault(recruitPost.getId(), List.of()))
                                 .build()
                 ).toList();
     }

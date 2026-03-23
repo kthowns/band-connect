@@ -33,8 +33,12 @@ public class ApplicationService {
         Recruit recruit = recruitRepository.findByIdWithPostAndAuthor(request.getRecruitId())
                 .orElseThrow(() -> new CustomException(CustomResponseCode.RECRUIT_NOT_FOUND));
 
-        if(recruit.getRecruitPost().getAuthor().getId().equals(user.getId())) {
+        if (recruit.getRecruitPost().getAuthor().getId().equals(user.getId())) {
             throw new CustomException(CustomResponseCode.APPLY_RECURSIVE_ERROR);
+        }
+
+        if (applicationRepository.existsByRecruit_IdAndApplicant_Id(recruit.getId(), user.getId())) {
+            throw new CustomException(CustomResponseCode.DUPLICATED_POSITION);
         }
 
         applicationRepository.save(
@@ -48,5 +52,36 @@ public class ApplicationService {
                         .status(ApplyStatus.APPLIED)
                         .build()
         );
+    }
+
+    @Transactional
+    public Application acceptApplication(Long applicationId, Long userId) {
+        Application application = applicationRepository
+                .findByIdAndRecruit_RecruitPost_Author_Id(applicationId, userId)
+                .orElseThrow(() -> new CustomException(CustomResponseCode.APPLICATION_NOT_FOUND));
+
+        application.setStatus(ApplyStatus.ACCEPTED);
+
+        List<Application> otherApplications = applicationRepository
+                .findByRecruit_IdAndIdNot(application.getRecruit().getId(), applicationId);
+
+        for (Application otherApplication : otherApplications) {
+            if (!otherApplication.getStatus().equals(ApplyStatus.REJECTED)) {
+                otherApplication.setStatus(ApplyStatus.CLOSED);
+            }
+        }
+
+        return applicationRepository.save(application);
+    }
+
+    public void declineApplication(Long applicationId, Long userId) {
+        Application application = applicationRepository
+                .findByIdAndRecruit_RecruitPost_Author_Id(applicationId, userId)
+                .orElseThrow(() -> new CustomException(CustomResponseCode.APPLICATION_NOT_FOUND));
+
+        if (application.getStatus().equals(ApplyStatus.ACCEPTED)) {
+            throw new CustomException(CustomResponseCode.APPLICATION_ALREADY_ACCEPTED);
+        }
+        application.setStatus(ApplyStatus.REJECTED);
     }
 }

@@ -24,7 +24,7 @@ public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruit_id", nullable = false)
@@ -49,6 +49,7 @@ public class Application {
     private String description;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private ApplyStatus status;
 
     @CreatedDate

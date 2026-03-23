@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class ApplicationDto {
-    private Integer id;
+    private Long id;
     private RecruitDto recruit;
     private UserDto applicant;
     private Integer age;

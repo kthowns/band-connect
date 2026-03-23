@@ -3,8 +3,11 @@ package com.kthowns.bandconnect.user.controller;
 import com.kthowns.bandconnect.application.dto.ApplicationDto;
 import com.kthowns.bandconnect.application.service.ApplicationService;
 import com.kthowns.bandconnect.post.dto.CommentDto;
+import com.kthowns.bandconnect.post.dto.PostWithRecruits;
 import com.kthowns.bandconnect.post.service.CommentService;
+import com.kthowns.bandconnect.post.service.PostService;
 import com.kthowns.bandconnect.user.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import java.util.List;
 public class MyController {
     private final CommentService commentService;
     private final ApplicationService applicationService;
+    private final PostService postService;
 
     @GetMapping("/profile")
     public String profile(
@@ -48,5 +52,17 @@ public class MyController {
         List<ApplicationDto> applications = applicationService.getApplications(user.getId());
         model.addAttribute("applications", applications);
         return "my/applications";
+    }
+
+    @GetMapping("/posts")
+    public String posts(
+            Model model,
+            @AuthenticationPrincipal User user,
+            HttpServletRequest servletRequest
+    ) {
+        List<PostWithRecruits> posts = postService.getMyPostsWithRecruits(user.getId());
+        model.addAttribute("posts", posts);
+        model.addAttribute("currentUri", servletRequest.getRequestURI());
+        return "my/posts";
     }
 }

@@ -3,7 +3,6 @@ package com.kthowns.bandconnect.post.dto;
 import com.kthowns.bandconnect.post.entity.Hashtag;
 import lombok.*;
 
-
 @Getter
 @Setter
 @AllArgsConstructor

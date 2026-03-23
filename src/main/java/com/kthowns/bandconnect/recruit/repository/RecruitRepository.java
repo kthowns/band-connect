@@ -22,4 +22,6 @@ public interface RecruitRepository extends JpaRepository<Recruit, Long> {
             " JOIN FETCH rp.author" +
             " WHERE r.id = :id")
     Optional<Recruit> findByIdWithPostAndAuthor(@Param("id") Long id);
+
+    Optional<Recruit> findByIdAndRecruitPost_Author_Id(Long id, Long userId);
 }

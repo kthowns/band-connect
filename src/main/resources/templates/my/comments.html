@@ -25,7 +25,7 @@
 
                 <h3 th:text="${comment.content}">댓글 내용</h3>
                 <p class="date"
-                   th:text="|작성 날짜: ${#strings.substring(comment.createdAt, 0, 16)}|">
+                   th:text="|작성 날짜: ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|">
                     작성 날짜: 2024-01-01 10:00
                 </p>
             </li>

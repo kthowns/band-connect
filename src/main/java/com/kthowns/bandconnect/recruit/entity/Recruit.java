@@ -28,7 +28,7 @@ public class Recruit {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private RecruitPost recruitPost;
 
     @Column(name = "position", nullable = false)

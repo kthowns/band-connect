@@ -58,4 +58,9 @@ public interface RecruitPostRepository extends JpaRepository<RecruitPost, Long> 
     @Modifying
     @Query("UPDATE RecruitPost rp SET rp.views = rp.views + 1 WHERE rp.id = :id")
     void incrementViews(@Param("id") Long id);
+
+    @Query("SELECT rp FROM RecruitPost rp" +
+            " JOIN FETCH rp.band" +
+            " WHERE rp.author.id = :authorId")
+    List<RecruitPost> findByAuthorIdWithBand(@Param("authorId") Long authorId);
 }

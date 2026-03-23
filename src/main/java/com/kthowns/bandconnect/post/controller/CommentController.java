@@ -31,11 +31,11 @@ public class CommentController {
     }
 
     @PostMapping("/comments/{id}/delete")
-    public String deletePost(
+    public String deleteComment(
             @PathVariable Long id,
             @AuthenticationPrincipal User user,
             RedirectAttributes rttr,
-            @RequestParam(value = "returnUrl", defaultValue = "/") String returnUrl
+            @RequestParam(value = "returnUri", defaultValue = "/") String returnUri
     ) {
         try {
             commentService.deleteComment(id, user);
@@ -43,6 +43,6 @@ public class CommentController {
         } catch (Exception e) {
             rttr.addFlashAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
         }
-        return "redirect:" + returnUrl;
+        return "redirect:" + returnUri;
     }
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BandConnect - Profile</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/styles-myApl.css}">
 </head>
 <body>
 <header th:replace="~{fragments/navBar :: navBar}"></header>
@@ -36,7 +37,7 @@
                 <p><strong>상태: </strong><span class="status-text" th:text="${apl.status.description}">대기중</span></p>
 
                 <p><span class="date"
-                         th:text="|지원 일시: ${#strings.substring(apl.createdAt, 0, 16)}|">
+                         th:text="|지원 일시: ${#temporals.format(apl.createdAt, 'yyyy-MM-dd HH:mm')}|">
                     지원 일시: 2026-03-23 10:00
                 </span></p>
             </li>

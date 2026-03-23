@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum CustomResponseCode {
     // Success
     SIGNUP_SUCCESS("회원가입이 성공했습니다.", HttpStatus.OK),
+    BAND_CREATED("밴드 생성이 성공했습니다.", HttpStatus.OK),
     APPLY_SUCCESS("지원이 성공했습니다.", HttpStatus.OK),
     CONFIRM_SUCCESS("지원서 처리가 성공했습니다.", HttpStatus.OK),
     COMMENT_ADD_SUCCESS("댓글이 등록되었습니다.", HttpStatus.OK),

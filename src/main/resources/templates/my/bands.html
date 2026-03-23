@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BandConnect - My Bands</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header th:replace="~{fragments/navBar :: navBar}"></header>
+
+<main>
+    <section class="my-bands-section">
+        <h2 class="section-title">내 밴드 현황</h2>
+
+        <div th:if="${#lists.isEmpty(bands)}" class="no-posts">
+            <p>소속된 밴드 활동이 없습니다.</p>
+            <a th:href="@{/}" class="action-link-btn">밴드 찾으러 가기</a>
+        </div>
+
+        <ul th:unless="${#lists.isEmpty(bands)}" class="post-list">
+            <li th:each="band : ${bands}" class="post-card band-card">
+                <div class="band-header">
+                    <span class="band-label">BAND</span>
+                    <h3 th:text="${band.name}">밴드 이름</h3>
+                </div>
+
+                <p class="post-title-link" th:text="${band.description}">밴드 설명이 들어갑니다.</p>
+
+                <div class="member-section">
+                    <p class="member-title">👥 활동 멤버</p>
+                    <div class="member-grid">
+
+                        <div class="member-item leader" th:if="${band.leader != null}">
+                            <span class="role-badge">Leader</span>
+                            <span class="name" th:text="${band.leader.username}">팀장 닉네임</span>
+                        </div>
+
+                        <th:block th:each="member : ${band.members}">
+                            <div class="member-item" th:if="${band.leader == null || member.id != band.leader.id}">
+                                <span class="role-badge">Member</span>
+                                <span class="name" th:text="${member.username}">멤버 닉네임</span>
+                            </div>
+                        </th:block>
+
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

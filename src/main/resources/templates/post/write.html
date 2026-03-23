@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BandConnect - 게시글 작성</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header th:replace="~{fragments/navBar :: navBar}"></header>
+
+<main class="post-write-container">
+    <section class="card">
+        <h1 class="card-title">게시글 작성</h1>
+
+        <form method="POST" th:action="@{/posts/write}" id="postForm">
+            <!-- 1. 제목 입력 -->
+            <div class="card-field">
+                <label for="title">제목</label>
+                <div class="input-box">
+                    <span class="icon">📝</span>
+                    <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
+                </div>
+            </div>
+
+            <!-- 2. 밴드 선택 (핵심) -->
+            <div class="card-field">
+                <label for="bandId">밴드 선택</label>
+                <div class="input-box">
+                    <select id="bandId" name="bandId" class="select-box" required>
+                        <option value="">-- 게시글을 올릴 밴드를 선택하세요 --</option>
+                        <!-- value를 band.id로 넘겨야 서버에서 처리가 편합니다 -->
+                        <option th:each="band : ${bands}"
+                                th:value="${band.id}"
+                                th:text="${band.name}">밴드 이름</option>
+                    </select>
+                </div>
+                <!-- 가입된 밴드가 없을 경우 안내 -->
+                <div th:if="${#lists.isEmpty(bands)}" class="error-msg" style="margin-top: 10px;">
+                    <p>관리 중인 밴드가 없습니다. <a th:href="@{/bands/create}" style="color: #007bff;">밴드 만들기</a></p>
+                </div>
+            </div>
+
+            <!-- 3. 내용 입력 -->
+            <div class="card-field">
+                <label for="content">내용</label>
+                <div class="textarea-box">
+                    <textarea id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
+                </div>
+            </div>
+
+            <!-- 4. 해시태그 -->
+            <div class="card-field">
+                <label for="hashtag">태그</label>
+                <div class="input-box">
+                    <input type="text" id="hashtag" name="hashtag" placeholder="#태그 (예: #락 #홍대 #기타구함)">
+                </div>
+            </div>
+
+            <!-- 5. 구인 파트 (동적 추가) -->
+            <div class="card-field">
+                <label>구인 파트</label>
+                <div id="part-list" class="part-list">
+                    <div class="part-box">
+                        <input type="text" class="part-input" name="parts[]" placeholder="구인 파트 항목 (예: 퍼스트 기타)" required>
+                    </div>
+                </div>
+                <div class="button-container" style="margin-top: 10px;">
+                    <button type="button" class="add-remove-btn" onclick="addPart()">+</button>
+                    <button type="button" class="add-remove-btn" onclick="removePart()">-</button>
+                </div>
+            </div>
+
+            <!-- 6. 제출 버튼 (초기 비활성화) -->
+            <div class="submit-section" style="margin-top: 30px;">
+                <button type="submit" id="submit-btn" class="submit-btn" disabled
+                        style="opacity: 0.5; cursor: not-allowed;">
+                    게시글 등록
+                </button>
+            </div>
+        </form>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<!-- JavaScript 로직 -->
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const bandSelect = document.getElementById('bandId');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // 밴드 선택 여부에 따른 버튼 활성화 로직
+        bandSelect.addEventListener('change', function() {
+            if (this.value !== "") {
+                // 활성화
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+                submitBtn.style.cursor = "pointer";
+            } else {
+                // 비활성화
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.5";
+                submitBtn.style.cursor = "not-allowed";
+            }
+        });
+    });
+
+    // 파트 추가 함수
+    function addPart() {
+        const partList = document.getElementById('part-list');
+        const newPartBox = document.createElement('div');
+        newPartBox.className = 'part-box';
+        newPartBox.style.marginTop = "5px";
+        newPartBox.innerHTML = `
+            <input type="text" class="part-input" name="parts[]" placeholder="구인 파트 항목" required>
+        `;
+        partList.appendChild(newPartBox);
+    }
+
+    // 파트 삭제 함수
+    function removePart() {
+        const partList = document.getElementById('part-list');
+        const partBoxes = partList.getElementsByClassName('part-box');
+        if (partBoxes.length > 1) {
+            partList.removeChild(partBoxes[partBoxes.length - 1]);
+        } else {
+            alert('최소 하나의 구인 파트는 입력해야 합니다.');
+        }
+    }
+</script>
+</body>
+</html>

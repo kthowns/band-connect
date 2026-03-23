@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BandConnect - Profile</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/styles-myRecruit.css}">
+</head>
+<body>
+<header class="header" th:replace="~{fragments/navBar :: navBar}"></header>
+
+<main>
+    <section class="my-posts-section">
+        <h2 class="section-title">구인 폼 관리</h2>
+
+        <!-- [Empty State 1] 작성한 게시글이 없는 경우 -->
+        <div th:if="${#lists.isEmpty(posts)}" class="no-posts">
+            <p>작성한 구인 게시글이 없습니다.</p>
+            <a th:href="@{/newRecruit}" class="action-link-btn">첫 구인글 작성하기</a>
+        </div>
+
+        <!-- 게시글 리스트 -->
+        <ul th:unless="${#lists.isEmpty(posts)}" class="post-list">
+            <li th:each="post : ${posts}" class="post-card">
+                <h3 class="post-title"
+                    th:onclick="|location.href='@{/postDetail(id=${post.id})}'|"
+                    th:text="${post.title}">구인글 제목</h3>
+
+                <p class="band-name">
+                    <strong th:text="${post.bandName}">밴드명</strong>
+                </p>
+                <p class="post-date">
+                    <strong>작성일:</strong>
+                    <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">2026-03-23 14:00</span>
+                </p>
+
+                <div class="recruit-container">
+                    <p class="recruit-subtitle"><strong>파트별 모집 현황</strong></p>
+                    <ul class="session-application">
+                        <li th:each="recruit : ${post.recruits}" class="session-item">
+                            <div class="session-header">
+                                <span class="position-name" th:text="${recruit.position}">보컬</span>
+                                <span th:with="isClosed=${recruit.member != null}"
+                                      th:classappend="${isClosed ? 'complete' : 'in-progress'}"
+                                      th:text="${isClosed ? '마감' : '모집 중'}"
+                                      class="status-tag">모집 상태</span>
+                            </div>
+
+                            <ul class="applicant-list">
+                                <li th:each="app : ${recruit.applications}">
+                                    <div th:with="statusName=${app.status.name()}, isClosed=${recruit.member != null}"
+                                         th:class="'applicant-name ' +
+                                           (${statusName == 'ACCEPTED'} ? 'accepted decided ' :
+                                           (${statusName == 'REJECTED'} ? 'rejected decided ' :
+                                           (${isClosed} ? 'disabled decided' : '')))"
+                                         th:onclick="showApplicantDetails(
+                                     [[${app.id}]],
+                                     [[${app.applicant.id}]],
+                                     [[${app.applicant.username}]],
+                                     [[${app.age}]],
+                                     [[${app.location}]],
+                                     [[${app.phone}]],
+                                     [[${app.description}]],
+                                     [[${app.status.description}]],
+                                     [[${statusName}]]
+                                 )">
+                                        👤 [[${app.applicant.username}]]
+                                        <span th:if="${statusName == 'ACCEPTED'}" class="mini-tag">✔️</span>
+                                        <span th:if="${statusName == 'REJECTED'}" class="mini-tag reject">❌</span>
+                                    </div>
+                                </li>
+
+                                <li th:if="${#lists.isEmpty(recruit.applications)}" class="empty-msg">아직 지원자가 없습니다.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </section>
+</main>
+
+<div id="applicant-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <h3 class="modal-title">지원자 상세 정보</h3>
+
+        <div class="status-badge-container">
+            <span id="applicant-status" class="status-badge"></span>
+        </div>
+
+        <div class="info-group">
+            <p><strong>이름:</strong> <span id="applicant-name"></span></p>
+            <p><strong>나이:</strong> <span id="applicant-age"></span></p>
+            <p><strong>지역:</strong> <span id="applicant-location"></span></p>
+            <p><strong>연락처:</strong> <span id="applicant-phone"></span></p>
+            <div class="desc-box">
+                <strong>자기소개</strong>
+                <p id="applicant-description"></p>
+            </div>
+        </div>
+
+        <div id="modal-actions" class="modal-footer">
+            <form id="confirm-form" method="post" th:action="@{/applications/confirm}">
+                <input type="hidden" name="applicationId" id="modal-applicationId">
+                <input type="hidden" name="isAccepted" id="modal-isAccepted">
+                <input type="hidden" name="returnUri" th:value="${currentUri}">
+
+                <button type="button" class="accept-btn" onclick="handleConfirm('ACCEPTED')">수락</button>
+                <button type="button" class="reject-btn" onclick="handleConfirm('REJECTED')">거절</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script th:inline="javascript">
+    function showApplicantDetails(applicationId, applicantId, name, age, location, phone, description, statusDesc, statusName) {
+        document.getElementById('applicant-name').textContent = name;
+        document.getElementById('applicant-age').textContent = age;
+        document.getElementById('applicant-location').textContent = location;
+        document.getElementById('applicant-phone').textContent = phone;
+        document.getElementById('applicant-description').textContent = description;
+
+        const statusBadge = document.getElementById('applicant-status');
+        statusBadge.textContent = statusDesc;
+        statusBadge.className = 'status-badge ' + statusName.toLowerCase();
+
+        const actionButtons = document.getElementById('modal-actions');
+        actionButtons.style.display = (statusName === 'APPLIED') ? 'flex' : 'none';
+
+        document.getElementById('applicant-modal').style.display = 'flex';
+        document.getElementById('modal-applicationId').value = applicationId;
+    }
+
+    function handleConfirm(isAccepted) {
+        document.getElementById('modal-isAccepted').value = isAccepted;
+        document.getElementById('confirm-form').submit();
+    }
+
+    function closeModal() {
+        document.getElementById('applicant-modal').style.display = 'none';
+    }
+</script>
+</body>
+</html>

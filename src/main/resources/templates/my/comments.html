@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BandConnect - Profile</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/styles-myApl.css}">
+</head>
+<body>
+<header th:replace="~{fragments/navBar :: navBar}"></header>
+
+<main th:if="${comments != null}">
+    <!-- 내가 쓴 댓글 섹션 -->
+    <section class="my-comments-section">
+        <h2>내가 쓴 댓글</h2>
+
+        <ul class="comment-list">
+            <li th:if="${#lists.isEmpty(comments)}">작성한 댓글이 없습니다.</li>
+
+            <li th:each="comment : ${comments}"
+                class="comment-item"
+                th:onclick="|location.href='@{/posts/{id}(id=${comment.post.id})}'|"
+                style="cursor: pointer;">
+
+                <h3 th:text="${comment.content}">댓글 내용</h3>
+                <p class="date"
+                   th:text="|작성 날짜: ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|">
+                    작성 날짜: 2024-01-01 10:00
+                </p>
+            </li>
+        </ul>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

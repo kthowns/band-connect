@@ -38,7 +38,7 @@ public class ApplicationService {
         }
 
         if (applicationRepository.existsByRecruit_IdAndApplicant_Id(recruit.getId(), user.getId())) {
-            throw new CustomException(CustomResponseCode.DUPLICATED_POSITION);
+            throw new CustomException(CustomResponseCode.DUPLICATED_APPLY_POSITION);
         }
 
         applicationRepository.save(

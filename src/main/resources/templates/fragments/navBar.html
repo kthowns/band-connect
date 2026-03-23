@@ -10,9 +10,10 @@
 
             <!-- 로그인 상태 -->
             <th:block sec:authorize="isAuthenticated()">
-                <!-- 로그아웃은 안전하게 POST로 처리 (JS 방식 유지) -->
-                <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
-                <a href="javascript:void(0)" onclick="document.getElementById('logoutForm').submit();">로그아웃</a>
+                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+
+                <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();">로그아웃</a>
+                <a th:href="@{/my/bands}">내 밴드</a>
                 <a th:href="@{/my/profile}">내 프로필</a>
             </th:block>
 

@@ -1,7 +1,9 @@
-package com.kthowns.bandconnect.user.controller;
+package com.kthowns.bandconnect.common.controller;
 
 import com.kthowns.bandconnect.application.dto.ApplicationDto;
 import com.kthowns.bandconnect.application.service.ApplicationService;
+import com.kthowns.bandconnect.band.dto.BandDetail;
+import com.kthowns.bandconnect.band.service.BandService;
 import com.kthowns.bandconnect.post.dto.CommentDto;
 import com.kthowns.bandconnect.post.dto.PostWithRecruits;
 import com.kthowns.bandconnect.post.service.CommentService;
@@ -24,6 +26,7 @@ public class MyController {
     private final CommentService commentService;
     private final ApplicationService applicationService;
     private final PostService postService;
+    private final BandService bandService;
 
     @GetMapping("/profile")
     public String profile(
@@ -64,5 +67,17 @@ public class MyController {
         model.addAttribute("posts", posts);
         model.addAttribute("currentUri", servletRequest.getRequestURI());
         return "my/posts";
+    }
+
+    @GetMapping("/bands")
+    public String bands(
+            Model model,
+            @AuthenticationPrincipal User user,
+            HttpServletRequest servletRequest
+    ) {
+        List<BandDetail> bands = bandService.getBelongingBands(user);
+        model.addAttribute("bands", bands);
+        model.addAttribute("currentUri", servletRequest.getRequestURI());
+        return "my/bands";
     }
 }

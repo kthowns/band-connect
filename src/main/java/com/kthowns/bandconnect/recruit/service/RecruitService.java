@@ -23,6 +23,15 @@ public class RecruitService {
 
     @Transactional
     public void createRecruits(RecruitPost post, List<String> parts) {
+        if (parts.isEmpty()) {
+            return;
+        }
+        parts = parts.stream().distinct().toList();
+
+        if (recruitRepository.existsByPositionsAndBandId(parts, post.getBand().getId())) {
+            throw new CustomException(CustomResponseCode.DUPLICATED_RECRUIT_POSITION);
+        }
+
         for (String part : parts) {
             recruitRepository.save(
                     Recruit.builder()

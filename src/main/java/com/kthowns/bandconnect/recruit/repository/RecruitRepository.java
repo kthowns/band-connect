@@ -24,4 +24,11 @@ public interface RecruitRepository extends JpaRepository<Recruit, Long> {
     Optional<Recruit> findByIdWithPostAndAuthor(@Param("id") Long id);
 
     Optional<Recruit> findByIdAndRecruitPost_Author_Id(Long id, Long userId);
+
+    @Query("SELECT COUNT(r) > 0 FROM Recruit r" +
+            " WHERE r.position IN :positions" +
+            " AND r.recruitPost.band.id = :bandId")
+    boolean existsByPositionsAndBandId(
+            @Param("positions") List<String> positions, @Param("bandId") Long bandId
+    );
 }

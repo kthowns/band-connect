@@ -29,7 +29,8 @@ public enum CustomResponseCode {
 
     LOGIN_FAILED("아이디 또는 비밀번호가 틀렸습니다.", HttpStatus.UNAUTHORIZED),
 
-    DUPLICATED_POSITION("이미 지원한 포지션입니다.", HttpStatus.CONFLICT),
+    DUPLICATED_APPLY_POSITION("이미 지원한 포지션입니다.", HttpStatus.CONFLICT),
+    DUPLICATED_RECRUIT_POSITION("이미 구인 중인 포지션이 포함되어 있습니다.", HttpStatus.CONFLICT),
     DUPLICATED_MEMBER("이미 멤버가 존재합니다.", HttpStatus.CONFLICT),
     DUPLICATED_EMAIL("이미 사용 중인 이메일입니다.", HttpStatus.CONFLICT),
     DUPLICATED_USERNAME("이미 사용 중인 아이디입니다.", HttpStatus.CONFLICT),

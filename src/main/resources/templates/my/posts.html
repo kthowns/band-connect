@@ -17,7 +17,7 @@
         <!-- [Empty State 1] 작성한 게시글이 없는 경우 -->
         <div th:if="${#lists.isEmpty(posts)}" class="no-posts">
             <p>작성한 구인 게시글이 없습니다.</p>
-            <a th:href="@{/newRecruit}" class="action-link-btn">첫 구인글 작성하기</a>
+            <a th:href="@{/posts/write}" class="action-link-btn">첫 구인글 작성하기</a>
         </div>
 
         <!-- 게시글 리스트 -->

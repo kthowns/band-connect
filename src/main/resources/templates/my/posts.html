@@ -24,7 +24,7 @@
         <ul th:unless="${#lists.isEmpty(posts)}" class="post-list">
             <li th:each="post : ${posts}" class="post-card">
                 <h3 class="post-title"
-                    th:onclick="|location.href='@{/postDetail(id=${post.id})}'|"
+                    th:onclick="|location.href='@{/posts/{id}(id=${post.id})}'|"
                     th:text="${post.title}">구인글 제목</h3>
 
                 <p class="band-name">

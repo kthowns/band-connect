@@ -25,11 +25,16 @@ import com.kthowns.bandconnect.user.dto.UserDto;
 import com.kthowns.bandconnect.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -74,29 +79,43 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecruitPostDetail> getRecruitPosts(RecruitPostSearch search) {
-        List<String> hashtags = search.getHashtags();
-        String keyword = search.getKeyword();
-        boolean hasTags = hashtags != null && hashtags.isEmpty();
-        boolean hasKeyword = keyword != null && keyword.isEmpty();
+    public Page<RecruitPostDetail> getRecruitPosts(String searchKeyword, Pageable pageable) {
+        List<String> hashtags = new ArrayList<>();
+        String keyword = "";
 
-        List<RecruitPost> recruitPosts;
+        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+            // 해시태그 추출 (#로 시작하고 공백 전까지의 문자열)
+            Pattern tagPattern = Pattern.compile("#[\\w가-힣]+");
+            Matcher matcher = tagPattern.matcher(searchKeyword);
+
+            while (matcher.find()) {
+                hashtags.add(matcher.group()); // #기타, #베이스 등을 리스트에 담음
+            }
+
+            // 키워드 정제 (해시태그 부분을 제거하고 남은 문자열)
+            keyword = matcher.replaceAll("").replaceAll("\\s+", " ").trim();
+        }
+
+        boolean hasTags = !hashtags.isEmpty();
+        boolean hasKeyword = !keyword.isEmpty();
+
+        Page<RecruitPost> recruitPosts;
         if (hasTags && hasKeyword) {
             recruitPosts = recruitPostRepository
-                    .findByKeywordAndHashtags(search.getKeyword(), search.getHashtags());
+                    .findByKeywordAndHashtags(keyword, hashtags, pageable);
         } else if (hasTags) {
-            recruitPosts = recruitPostRepository.findByHashtags(search.getHashtags());
+            recruitPosts = recruitPostRepository.findByHashtags(hashtags, pageable);
         } else if (hasKeyword) {
-            recruitPosts = recruitPostRepository.findByKeyword(search.getKeyword());
+            recruitPosts = recruitPostRepository.findByKeyword(keyword, pageable);
         } else {
-            recruitPosts = recruitPostRepository.findAllWithBandAndAuthor();
+            recruitPosts = recruitPostRepository.findAllWithBandAndAuthor(pageable);
         }
 
         List<Long> recruitPostIds = recruitPosts.stream()
                 .map(RecruitPost::getId).toList();
 
         if (recruitPostIds.isEmpty()) {
-            return List.of();
+            return Page.empty(pageable);
         }
 
         List<PostHashtag> postHashtags = postHashtagRepository.findByRecruitPostIds(recruitPostIds);
@@ -118,41 +137,23 @@ public class PostService {
                         PostApplicantCount::getCount
                 ));
 
-        return recruitPosts.stream()
-                .map((recruitPost) ->
-                        RecruitPostDetail.builder()
-                                .id(recruitPost.getId())
-                                .author(UserDto.fromEntity(recruitPost.getAuthor()))
-                                .band(BandDto.fromEntity(recruitPost.getBand()))
-                                .views(recruitPost.getViews())
-                                .title(recruitPost.getTitle())
-                                .content(recruitPost.getContent())
-                                .createdAt(recruitPost.getCreatedAt())
-                                .applicantsCount(
-                                        applicantsCountMap.getOrDefault(recruitPost.getId(), 0L)
-                                )
-                                .recruits(recruitMap.getOrDefault(recruitPost.getId(), List.of())
-                                        .stream().map(RecruitDto::fromEntity)
-                                        .toList())
-                                .hashtags(hashtagMap.getOrDefault(recruitPost.getId(), List.of())
-                                        .stream().map((ph) -> HashtagDto.fromEntity(ph.getHashtag()))
-                                        .toList())
-                                .comments(commentMap.getOrDefault(recruitPost.getId(), List.of())
-                                        .stream().map(CommentDto::fromEntity)
-                                        .toList())
-                                .build()
-                ).toList();
+        return convertToDetail(
+                recruitPosts,
+                hashtagMap,
+                applicantsCountMap,
+                recruitMap,
+                commentMap
+        );
     }
 
-
     @Transactional(readOnly = true)
-    public List<PostWithRecruits> getMyPostsWithRecruits(Long userId) {
-        List<RecruitPost> recruitPosts = recruitPostRepository.findByAuthorIdWithBand(userId);
+    public Page<PostWithRecruits> getMyPostsWithRecruits(Long userId, Pageable pageable) {
+        Page<RecruitPost> recruitPosts = recruitPostRepository.findByAuthorIdWithBand(userId, pageable);
         List<Long> recruitPostIds = recruitPosts.stream()
                 .map(RecruitPost::getId).toList();
 
         if (recruitPostIds.isEmpty()) {
-            return List.of();
+            return Page.empty(pageable);
         }
 
         List<Recruit> recruits = recruitRepository.findByRecruitPostIds(recruitPostIds);
@@ -178,16 +179,15 @@ public class PostService {
         Map<Long, List<RecruitDetail>> recruitDetailsMap = recruitDetails.stream()
                 .collect(Collectors.groupingBy((rd) -> rd.getPost().getId()));
 
-        return recruitPosts.stream()
-                .map((recruitPost) ->
-                        PostWithRecruits.builder()
-                                .id(recruitPost.getId())
-                                .bandName(recruitPost.getBand().getName())
-                                .title(recruitPost.getTitle())
-                                .createdAt(recruitPost.getCreatedAt())
-                                .recruits(recruitDetailsMap.getOrDefault(recruitPost.getId(), List.of()))
-                                .build()
-                ).toList();
+        return recruitPosts.map((recruitPost) ->
+                PostWithRecruits.builder()
+                        .id(recruitPost.getId())
+                        .bandName(recruitPost.getBand().getName())
+                        .title(recruitPost.getTitle())
+                        .createdAt(recruitPost.getCreatedAt())
+                        .recruits(recruitDetailsMap.getOrDefault(recruitPost.getId(), List.of()))
+                        .build()
+        );
     }
 
     @Transactional
@@ -216,5 +216,38 @@ public class PostService {
         }
 
         recruitPostRepository.delete(recruitPost);
+    }
+
+
+    private Page<RecruitPostDetail> convertToDetail(
+            Page<RecruitPost> recruitPosts,
+            Map<Long, List<PostHashtag>> hashtagMap,
+            Map<Long, Long> applicantsCountMap,
+            Map<Long, List<Recruit>> recruitMap,
+            Map<Long, List<Comment>> commentMap
+    ) {
+        return recruitPosts.map((recruitPost) ->
+                RecruitPostDetail.builder()
+                        .id(recruitPost.getId())
+                        .author(UserDto.fromEntity(recruitPost.getAuthor()))
+                        .band(BandDto.fromEntity(recruitPost.getBand()))
+                        .views(recruitPost.getViews())
+                        .title(recruitPost.getTitle())
+                        .content(recruitPost.getContent())
+                        .createdAt(recruitPost.getCreatedAt())
+                        .applicantsCount(
+                                applicantsCountMap.getOrDefault(recruitPost.getId(), 0L)
+                        )
+                        .recruits(recruitMap.getOrDefault(recruitPost.getId(), List.of())
+                                .stream().map(RecruitDto::fromEntity)
+                                .toList())
+                        .hashtags(hashtagMap.getOrDefault(recruitPost.getId(), List.of())
+                                .stream().map((ph) -> HashtagDto.fromEntity(ph.getHashtag()))
+                                .toList())
+                        .comments(commentMap.getOrDefault(recruitPost.getId(), List.of())
+                                .stream().map(CommentDto::fromEntity)
+                                .toList())
+                        .build()
+        );
     }
 }

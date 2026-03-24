@@ -16,8 +16,9 @@
     <section id="search" class="section">
         <h2>🎸 우리 밴드에 꼭 맞는 멤버 찾기</h2>
         <div class="tag-search">
-            <form th:action="@{/}" th:object="${searchDto}" method="get">
-                <input type="text" th:field="*{keyword}" placeholder="장르나 악기를 입력하세요 (예: #밴드 #기타)" required>
+            <form th:action="@{/}" method="get">
+                <input type="text" name="keyword" th:value="${param.keyword}" placeholder="장르나 악기를 입력하세요 (예: #밴드 #기타)"
+                       required>
                 <button type="submit" class="tag-search-btn">검색</button>
             </form>
         </div>
@@ -73,6 +74,31 @@
                           th:text="'작성일: ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
                 </div>
             </div>
+        </div>
+        <div th:if="${!posts.isEmpty()}" class="pagination-container">
+            <ul class="pagination">
+                <li th:classappend="${posts.first} ? 'disabled'">
+                    <a th:href="@{/(page=${posts.number - 1}, keyword=${keyword})}"
+                       th:if="${!posts.first}">이전</a>
+                </li>
+
+                <th:block th:with="
+            start=${(posts.number / 10) * 10 + 1},
+            total=${posts.totalPages},
+            last=${(start + 9 < total ? start + 9 : (total == 0 ? 1 : total))}">
+
+                    <li th:each="page : ${#numbers.sequence(start, last)}"
+                        th:classappend="${page == posts.number + 1} ? 'active'">
+                        <a th:href="@{/(page=${page - 1}, keyword=${keyword})}"
+                           th:text="${page}">1</a>
+                    </li>
+                </th:block>
+
+                <li th:classappend="${posts.last} ? 'disabled'">
+                    <a th:href="@{/(page=${posts.number + 1}, keyword=${keyword})}"
+                       th:if="${!posts.last}">다음</a>
+                </li>
+            </ul>
         </div>
     </section>
 </main>

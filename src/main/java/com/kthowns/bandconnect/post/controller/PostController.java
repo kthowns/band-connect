@@ -13,6 +13,10 @@ import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +29,27 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/posts")
 public class PostController {
     private final PostService postService;
     private final BandService bandService;
     private final PostFacade postFacade;
 
-    @GetMapping("/{id}")
+    @GetMapping("/")
+    public String index(
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
+            Model model
+    ) {
+        Page<RecruitPostDetail> posts = postService.getRecruitPosts(
+                keyword, pageable
+        );
+
+        model.addAttribute("posts", posts);
+
+        return "index";
+    }
+
+    @GetMapping("/posts/{id}")
     public String postDetail(
             Model model,
             @PathVariable @Nullable Long id,
@@ -53,7 +71,7 @@ public class PostController {
         }
     }
 
-    @GetMapping("/write")
+    @GetMapping("/posts/write")
     public String writePost(
             Model model,
             @AuthenticationPrincipal User user
@@ -64,7 +82,7 @@ public class PostController {
         return "post/write";
     }
 
-    @PostMapping("/write")
+    @PostMapping("/posts/write")
     public String writePost(
             @ModelAttribute AddPostRequest request,
             @AuthenticationPrincipal User user,
@@ -90,7 +108,7 @@ public class PostController {
         }
     }
 
-    @PostMapping("/{id}/delete")
+    @PostMapping("/posts/{id}/delete")
     public String deletePost(
             @PathVariable Long id,
             @AuthenticationPrincipal User user,

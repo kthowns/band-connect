@@ -11,6 +11,8 @@ import com.kthowns.bandconnect.post.service.PostService;
 import com.kthowns.bandconnect.user.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,11 +61,14 @@ public class MyController {
 
     @GetMapping("/posts")
     public String posts(
+            Pageable pageable,
             Model model,
             @AuthenticationPrincipal User user,
             HttpServletRequest servletRequest
     ) {
-        List<PostWithRecruits> posts = postService.getMyPostsWithRecruits(user.getId());
+        Page<PostWithRecruits> posts = postService.getMyPostsWithRecruits(
+                user.getId(), pageable
+        );
         model.addAttribute("posts", posts);
         model.addAttribute("currentUri", servletRequest.getRequestURI());
         return "my/posts";

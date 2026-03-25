@@ -1,6 +1,7 @@
 package com.kthowns.bandconnect.band.service;
 
 import com.kthowns.bandconnect.band.dto.BandDetail;
+import com.kthowns.bandconnect.band.dto.MemberDetail;
 import com.kthowns.bandconnect.band.entity.Band;
 import com.kthowns.bandconnect.band.entity.BandMember;
 import com.kthowns.bandconnect.band.repository.BandMemberRepository;
@@ -14,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,11 +44,16 @@ public class BandService {
                 .map(Band::getId).toList();
         List<BandMember> allMembers = bandMemberRepository.findAllByBandIdInWithMember(bandIds);
 
-        Map<Long, List<UserDto>> membersByBand = allMembers.stream()
+        Map<Long, List<MemberDetail>> membersByBand = allMembers.stream()
                 .collect(Collectors.groupingBy(
                         bm -> bm.getBand().getId(),
-                        Collectors.mapping(bm -> UserDto.fromEntity(bm.getMember()),
-                                Collectors.collectingAndThen(Collectors.toList(), list -> list.stream().distinct().collect(Collectors.toList())))
+                        Collectors.mapping(
+                                bm -> MemberDetail.from(bm.getMember(), bm),
+                                Collectors.collectingAndThen(
+                                        Collectors.toCollection(LinkedHashSet::new),
+                                        ArrayList::new
+                                )
+                        )
                 ));
 
         return myBands.stream()

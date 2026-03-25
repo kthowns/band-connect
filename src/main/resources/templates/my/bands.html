@@ -27,7 +27,7 @@
 
                 <p class="post-title-link" th:text="${band.description}">밴드 설명이 들어갑니다.</p>
 
-                <div class="member-section">
+                <div class="member-list">
                     <p class="member-title">👥 활동 멤버</p>
                     <div class="member-grid">
 
@@ -38,7 +38,7 @@
 
                         <th:block th:each="member : ${band.members}">
                             <div class="member-item" th:if="${band.leader == null || member.id != band.leader.id}">
-                                <span class="role-badge">Member</span>
+                                <span class="role-badge" th:text="${member.position}">Member</span>
                                 <span class="name" th:text="${member.username}">멤버 닉네임</span>
                             </div>
                         </th:block>

@@ -16,6 +16,6 @@ public class BandDetail {
     private String name;
     private String description;
     private UserDto leader;
-    private List<UserDto> members;
+    private List<MemberDetail> members;
     private LocalDateTime createdAt;
 }

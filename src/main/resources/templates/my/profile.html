@@ -1,31 +1,48 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BandConnect - Profile</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<body>
-<header class="header" th:replace="~{fragments/navBar :: navBar}"></header>
+<body class="bg-bg-main">
+    <header th:replace="~{fragments/navBar :: navBar}"></header>
 
-<main class="profile-section">
-    <h1>My Profile</h1>
+    <main class="max-w-[800px] mx-auto my-16 px-6 text-center min-h-[80vh]">
+        <h1 class="text-[2.25rem] font-black text-primary mb-12 tracking-tighter">My Profile</h1>
 
-    <div class="profile-info" th:if="${user != null}" th:object="${user}">
-        <p><strong>이름:</strong> <span th:text="*{username}">이름 없음</span></p>
-        <p><strong>이메일:</strong> <span th:text="*{email}">이메일 없음</span></p>
-    </div>
+        <!-- 프로필 정보 -->
+        <div class="bg-white p-10 border border-border rounded-custom shadow-custom max-w-[600px] mx-auto mb-12 text-left" 
+             th:if="${user != null}" th:object="${user}">
+            <div class="space-y-4">
+                <p class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
+                    <strong class="text-slate-400 font-bold text-[0.95rem]">아이디</strong>
+                    <span class="text-primary font-black text-[1.1rem]" th:text="*{username}">이름 없음</span>
+                </p>
+                <p class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
+                    <strong class="text-slate-400 font-bold text-[0.95rem]">이메일</strong>
+                    <span class="text-primary font-black text-[1.1rem]" th:text="*{email}">이메일 없음</span>
+                </p>
+            </div>
+        </div>
 
-    <div class="profile-actions">
-        <a th:href="@{/my/applications}" class="action-link">지원 폼 목록</a>
-        <a th:href="@{/my/posts}" class="action-link">구인 폼 목록</a>
-        <a th:href="@{/my/comments}" class="action-link">내가 쓴 댓글 보기</a>
-    </div>
-</main>
+        <!-- 액션 링크 그룹 -->
+        <div class="flex flex-col items-center gap-5 max-w-[420px] mx-auto w-full">
+            <a th:href="@{/my/applications}" 
+               class="flex items-center justify-center w-full bg-white border-[1.5px] border-primary text-primary py-5 rounded-custom text-lg font-black shadow-custom hover:bg-accent hover:border-accent hover:text-white hover:-translate-y-1.5 hover:shadow-xl transition-all">
+               지원 폼 목록
+            </a>
+            <a th:href="@{/my/posts}" 
+               class="flex items-center justify-center w-full bg-white border-[1.5px] border-primary text-primary py-5 rounded-custom text-lg font-black shadow-custom hover:bg-accent hover:border-accent hover:text-white hover:-translate-y-1.5 hover:shadow-xl transition-all">
+               구인 폼 목록
+            </a>
+            <a th:href="@{/my/comments}" 
+               class="flex items-center justify-center w-full bg-white border-[1.5px] border-primary text-primary py-5 rounded-custom text-lg font-black shadow-custom hover:bg-accent hover:border-accent hover:text-white hover:-translate-y-1.5 hover:shadow-xl transition-all">
+               내가 쓴 댓글 보기
+            </a>
+        </div>
+    </main>
 
-<footer th:replace="~{fragments/footer :: footer}"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

@@ -56,6 +56,8 @@ public class BandService {
                         )
                 ));
 
+        System.out.println("Some asd");
+
         return myBands.stream()
                 .map(band -> BandDetail.builder()
                         .id(band.getId())

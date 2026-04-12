@@ -1,26 +1,71 @@
 <!-- fragments/navBar.html -->
-<div th:fragment="navBar" class="header"> <!-- 클래스명 확인 -->
-    <script th:if="${message != null}" th:inline="javascript">
-        alert([[${message}]]);
+<div th:fragment="navBar" class="header border-b border-[#dfe6e9] sticky top-0 z-[1000] bg-white/90 backdrop-blur-md w-full flex justify-center">
+    <!-- Tailwind Custom Configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2d3436',
+                        'primary-dark': '#000000',
+                        accent: '#d63031',
+                        'accent-hover': '#c0392b',
+                        'bg-main': '#fcfcfc',
+                        border: '#dfe6e9',
+                    },
+                    borderRadius: {
+                        'custom': '6px',
+                    },
+                    boxShadow: {
+                        'custom': '0 2px 4px rgba(0, 0, 0, 0.05)',
+                        'custom-hover': '0 8px 16px rgba(0, 0, 0, 0.1)',
+                    }
+                }
+            }
+        }
     </script>
-    <div class="logo">🎵 BandConnect</div>
-    <nav>
-        <div class="nav-links">
-            <a th:href="@{/}">홈</a>
+    <style type="text/tailwindcss">
+        @layer base {
+            body { 
+                @apply text-primary antialiased leading-relaxed min-h-screen relative;
+                background-image: url('/images/background-alt.jpg');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }
+            /* 배경 위에 은은한 밝은 레이어를 덮어 가독성 확보 */
+            body::before {
+                content: "";
+                @apply absolute inset-0 bg-white/70 -z-10;
+            }
+            button, .btn { @apply transition-all duration-300; }
+        }
+    </style>
 
-            <!-- 로그인 상태 -->
-            <th:block sec:authorize="isAuthenticated()">
-                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+    <div class="max-w-[1100px] w-full mx-auto px-6 py-4 flex justify-between items-center">
+        <script th:if="${message != null}" th:inline="javascript">
+            alert([[${message}]]);
+        </script>
+        <a th:href="@{/}" class="inline-block transition-all duration-300 hover:scale-105 active:scale-95">
+            <img th:src="@{/images/loco.png}" alt="BandConnect Logo" class="h-10 w-auto object-contain">
+        </a>
+        <nav>
+            <div class="flex gap-3 items-center">
+                <!-- 로그인 상태 -->
+                <th:block sec:authorize="isAuthenticated()">
+                    <form id="logout-form" th:action="@{/logout}" method="post" class="hidden"></form>
+                    <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();" 
+                       class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">로그아웃</a>
+                    <a th:href="@{/my/bands}" class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">내 밴드</a>
+                    <a th:href="@{/my/profile}" class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">내 프로필</a>
+                </th:block>
 
-                <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();">로그아웃</a>
-                <a th:href="@{/my/bands}">내 밴드</a>
-                <a th:href="@{/my/profile}">내 프로필</a>
-            </th:block>
-
-            <!-- 비로그인 상태 -->
-            <th:block sec:authorize="isAnonymous()">
-                <a th:href="@{/login}">로그인/회원가입</a>
-            </th:block>
-        </div>
-    </nav>
+                <!-- 비로그인 상태 -->
+                <th:block sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}" class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">로그인/회원가입</a>
+                </th:block>
+            </div>
+        </nav>
+    </div>
 </div>

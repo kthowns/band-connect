@@ -1,0 +1,62 @@
+/* --- Index Page Specific Styles --- */
+main {
+    max-width: 800px; /* 메인 콘텐츠 너비를 더 컴팩트하게 제한 */
+    margin: 4rem auto;
+    padding: 0 24px;
+}
+
+/* --- Search Section --- */
+.section {
+    text-align: center; /* 섹션 내 요소들 기본 중앙 정렬 */
+}
+
+.section h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.05em;
+}
+
+.tag-search {
+    margin-bottom: 4.5rem;
+    max-width: 600px; /* 검색바 너비를 더 좁게 중앙 집중 */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tag-search form {
+    display: flex;
+    background: white;
+    padding: 0.4rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1.5px solid var(--border);
+    transition: var(--transition);
+}
+
+/* --- Post Cards Specific --- */
+.card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left; /* 카드는 왼쪽 정렬 유지 */
+}
+
+.card.clickable {
+    padding: 1.75rem 2rem;
+}
+
+/* --- Pagination (Ensuring no bullets) --- */
+.pagination-container {
+    margin-top: 4.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.6rem;
+    list-style: none; /* 리스트 말머리 제거 */
+    padding: 0;
+}

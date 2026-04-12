@@ -1,26 +1,28 @@
 <!-- fragments/navBar.html -->
-<div th:fragment="navBar" class="header"> <!-- 클래스명 확인 -->
-    <script th:if="${message != null}" th:inline="javascript">
-        alert([[${message}]]);
-    </script>
-    <div class="logo">🎵 BandConnect</div>
-    <nav>
-        <div class="nav-links">
-            <a th:href="@{/}">홈</a>
+<div th:fragment="navBar" class="header">
+    <div class="header-inner">
+        <script th:if="${message != null}" th:inline="javascript">
+            alert([[${message}]]);
+        </script>
+        <a th:href="@{/}" class="logo">🎵 BandConnect</a>
+        <nav>
+            <div class="nav-links">
+                <a th:href="@{/}">홈</a>
 
-            <!-- 로그인 상태 -->
-            <th:block sec:authorize="isAuthenticated()">
-                <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
+                <!-- 로그인 상태 -->
+                <th:block sec:authorize="isAuthenticated()">
+                    <form id="logout-form" th:action="@{/logout}" method="post" style="display: none;"></form>
 
-                <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();">로그아웃</a>
-                <a th:href="@{/my/bands}">내 밴드</a>
-                <a th:href="@{/my/profile}">내 프로필</a>
-            </th:block>
+                    <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();">로그아웃</a>
+                    <a th:href="@{/my/bands}">내 밴드</a>
+                    <a th:href="@{/my/profile}">내 프로필</a>
+                </th:block>
 
-            <!-- 비로그인 상태 -->
-            <th:block sec:authorize="isAnonymous()">
-                <a th:href="@{/login}">로그인/회원가입</a>
-            </th:block>
-        </div>
-    </nav>
+                <!-- 비로그인 상태 -->
+                <th:block sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}">로그인/회원가입</a>
+                </th:block>
+            </div>
+        </nav>
+    </div>
 </div>

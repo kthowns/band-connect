@@ -1,0 +1,92 @@
+/* --- Post Detail Specific Styles --- */
+main {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding: 0 24px;
+}
+
+.post-header {
+    text-align: center; /* 제목과 메타정보 중앙 정렬 */
+    margin-bottom: 3.5rem;
+}
+
+.post-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.05em;
+    line-height: 1.2;
+}
+
+.post-meta {
+    font-size: 1rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center; /* 메타 정보 중앙 정렬 */
+}
+
+.post-content {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--text-main);
+    background: #fff;
+    padding: 3rem; /* 여백 확대 */
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 4rem;
+    box-shadow: var(--shadow);
+}
+
+/* --- Comments Section (Refined for list removal) --- */
+.comments-section {
+    margin-top: 5rem;
+    padding: 3rem;
+    background-color: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.comments-list {
+    margin-top: 2rem;
+    padding: 0;
+    list-style: none; /* 리스트 마커 제거 */
+}
+
+.comment {
+    background-color: #fcfcfc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.comment strong {
+    color: var(--primary);
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    display: block;
+}
+
+/* --- Session Status List --- */
+.session-status {
+    list-style: none; /* 말머리 제거 */
+    padding: 0;
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center; /* 상태 리스트 중앙 정렬 */
+}
+
+.session-status li {
+    font-size: 1rem;
+    color: var(--text-main);
+    background: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+}

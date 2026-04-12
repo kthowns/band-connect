@@ -1,0 +1,93 @@
+/* --- Auth Page Specific Styles --- */
+.register-section, .login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    background-color: #fcfcfc;
+}
+
+.form {
+    background: white;
+    padding: 3rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-hover);
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid var(--border);
+    transition: var(--transition);
+}
+
+.form h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 2.5rem;
+    text-align: center;
+    letter-spacing: -0.05em;
+}
+
+.form label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.6rem;
+}
+
+.form input {
+    width: 100%;
+    padding: 0.85rem 1.1rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    background: #fff;
+    transition: var(--transition);
+    outline: none;
+    box-sizing: border-box;
+    margin-bottom: 1.5rem;
+}
+
+.form input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(214, 48, 49, 0.1);
+}
+
+.form button[type="submit"] {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 1rem;
+}
+
+.form button[type="submit"]:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(214, 48, 49, 0.2);
+}
+
+.sign-up-text {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.sign-up-text a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 0.5rem;
+    transition: var(--transition);
+}
+
+.sign-up-text a:hover {
+    text-decoration: underline;
+}

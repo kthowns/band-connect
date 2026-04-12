@@ -33,14 +33,14 @@
                     <p class="text-[1rem] font-black text-primary mb-6 flex items-center gap-2">👥 활동 멤버</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         <!-- 팀장 -->
-                        <div class="flex items-center gap-4 bg-slate-50 border border-primary/20 p-4 rounded-custom transition-all hover:shadow-md" th:if="${band.leader != null}">
+                        <div class="flex items-center gap-4 bg-slate-50 border border-primary/20 p-4 rounded-custom" th:if="${band.leader != null}">
                             <span class="bg-primary text-white text-[0.65rem] font-black px-2.5 py-1 rounded-sm uppercase tracking-tighter">Leader</span>
                             <span class="font-black text-primary text-[1.05rem]" th:text="${band.leader.username}">팀장 닉네임</span>
                         </div>
 
                         <!-- 일반 멤버 -->
                         <th:block th:each="member : ${band.members}">
-                            <div class="flex items-center gap-4 bg-white border border-border p-4 rounded-custom transition-all hover:border-accent hover:shadow-md" 
+                            <div class="flex items-center gap-4 bg-white border border-border p-4 rounded-custom" 
                                  th:if="${band.leader == null || member.id != band.leader.id}">
                                 <span class="bg-slate-100 text-slate-500 text-[0.65rem] font-black px-2.5 py-1 rounded-sm uppercase tracking-tighter" th:text="${member.position}">Member</span>
                                 <span class="font-bold text-primary text-[1.05rem]" th:text="${member.username}">멤버 닉네임</span>

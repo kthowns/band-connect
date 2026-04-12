@@ -27,7 +27,18 @@
     </script>
     <style type="text/tailwindcss">
         @layer base {
-            body { @apply bg-bg-main text-primary antialiased leading-relaxed; }
+            body { 
+                @apply text-primary antialiased leading-relaxed min-h-screen relative;
+                background-image: url('/images/background-alt.jpg');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+            }
+            /* 배경 위에 은은한 밝은 레이어를 덮어 가독성 확보 */
+            body::before {
+                content: "";
+                @apply absolute inset-0 bg-white/70 -z-10;
+            }
             button, .btn { @apply transition-all duration-300; }
         }
     </style>
@@ -36,11 +47,11 @@
         <script th:if="${message != null}" th:inline="javascript">
             alert([[${message}]]);
         </script>
-        <a th:href="@{/}" class="text-2xl font-black text-primary no-underline tracking-tighter cursor-pointer">🎵 BandConnect</a>
+        <a th:href="@{/}" class="inline-block transition-all duration-300 hover:scale-105 active:scale-95">
+            <img th:src="@{/images/loco.png}" alt="BandConnect Logo" class="h-10 w-auto object-contain">
+        </a>
         <nav>
             <div class="flex gap-3 items-center">
-                <a th:href="@{/}" class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all duration-300">홈</a>
-
                 <!-- 로그인 상태 -->
                 <th:block sec:authorize="isAuthenticated()">
                     <form id="logout-form" th:action="@{/logout}" method="post" class="hidden"></form>

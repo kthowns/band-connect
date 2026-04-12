@@ -4,47 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - BandConnect</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/styles-auth.css}">
 </head>
-<body>
-<header th:replace="~{fragments/navBar :: navBar}"></header>
-<main>
-    <section class="login-section">
-        <form class="form" method="post" th:action="@{/login}" id="loginForm">
-            <label for="username">아이디</label>
-            <input type="text" id="username" name="username" required>
+<body class="bg-bg-main">
+    <header th:replace="~{fragments/navBar :: navBar}"></header>
 
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" required>
+    <main class="flex justify-center items-center min-h-[85vh] px-6">
+        <section class="w-full max-w-[420px]">
+            <form class="bg-white p-12 rounded-custom shadow-custom-hover border border-border transition-all duration-300" 
+                  method="post" th:action="@{/login}" id="loginForm">
+                
+                <h1 class="text-[1.75rem] font-black text-primary mb-10 text-center tracking-tighter">로그인</h1>
 
-            <button type="submit" id="loginButton" class="btn btn-primary">로그인</button>
+                <div class="mb-6">
+                    <label for="username" class="block text-[0.9rem] font-bold text-primary mb-2">아이디</label>
+                    <input type="text" id="username" name="username" required
+                           class="w-full px-5 py-3.5 border-[1.5px] border-border rounded-custom text-[0.95rem] outline-none bg-white focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all">
+                </div>
 
-            <button type="button" id="testLoginButton" class="btn" onclick="quickLogin()"
-                    style="margin-top: 10px; background-color: #64748b; color: white; border: none;">
-                테스트 계정으로 로그인 (Quick Login)
-            </button>
-            <p class="error" th:if="${param.error}" style="color: red">
-                아이디 또는 비밀번호가 틀렸습니다.
-            </p>
+                <div class="mb-8">
+                    <label for="password" class="block text-[0.9rem] font-bold text-primary mb-2">비밀번호</label>
+                    <input type="password" id="password" name="password" required
+                           class="w-full px-5 py-3.5 border-[1.5px] border-border rounded-custom text-[0.95rem] outline-none bg-white focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all">
+                </div>
 
-            <p class="sign-up-text">
-                회원이 아니신가요?
-                <a th:href="@{/signup}">회원가입 하기</a>
-            </p>
-        </form>
-    </section>
-</main>
+                <button type="submit" id="loginButton" 
+                        class="w-full bg-accent text-white py-4 rounded-custom text-lg font-black hover:bg-accent-hover hover:-translate-y-1 hover:shadow-lg transition-all mb-4">
+                    로그인
+                </button>
 
-<script>
-    function quickLogin() {
-        document.getElementById('username').value = 'test';
-        document.getElementById('password').value = 'test1231';
+                <button type="button" id="testLoginButton" onclick="quickLogin()"
+                        class="w-full bg-slate-100 text-slate-500 py-4 rounded-custom text-[0.95rem] font-bold hover:bg-slate-200 transition-all">
+                    테스트 계정으로 로그인 (Quick Login)
+                </button>
 
-        document.getElementById('loginForm').submit();
-    }
-</script>
+                <p class="text-accent text-[0.85rem] font-bold mt-4 text-center" th:if="${param.error}">
+                    아이디 또는 비밀번호가 틀렸습니다.
+                </p>
 
-<footer th:replace="~{fragments/footer :: footer}"></footer>
+                <p class="mt-8 text-center text-[0.9rem] text-slate-400 font-medium">
+                    회원이 아니신가요?
+                    <a th:href="@{/signup}" class="text-accent font-black ml-2 hover:underline">회원가입 하기</a>
+                </p>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        function quickLogin() {
+            document.getElementById('username').value = 'test';
+            document.getElementById('password').value = 'test1231';
+            document.getElementById('loginForm').submit();
+        }
+    </script>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

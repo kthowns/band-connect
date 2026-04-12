@@ -3,51 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BandConnect - My Bands</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/styles-bands.css}">
+    <title>BandConnect - 내 밴드</title>
 </head>
-<body>
+<body class="bg-bg-main">
 <header th:replace="~{fragments/navBar :: navBar}"></header>
 
-<main>
-    <section class="my-bands-section">
-        <h2 class="section-title">내 밴드 현황</h2>
+<main class="max-w-[1000px] mx-auto my-16 px-6">
+    <section>
+        <h2 class="text-[1.75rem] font-black text-primary mb-12 border-l-8 border-accent pl-6 tracking-tighter">내 밴드 현황</h2>
 
-        <div th:if="${#lists.isEmpty(bands)}" class="no-posts">
-            <p>소속된 밴드 활동이 없습니다.</p>
-            <a th:href="@{/}" class="action-link-btn">밴드 찾으러 가기</a>
+        <!-- [Empty State] -->
+        <div th:if="${#lists.isEmpty(bands)}" class="bg-white p-24 rounded-custom text-center border-2 border-dashed border-border text-slate-400">
+            <p class="text-xl mb-8">소속된 밴드 활동이 없습니다.</p>
+            <a th:href="@{/}" class="bg-accent text-white px-8 py-4 rounded-custom font-black hover:bg-accent-hover transition-all inline-block shadow-lg">밴드 찾으러 가기</a>
         </div>
 
-        <ul th:unless="${#lists.isEmpty(bands)}" class="post-list">
-            <li th:each="band : ${bands}" class="post-card band-card">
-                <div class="band-header">
-                    <span class="band-label">BAND</span>
-                    <h3 th:text="${band.name}">밴드 이름</h3>
+        <!-- 밴드 리스트 -->
+        <div th:unless="${#lists.isEmpty(bands)}" class="space-y-10">
+            <article th:each="band : ${bands}" class="bg-white border border-border border-l-[10px] border-l-primary rounded-custom p-10 shadow-custom">
+                <div class="mb-8 pb-6 border-b border-slate-50">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="bg-primary text-white px-3 py-1 rounded text-[0.7rem] font-black tracking-widest">BAND</span>
+                    </div>
+                    <h3 class="text-3xl font-black text-primary tracking-tight" th:text="${band.name}">밴드 이름</h3>
+                    <p class="mt-4 text-[1.1rem] text-slate-500 leading-relaxed font-medium" th:text="${band.description}">밴드 설명이 들어갑니다.</p>
                 </div>
 
-                <p class="post-title-link" th:text="${band.description}">밴드 설명이 들어갑니다.</p>
-
-                <div class="member-list">
-                    <p class="member-title">👥 활동 멤버</p>
-                    <div class="member-grid">
-
-                        <div class="member-item leader" th:if="${band.leader != null}">
-                            <span class="role-badge">Leader</span>
-                            <span class="name" th:text="${band.leader.username}">팀장 닉네임</span>
+                <div>
+                    <p class="text-[1rem] font-black text-primary mb-6 flex items-center gap-2">👥 활동 멤버</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <!-- 팀장 -->
+                        <div class="flex items-center gap-4 bg-slate-50 border border-primary/20 p-4 rounded-custom transition-all hover:shadow-md" th:if="${band.leader != null}">
+                            <span class="bg-primary text-white text-[0.65rem] font-black px-2.5 py-1 rounded-sm uppercase tracking-tighter">Leader</span>
+                            <span class="font-black text-primary text-[1.05rem]" th:text="${band.leader.username}">팀장 닉네임</span>
                         </div>
 
+                        <!-- 일반 멤버 -->
                         <th:block th:each="member : ${band.members}">
-                            <div class="member-item" th:if="${band.leader == null || member.id != band.leader.id}">
-                                <span class="role-badge" th:text="${member.position}">Member</span>
-                                <span class="name" th:text="${member.username}">멤버 닉네임</span>
+                            <div class="flex items-center gap-4 bg-white border border-border p-4 rounded-custom transition-all hover:border-accent hover:shadow-md" 
+                                 th:if="${band.leader == null || member.id != band.leader.id}">
+                                <span class="bg-slate-100 text-slate-500 text-[0.65rem] font-black px-2.5 py-1 rounded-sm uppercase tracking-tighter" th:text="${member.position}">Member</span>
+                                <span class="font-bold text-primary text-[1.05rem]" th:text="${member.username}">멤버 닉네임</span>
                             </div>
                         </th:block>
-
                     </div>
                 </div>
-            </li>
-        </ul>
+            </article>
+        </div>
     </section>
 </main>
 

@@ -3,34 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BandConnect - Profile</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/styles-comments.css}">
+    <title>BandConnect - 내가 쓴 댓글</title>
 </head>
-<body>
+<body class="bg-bg-main">
 <header th:replace="~{fragments/navBar :: navBar}"></header>
 
-<main th:if="${comments != null}">
-    <!-- 내가 쓴 댓글 섹션 -->
-    <section class="my-comments-section">
-        <h2>내가 쓴 댓글</h2>
+<main class="max-w-[800px] mx-auto my-16 px-6" th:if="${comments != null}">
+    <section>
+        <h2 class="text-[1.75rem] font-black text-primary mb-12 border-l-8 border-accent pl-6 tracking-tighter text-center sm:text-left">내가 쓴 댓글</h2>
 
-        <ul class="comment-list">
-            <li th:if="${#lists.isEmpty(comments)}">작성한 댓글이 없습니다.</li>
+        <!-- [Empty State] -->
+        <div th:if="${#lists.isEmpty(comments)}" class="bg-white p-24 rounded-custom text-center border-2 border-dashed border-border text-slate-400">
+            <p class="text-xl">작성한 댓글이 아직 없습니다.</p>
+        </div>
 
-            <li th:each="comment : ${comments}"
-                class="comment-item"
-                th:onclick="|location.href='@{/posts/{id}(id=${comment.post.id})}'|"
-                style="cursor: pointer;">
+        <!-- 댓글 리스트 -->
+        <div th:unless="${#lists.isEmpty(comments)}" class="space-y-6">
+            <article th:each="comment : ${comments}"
+                     class="group bg-white border border-border rounded-custom p-8 shadow-custom hover:shadow-custom-hover hover:border-accent hover:-translate-x-1.5 transition-all duration-300 cursor-pointer"
+                     th:onclick="|location.href='@{/posts/{id}(id=${comment.post.id})}'|">
+                
+                <div class="mb-4 flex items-center gap-3">
+                    <span class="bg-slate-100 text-slate-500 px-2.5 py-1 rounded text-[0.75rem] font-black">POST</span>
+                    <h3 class="text-[1.15rem] font-black text-primary group-hover:text-accent transition-colors tracking-tight truncate" th:text="${comment.post.title}">게시글 제목</h3>
+                </div>
 
-                <h3 th:text="${comment.post.title}">댓글 내용</h3>
-                <p th:text="${comment.content}">댓글 내용</p>
-                <p class="date"
-                   th:text="|작성 날짜: ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|">
-                    작성 날짜: 2024-01-01 10:00
-                </p>
-            </li>
-        </ul>
+                <div class="mb-6">
+                    <p class="text-[1.05rem] text-primary leading-relaxed font-medium" th:text="${comment.content}">댓글 내용</p>
+                </div>
+
+                <div class="pt-4 border-t border-slate-50 flex justify-between items-center">
+                    <span class="text-[0.85rem] text-slate-400 font-bold"
+                          th:text="|📅 ${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}|">작성 날짜</span>
+                    <span class="text-accent text-[0.85rem] font-black opacity-0 group-hover:opacity-100 transition-opacity">원본 글 보기 →</span>
+                </div>
+            </article>
+        </div>
     </section>
 </main>
 

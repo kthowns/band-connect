@@ -4,48 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BandConnect - 밴드 생성</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/styles-post-write.css}">
 </head>
-<body>
-<header th:replace="~{fragments/navBar :: navBar}"></header>
+<body class="bg-bg-main">
+    <header th:replace="~{fragments/navBar :: navBar}"></header>
 
-<main class="post-write-container">
-    <section class="card">
-        <h1 class="card-title">🎸 새로운 밴드 만들기</h1>
-        <p style="text-align: center; color: #666; margin-bottom: 20px;">
-            밴드를 생성하면 구인 게시글을 올릴 수 있습니다.
-        </p>
+    <main class="max-w-[650px] mx-auto my-16 px-6">
+        <section class="bg-white border border-border rounded-custom p-12 shadow-custom-hover transition-all duration-300">
+            <h1 class="text-[2rem] font-black text-primary mb-4 text-center tracking-tighter">🎸 새로운 밴드 만들기</h1>
+            <p class="text-center text-slate-400 font-medium mb-12">
+                밴드를 생성하면 구인 게시글을 올릴 수 있습니다.
+            </p>
 
-        <form method="POST" th:action="@{/bands/create}">
-            <!-- 밴드 이름 -->
-            <div class="card-field">
-                <label for="name">밴드 이름</label>
-                <div class="input-box">
-                    <span class="icon">🤘</span>
-                    <input type="text" id="name" name="name"
-                           placeholder="멋진 밴드 이름을 지어주세요" required>
+            <form method="POST" th:action="@{/bands/create}" class="space-y-8">
+                <!-- 밴드 이름 -->
+                <div>
+                    <label for="name" class="block text-[0.95rem] font-bold text-primary mb-3">밴드 이름</label>
+                    <div class="flex items-center gap-3 px-5 py-1 border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all">
+                        <span class="text-xl">🤘</span>
+                        <input type="text" id="name" name="name" placeholder="멋진 밴드 이름을 지어주세요" required
+                               class="w-full py-3.5 text-[1rem] outline-none bg-transparent text-primary placeholder-slate-300 font-medium">
+                    </div>
                 </div>
-            </div>
 
-            <!-- 밴드 설명 -->
-            <div class="card-field">
-                <label for="description">밴드 소개</label>
-                <div class="textarea-box">
-                    <textarea id="description" name="description"
-                              placeholder="우리 밴드는 어떤 음악을 하나요? (장르, 활동 지역 등)"
-                              style="height: 150px;"></textarea>
+                <!-- 밴드 설명 -->
+                <div>
+                    <label for="description" class="block text-[0.95rem] font-bold text-primary mb-3">밴드 소개</label>
+                    <div class="border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all">
+                        <textarea id="description" name="description" placeholder="우리 밴드는 어떤 음악을 하나요? (장르, 활동 지역 등)"
+                                  class="w-full p-5 min-h-[200px] text-[1rem] outline-none bg-transparent text-primary placeholder-slate-300 font-medium resize-none leading-relaxed"></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <!-- 제출 버튼 -->
-            <div class="submit-section" style="margin-top: 30px;">
-                <button type="submit" class="submit-btn">밴드 생성하기</button>
-            </div>
-        </form>
-    </section>
-</main>
+                <!-- 제출 버튼 -->
+                <div class="pt-8 border-t border-slate-50">
+                    <button type="submit" 
+                            class="w-full bg-accent text-white py-5 rounded-custom text-xl font-black hover:bg-accent-hover hover:-translate-y-1 shadow-lg transition-all">
+                        밴드 생성하기
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
 
-<footer th:replace="~{fragments/footer :: footer}"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

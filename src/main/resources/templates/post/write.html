@@ -4,131 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BandConnect - 게시글 작성</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link rel="stylesheet" th:href="@{/css/styles-post-write.css}">
 </head>
-<body>
-<header th:replace="~{fragments/navBar :: navBar}"></header>
+<body class="bg-bg-main">
+    <header th:replace="~{fragments/navBar :: navBar}"></header>
 
-<main class="post-write-container">
-    <section class="card">
-        <h1 class="card-title">게시글 작성</h1>
+    <main class="max-w-[650px] mx-auto my-16 px-6">
+        <section class="bg-white border border-border rounded-custom p-12 shadow-custom-hover transition-all duration-300">
+            <h1 class="text-[2rem] font-black text-primary mb-12 text-center tracking-tighter">게시글 작성</h1>
 
-        <form method="POST" th:action="@{/posts/write}" id="postForm">
-            <!-- 1. 제목 입력 -->
-            <div class="card-field">
-                <label for="title">제목</label>
-                <div class="input-box">
-                    <span class="icon">📝</span>
-                    <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
-                </div>
-            </div>
-
-            <!-- 2. 밴드 선택 (핵심) -->
-            <div class="card-field">
-                <label for="bandId">밴드 선택</label>
-                <div class="input-box">
-                    <select id="bandId" name="bandId" class="select-box" required>
-                        <option value="">-- 게시글을 올릴 밴드를 선택하세요 --</option>
-                        <!-- value를 band.id로 넘겨야 서버에서 처리가 편합니다 -->
-                        <option th:each="band : ${bands}"
-                                th:value="${band.id}"
-                                th:text="${band.name}">밴드 이름</option>
-                    </select>
-                </div>
-                <!-- 가입된 밴드가 없을 경우 안내 -->
-                <div th:if="${#lists.isEmpty(bands)}" class="error-msg" style="margin-top: 10px;">
-                    <p>관리 중인 밴드가 없습니다. <a th:href="@{/bands/create}" style="color: #007bff;">밴드 만들기</a></p>
-                </div>
-            </div>
-
-            <!-- 3. 내용 입력 -->
-            <div class="card-field">
-                <label for="content">내용</label>
-                <div class="textarea-box">
-                    <textarea id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
-                </div>
-            </div>
-
-            <!-- 4. 해시태그 -->
-            <div class="card-field">
-                <label for="hashtag">태그</label>
-                <div class="input-box">
-                    <input type="text" id="hashtag" name="hashtag" placeholder="#태그 (예: #락 #홍대 #기타구함)">
-                </div>
-            </div>
-
-            <!-- 5. 구인 파트 (동적 추가) -->
-            <div class="card-field">
-                <label>구인 파트</label>
-                <div id="part-list" class="part-list">
-                    <div class="part-box">
-                        <input type="text" class="part-input" name="parts[]" placeholder="구인 파트 항목 (예: 퍼스트 기타)" required>
+            <form method="POST" th:action="@{/posts/write}" id="postForm" class="space-y-8">
+                <!-- 1. 제목 입력 -->
+                <div>
+                    <label for="title" class="block text-[0.95rem] font-bold text-primary mb-3">제목</label>
+                    <div class="flex items-center gap-3 px-5 py-1 border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all">
+                        <span class="text-xl">📝</span>
+                        <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required
+                               class="w-full py-3.5 text-[1rem] outline-none bg-transparent text-primary placeholder-slate-300 font-medium">
                     </div>
                 </div>
-                <div class="button-container" style="margin-top: 10px;">
-                    <button type="button" class="add-remove-btn" onclick="addPart()">+</button>
-                    <button type="button" class="add-remove-btn" onclick="removePart()">-</button>
+
+                <!-- 2. 밴드 선택 -->
+                <div>
+                    <label for="bandId" class="block text-[0.95rem] font-bold text-primary mb-3">밴드 선택</label>
+                    <div class="px-5 py-1 border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all bg-white">
+                        <select id="bandId" name="bandId" required
+                                class="w-full py-3.5 text-[1rem] outline-none bg-transparent text-primary font-medium appearance-none">
+                            <option value="">-- 게시글을 올릴 밴드를 선택하세요 --</option>
+                            <option th:each="band : ${bands}" th:value="${band.id}" th:text="${band.name}">밴드 이름</option>
+                        </select>
+                    </div>
+                    <!-- 가입된 밴드가 없을 경우 -->
+                    <div th:if="${#lists.isEmpty(bands)}" class="mt-3 text-[0.9rem] text-accent font-bold">
+                        <p>관리 중인 밴드가 없습니다. <a th:href="@{/bands/create}" class="underline ml-1">밴드 만들기</a></p>
+                    </div>
                 </div>
-            </div>
 
-            <!-- 6. 제출 버튼 (초기 비활성화) -->
-            <div class="submit-section" style="margin-top: 30px;">
-                <button type="submit" id="submit-btn" class="submit-btn" disabled
-                        style="opacity: 0.5; cursor: not-allowed;">
-                    게시글 등록
-                </button>
-            </div>
-        </form>
-    </section>
-</main>
+                <!-- 3. 내용 입력 -->
+                <div>
+                    <label for="content" class="block text-[0.95rem] font-bold text-primary mb-3">내용</label>
+                    <div class="border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all">
+                        <textarea id="content" name="content" placeholder="내용을 입력하세요" required
+                                  class="w-full p-5 min-h-[250px] text-[1rem] outline-none bg-transparent text-primary placeholder-slate-300 font-medium resize-none leading-relaxed"></textarea>
+                    </div>
+                </div>
 
-<footer th:replace="~{fragments/footer :: footer}"></footer>
+                <!-- 4. 해시태그 -->
+                <div>
+                    <label for="hashtag" class="block text-[0.95rem] font-bold text-primary mb-3">태그</label>
+                    <div class="px-5 py-1 border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all">
+                        <input type="text" id="hashtag" name="hashtag" placeholder="#태그 (예: #락 #홍대 #기타구함)"
+                               class="w-full py-3.5 text-[1rem] outline-none bg-transparent text-primary placeholder-slate-300 font-medium">
+                    </div>
+                </div>
 
-<!-- JavaScript 로직 -->
-<script th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        const bandSelect = document.getElementById('bandId');
-        const submitBtn = document.getElementById('submit-btn');
+                <!-- 5. 구인 파트 (동적 추가) -->
+                <div>
+                    <label class="block text-[0.95rem] font-bold text-primary mb-3">구인 파트</label>
+                    <div id="part-list" class="space-y-3">
+                        <div class="part-box">
+                            <input type="text" name="parts[]" placeholder="구인 파트 항목 (예: 퍼스트 기타)" required
+                                   class="w-full px-5 py-3.5 border-[1.5px] border-border rounded-custom text-[0.95rem] font-medium outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all">
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-4">
+                        <button type="button" onclick="addPart()" 
+                                class="bg-white text-primary border-2 border-primary px-4 py-2 rounded-custom font-black hover:bg-primary hover:text-white transition-all text-xl">+</button>
+                        <button type="button" onclick="removePart()" 
+                                class="bg-white text-primary border-2 border-primary px-4 py-2 rounded-custom font-black hover:bg-primary hover:text-white transition-all text-xl">-</button>
+                    </div>
+                </div>
 
-        // 밴드 선택 여부에 따른 버튼 활성화 로직
-        bandSelect.addEventListener('change', function() {
-            if (this.value !== "") {
-                // 활성화
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = "1";
-                submitBtn.style.cursor = "pointer";
-            } else {
-                // 비활성화
-                submitBtn.disabled = true;
-                submitBtn.style.opacity = "0.5";
-                submitBtn.style.cursor = "not-allowed";
-            }
+                <!-- 6. 제출 버튼 -->
+                <div class="pt-8 border-t border-slate-50">
+                    <button type="submit" id="submit-btn" disabled
+                            class="w-full bg-accent text-white py-5 rounded-custom text-xl font-black opacity-50 cursor-not-allowed shadow-lg transition-all">
+                        게시글 등록
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const bandSelect = document.getElementById('bandId');
+            const submitBtn = document.getElementById('submit-btn');
+
+            bandSelect.addEventListener('change', function() {
+                if (this.value !== "") {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    submitBtn.classList.add('hover:bg-accent-hover', 'hover:-translate-y-1', 'cursor-pointer');
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    submitBtn.classList.remove('hover:bg-accent-hover', 'hover:-translate-y-1', 'cursor-pointer');
+                }
+            });
         });
-    });
 
-    // 파트 추가 함수
-    function addPart() {
-        const partList = document.getElementById('part-list');
-        const newPartBox = document.createElement('div');
-        newPartBox.className = 'part-box';
-        newPartBox.style.marginTop = "5px";
-        newPartBox.innerHTML = `
-            <input type="text" class="part-input" name="parts[]" placeholder="구인 파트 항목" required>
-        `;
-        partList.appendChild(newPartBox);
-    }
-
-    // 파트 삭제 함수
-    function removePart() {
-        const partList = document.getElementById('part-list');
-        const partBoxes = partList.getElementsByClassName('part-box');
-        if (partBoxes.length > 1) {
-            partList.removeChild(partBoxes[partBoxes.length - 1]);
-        } else {
-            alert('최소 하나의 구인 파트는 입력해야 합니다.');
+        function addPart() {
+            const partList = document.getElementById('part-list');
+            const newPartBox = document.createElement('div');
+            newPartBox.className = 'part-box animate-in fade-in slide-in-from-top-2 duration-300';
+            newPartBox.innerHTML = `
+                <input type="text" name="parts[]" placeholder="구인 파트 항목" required
+                       class="w-full px-5 py-3.5 border-[1.5px] border-border rounded-custom text-[0.95rem] font-medium outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all">
+            `;
+            partList.appendChild(newPartBox);
         }
-    }
-</script>
+
+        function removePart() {
+            const partList = document.getElementById('part-list');
+            const partBoxes = partList.getElementsByClassName('part-box');
+            if (partBoxes.length > 1) {
+                partList.removeChild(partBoxes[partBoxes.length - 1]);
+            } else {
+                alert('최소 하나의 구인 파트는 입력해야 합니다.');
+            }
+        }
+    </script>
 </body>
 </html>

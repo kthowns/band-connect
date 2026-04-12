@@ -11,6 +11,7 @@ import com.kthowns.bandconnect.post.service.PostService;
 import com.kthowns.bandconnect.user.entity.User;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -54,8 +55,11 @@ public class PostController {
             Model model,
             @PathVariable @Nullable Long id,
             @AuthenticationPrincipal User user,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpSession session
     ) {
+        request.getSession();
+
         if (id == null) {
             return "redirect:/";
         }

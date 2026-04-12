@@ -43,27 +43,27 @@
         }
     </style>
 
-    <div class="max-w-[1100px] w-full mx-auto px-6 py-4 flex justify-between items-center">
+    <div class="max-w-[1100px] w-full mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center">
         <script th:if="${message != null}" th:inline="javascript">
             alert([[${message}]]);
         </script>
-        <a th:href="@{/}" class="inline-block transition-all duration-300 hover:scale-105 active:scale-95">
-            <img th:src="@{/images/loco.png}" alt="BandConnect Logo" class="h-10 w-auto object-contain">
+        <a th:href="@{/}" class="inline-block transition-all duration-300 hover:scale-105 active:scale-95 shrink-0">
+            <img th:src="@{/images/loco.png}" alt="BandConnect Logo" class="h-8 md:h-10 w-auto object-contain">
         </a>
         <nav>
-            <div class="flex gap-3 items-center">
+            <div class="flex gap-1 md:gap-3 items-center whitespace-nowrap overflow-x-auto no-scrollbar">
                 <!-- 로그인 상태 -->
                 <th:block sec:authorize="isAuthenticated()">
                     <form id="logout-form" th:action="@{/logout}" method="post" class="hidden"></form>
+                    <a th:href="@{/my/bands}" class="no-underline text-primary font-bold text-[0.8rem] md:text-[0.9rem] px-2 md:px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">내 밴드</a>
+                    <a th:href="@{/my/profile}" class="no-underline text-primary font-bold text-[0.8rem] md:text-[0.9rem] px-2 md:px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">프로필</a>
                     <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();" 
-                       class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">로그아웃</a>
-                    <a th:href="@{/my/bands}" class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">내 밴드</a>
-                    <a th:href="@{/my/profile}" class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">내 프로필</a>
+                       class="no-underline text-slate-400 font-bold text-[0.8rem] md:text-[0.9rem] px-2 md:px-3 py-2 rounded-custom hover:text-accent transition-all">로그아웃</a>
                 </th:block>
 
                 <!-- 비로그인 상태 -->
                 <th:block sec:authorize="isAnonymous()">
-                    <a th:href="@{/login}" class="no-underline text-primary font-bold text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">로그인/회원가입</a>
+                    <a th:href="@{/login}" class="no-underline text-primary font-bold text-[0.8rem] md:text-[0.9rem] px-3 py-2 rounded-custom hover:text-accent hover:bg-accent/5 transition-all">로그인/회원가입</a>
                 </th:block>
             </div>
         </nav>

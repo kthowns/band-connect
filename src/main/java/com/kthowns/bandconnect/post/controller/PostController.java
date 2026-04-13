@@ -55,7 +55,8 @@ public class PostController {
             Model model,
             @PathVariable @Nullable Long id,
             @AuthenticationPrincipal User user,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpSession session
     ) {
         if (id == null) {
             return "redirect:/";

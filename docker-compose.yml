@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Seoul
     volumes:
       - band-db-data:/var/lib/mysql
     healthcheck:
@@ -30,6 +31,8 @@ services:
     depends_on:
       band-db:
         condition: service_healthy
+    environment:
+      TZ: Asia/Seoul
 
 networks:
   band-net:

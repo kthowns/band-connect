@@ -116,7 +116,7 @@
                 <h2 class="text-2xl font-black text-primary mb-10 text-center tracking-tight">지원 폼</h2>
                 
                 <form id="application-form" th:action="@{/recruits/apply}" method="post" class="space-y-5 text-left"
-                      th:with="allRecruits=${postDetail.recruits ?: #lists.toList({})}, 
+                      th:with="allRecruits=${postDetail.recruits},
                                availableRecruits=${allRecruits.?[member == null]}">
                     <div>
                         <label class="block text-[0.9rem] font-bold text-primary mb-2">이름</label>

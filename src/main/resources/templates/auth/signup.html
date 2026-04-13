@@ -56,10 +56,6 @@
     </main>
 
     <script th:inline="javascript">
-        /* 서버에서 보낸 메시지 처리 */
-        const serverMessage = [[${message}]];
-        if (serverMessage) alert(serverMessage);
-
         /* 클라이언트 사이드 유효성 검사 */
         document.getElementById("registerForm").addEventListener("submit", function (event) {
             const username = document.getElementById("username").value;

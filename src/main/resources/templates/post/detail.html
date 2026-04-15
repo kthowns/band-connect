@@ -15,6 +15,7 @@
             <div class="flex justify-between items-start mb-6 pb-5 border-b border-slate-50">
                 <div>
                     <h1 class="text-[2rem] font-black text-primary tracking-tight leading-tight mb-3" th:text="${postDetail.title}">게시글 제목</h1>
+                    <p th:text="${postDetail.author.username}">작성자</p>
                     <div class="flex flex-wrap gap-4 text-[0.85rem] text-slate-400 font-bold items-center">
                         <span th:text="|📅 ${#temporals.format(postDetail.createdAt, 'yyyy-MM-dd HH:mm')}|">작성일</span>
                         <span th:text="|👀 조회수 ${postDetail.views}|">조회수</span>
@@ -35,7 +36,6 @@
                                 onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
                     </form>
                 </div>
-
             </div>
 
             <!-- 2. 밴드 정보 및 본문 -->
@@ -49,7 +49,7 @@
 
             <!-- 3. 해시태그 -->
             <div class="flex flex-wrap gap-2 mb-8">
-                <span th:each="tag : ${postDetail.hashtags}" class="text-accent font-extrabold text-[0.85rem] bg-accent/5 px-2.5 py-1.5 rounded border border-accent/10" th:text="|#${tag.name}|">#태그</span>
+                <span th:each="tag : ${postDetail.hashtags}" class="text-accent font-extrabold text-[0.85rem] bg-accent/5 px-2.5 py-1.5 rounded border border-accent/10" th:text="|${tag.name}|">#태그</span>
             </div>
 
             <!-- 4. 모집 현황 현황판 -->

@@ -5,13 +5,15 @@ import com.kthowns.bandconnect.band.service.BandService;
 import com.kthowns.bandconnect.common.exception.CustomException;
 import com.kthowns.bandconnect.common.exception.CustomResponseCode;
 import com.kthowns.bandconnect.post.dto.AddPostRequest;
+import com.kthowns.bandconnect.post.dto.EditPostRequest;
+import com.kthowns.bandconnect.post.dto.HashtagDto;
 import com.kthowns.bandconnect.post.dto.RecruitPostDetail;
 import com.kthowns.bandconnect.post.facade.PostFacade;
 import com.kthowns.bandconnect.post.service.PostService;
+import com.kthowns.bandconnect.recruit.dto.RecruitDto;
 import com.kthowns.bandconnect.user.entity.User;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -74,6 +77,56 @@ public class PostController {
         }
     }
 
+    @GetMapping("/posts/{id}/edit")
+    public String editPost(
+            @PathVariable Long id,
+            Model model,
+            @AuthenticationPrincipal User user
+    ) {
+        RecruitPostDetail postDetail = postService.getRecruitPostDetail(id);
+
+        if (!postDetail.getAuthor().getId().equals(user.getId())) {
+            return "redirect:/posts/" + id;
+        }
+
+        String hashtags = postDetail.getHashtags().stream()
+                .map(HashtagDto::getName)
+                .collect(Collectors.joining(" "));
+
+        List<String> parts = postDetail.getRecruits().stream()
+                .map(RecruitDto::getPosition)
+                .collect(Collectors.toList());
+
+        EditPostRequest editPostRequest = EditPostRequest.builder()
+                .title(postDetail.getTitle())
+                .content(postDetail.getContent())
+                .hashtag(hashtags)
+                .parts(parts)
+                .build();
+
+        model.addAttribute("editPostRequest", editPostRequest);
+        model.addAttribute("postDetail", postDetail);
+        model.addAttribute("postId", id);
+        return "post/edit";
+    }
+
+    @PostMapping("/posts/{id}/edit")
+    public String editPostProcess(
+            @PathVariable Long id,
+            @ModelAttribute EditPostRequest editPostRequest,
+            @AuthenticationPrincipal User user,
+            RedirectAttributes rttr
+    ) {
+        try {
+            postFacade.updatePost(id, editPostRequest, user);
+            rttr.addFlashAttribute("message", "게시글이 수정되었습니다.");
+            return "redirect:/posts/" + id;
+        } catch (Exception e) {
+            rttr.addFlashAttribute("message", "수정 중 에러가 발생했습니다.");
+            return "redirect:/posts/" + id + "/edit";
+        }
+    }
+
     @GetMapping("/posts/write")
     public String writePost(
             Model model,
@@ -86,7 +139,7 @@ public class PostController {
     }
 
     @PostMapping("/posts/write")
-    public String writePost(
+    public String writePostProcess(
             @ModelAttribute AddPostRequest request,
             @AuthenticationPrincipal User user,
             RedirectAttributes rttr,

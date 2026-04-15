@@ -35,7 +35,7 @@ public class BandController {
     ) {
         try {
             bandService.createBand(user, name, description);
-            rttr.addFlashAttribute("message", CustomResponseCode.BAND_CREATED);
+            rttr.addFlashAttribute("message", CustomResponseCode.BAND_CREATED.getMessage());
         } catch (CustomException e) {
             rttr.addFlashAttribute("message", e.getMessage());
         } catch (Exception e) {

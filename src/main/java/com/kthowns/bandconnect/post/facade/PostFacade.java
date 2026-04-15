@@ -1,6 +1,7 @@
 package com.kthowns.bandconnect.post.facade;
 
 import com.kthowns.bandconnect.post.dto.AddPostRequest;
+import com.kthowns.bandconnect.post.dto.EditPostRequest;
 import com.kthowns.bandconnect.post.dto.RecruitPostDetail;
 import com.kthowns.bandconnect.post.entity.RecruitPost;
 import com.kthowns.bandconnect.post.service.HashtagService;
@@ -23,6 +24,13 @@ public class PostFacade {
         RecruitPost post = postService.createPost(request.getTitle(), request.getContent(), request.getBandId(), user);
         hashtagService.linkHashtags(post, request.getHashtag());
         recruitService.createRecruits(post, request.getParts());
+    }
+
+    @Transactional
+    public void updatePost(Long postId, EditPostRequest request, User user) {
+        RecruitPost post = postService.updatePost(postId, request.getTitle(), request.getContent(), user);
+        hashtagService.updateHashtags(post, request.getHashtag());
+        recruitService.updateRecruits(post, request.getParts());
     }
 
     @Transactional

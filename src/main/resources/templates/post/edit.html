@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BandConnect - 게시글 수정</title>
+</head>
+<body class="bg-bg-main">
+    <header th:replace="~{fragments/navBar :: navBar}"></header>
+
+    <main class="max-w-[650px] mx-auto my-16 px-6">
+        <section class="bg-white border border-border rounded-custom p-12 shadow-custom-hover transition-all duration-300">
+            <h1 class="text-[2rem] font-black text-primary mb-12 text-center tracking-tighter">게시글 수정</h1>
+
+            <form method="POST" th:action="@{/posts/{id}/edit(id=${postId})}" th:object="${editPostRequest}" id="postForm" class="space-y-8">
+                <!-- 1. 제목 입력 -->
+                <div>
+                    <label for="title" class="block text-[0.95rem] font-bold text-primary mb-3">제목</label>
+                    <div class="flex items-center gap-3 px-5 py-1 border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all">
+                        <span class="text-xl">📝</span>
+                        <input type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요" required
+                               class="w-full py-3.5 text-[1rem] outline-none bg-transparent text-primary placeholder-slate-300 font-medium">
+                    </div>
+                </div>
+
+                <!-- 2. 내용 입력 -->
+                <div>
+                    <label for="content" class="block text-[0.95rem] font-bold text-primary mb-3">내용</label>
+                    <div class="border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all">
+                        <textarea id="content" th:field="*{content}" placeholder="내용을 입력하세요" required
+                                  class="w-full p-5 min-h-[250px] text-[1rem] outline-none bg-transparent text-primary placeholder-slate-300 font-medium resize-none leading-relaxed"></textarea>
+                    </div>
+                </div>
+
+                <!-- 3. 해시태그 -->
+                <div>
+                    <label for="hashtag" class="block text-[0.95rem] font-bold text-primary mb-3">태그</label>
+                    <div class="px-5 py-1 border-[1.5px] border-border rounded-custom focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10 transition-all">
+                        <input type="text" id="hashtag" th:field="*{hashtag}" placeholder="#태그 (예: #락 #홍대 #기타구함)"
+                               class="w-full py-3.5 text-[1rem] outline-none bg-transparent text-primary placeholder-slate-300 font-medium">
+                    </div>
+                </div>
+
+                <!-- 4. 구인 파트 (동적 추가) -->
+                <div>
+                    <label class="block text-[0.95rem] font-bold text-primary mb-3">구인 파트</label>
+                    <p class="text-[0.75rem] text-slate-400 mb-4 font-bold">* 이미 확정된(CLOSED) 파트는 수정하거나 삭제할 수 없습니다.</p>
+                    <div id="part-list" class="space-y-3">
+                        <!-- 4-1. 이미 멤버가 확정된(Closed) 구인: 버튼 없음, 텍스트로만 표시 -->
+                        <div th:each="recruit : ${postDetail.recruits}" th:if="${recruit.member != null}" 
+                             class="flex gap-2 items-center">
+                            <div class="flex-1 relative">
+                                <input type="text" th:value="${recruit.position}" readonly
+                                       class="w-full px-5 py-3.5 border-[1.5px] border-slate-100 rounded-custom text-[0.95rem] font-bold outline-none bg-slate-50 text-slate-400 cursor-not-allowed">
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[0.7rem] bg-slate-300 text-white px-2 py-1 rounded font-black">CLOSED</span>
+                            </div>
+                            <div class="w-12"></div> <!-- 버튼 자리 비워둠 -->
+                        </div>
+
+                        <!-- 4-2. 아직 멤버가 없는(Open) 구인: 개별 삭제 버튼 제공 -->
+                        <div th:each="recruit : ${postDetail.recruits}" th:if="${recruit.member == null}" 
+                             class="flex gap-2 items-center">
+                            <input type="text" name="parts" th:value="${recruit.position}" placeholder="구인 파트 항목" required
+                                   class="flex-1 px-5 py-3.5 border-[1.5px] border-border rounded-custom text-[0.95rem] font-medium outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all">
+                            <button type="button" onclick="removeThisPart(this)" 
+                                    class="w-12 h-12 flex items-center justify-center text-slate-300 hover:text-accent border-2 border-transparent hover:border-accent rounded-custom transition-all text-2xl font-bold">&times;</button>
+                        </div>
+
+                        <!-- 4-3. 데이터가 아예 없는 경우 방어 코드 -->
+                        <div th:if="${#lists.isEmpty(postDetail.recruits)}" class="flex gap-2 items-center">
+                            <input type="text" name="parts" placeholder="구인 파트 항목 (예: 퍼스트 기타)" required
+                                   class="flex-1 px-5 py-3.5 border-[1.5px] border-border rounded-custom text-[0.95rem] font-medium outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all">
+                            <button type="button" onclick="removeThisPart(this)" 
+                                    class="w-12 h-12 flex items-center justify-center text-slate-300 hover:text-accent border-2 border-transparent hover:border-accent rounded-custom transition-all text-2xl font-bold">&times;</button>
+                        </div>
+                    </div>
+                    
+                    <button type="button" onclick="addPart()" 
+                            class="mt-4 flex items-center gap-2 bg-white text-primary border-2 border-primary px-5 py-2.5 rounded-custom font-black hover:bg-primary hover:text-white transition-all">
+                        <span class="text-xl">+</span> 파트 추가하기
+                    </button>
+                </div>
+
+                <!-- 5. 제출 버튼 -->
+                <div class="pt-8 border-t border-slate-50 flex gap-4">
+                    <a th:href="@{/posts/{id}(id=${postId})}"
+                       class="flex-1 bg-slate-100 text-slate-500 py-5 rounded-custom text-xl font-black text-center hover:bg-slate-200 transition-all">
+                        취소
+                    </a>
+                    <button type="submit" id="submit-btn"
+                            class="flex-[2] bg-accent text-white py-5 rounded-custom text-xl font-black shadow-lg hover:bg-accent-hover hover:-translate-y-1 transition-all cursor-pointer">
+                        수정 완료
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:inline="javascript">
+        function addPart() {
+            const partList = document.getElementById('part-list');
+            const newDiv = document.createElement('div');
+            newDiv.className = 'flex gap-2 items-center animate-in fade-in slide-in-from-top-2 duration-300';
+            newDiv.innerHTML = `
+                <input type="text" name="parts" placeholder="구인 파트 항목" required
+                       class="flex-1 px-5 py-3.5 border-[1.5px] border-border rounded-custom text-[0.95rem] font-medium outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all">
+                <button type="button" onclick="removeThisPart(this)" 
+                        class="w-12 h-12 flex items-center justify-center text-slate-300 hover:text-accent border-2 border-transparent hover:border-accent rounded-custom transition-all text-2xl font-bold">&times;</button>
+            `;
+            partList.appendChild(newDiv);
+        }
+
+        function removeThisPart(btn) {
+            const partList = document.getElementById('part-list');
+            // 전체 구인 항목(CLOSED 포함)이 최소 1개는 있어야 함
+            if (partList.children.length > 1) {
+                btn.parentElement.remove();
+            } else {
+                alert('최소 하나의 구인 파트는 입력해야 합니다.');
+            }
+        }
+    </script>
+</body>
+</html>

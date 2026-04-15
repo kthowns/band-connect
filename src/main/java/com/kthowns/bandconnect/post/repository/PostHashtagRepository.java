@@ -19,4 +19,6 @@ public interface PostHashtagRepository extends JpaRepository<PostHashtag, Long> 
     @Query("SELECT ph.hashtag from PostHashtag ph" +
             " WHERE ph.recruitPost.id = :postId")
     List<Hashtag> findHashtagsByPostId(@Param("postId") Long postId);
+
+    void deleteByRecruitPostId(Long recruitPostId);
 }

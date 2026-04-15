@@ -218,6 +218,21 @@ public class PostService {
         recruitPostRepository.delete(recruitPost);
     }
 
+    @Transactional
+    public RecruitPost updatePost(Long postId, String title, String content, User user) {
+        RecruitPost recruitPost = recruitPostRepository.findByIdWithAuthor(postId)
+                .orElseThrow(() -> new CustomException(CustomResponseCode.POST_NOT_FOUND));
+
+        if (!recruitPost.getAuthor().getId().equals(user.getId())) {
+            throw new CustomException(CustomResponseCode.FORBIDDEN);
+        }
+
+        recruitPost.setTitle(title);
+        recruitPost.setContent(content);
+
+        return recruitPostRepository.save(recruitPost);
+    }
+
 
     private Page<RecruitPostDetail> convertToDetail(
             Page<RecruitPost> recruitPosts,

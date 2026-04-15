@@ -57,4 +57,36 @@ public class RecruitService {
 
         return recruitRepository.save(recruit);
     }
+
+    @Transactional
+    public void updateRecruits(RecruitPost post, List<String> parts) {
+        List<Recruit> existingRecruits = recruitRepository.findByRecruitPost_Id(post.getId());
+
+        // 멤버가 없는(Open) 구인만 필터링해서 삭제
+        List<Recruit> openRecruits = existingRecruits.stream()
+                .filter(r -> r.getMember() == null)
+                .collect(java.util.stream.Collectors.toList());
+        recruitRepository.deleteAll(openRecruits);
+
+        // 이미 멤버가 있는 포지션 이름들
+        java.util.Set<String> closedPositions = existingRecruits.stream()
+                .filter(r -> r.getMember() != null)
+                .map(Recruit::getPosition)
+                .collect(java.util.stream.Collectors.toSet());
+
+        // 새로운 파트들 중 이미 닫힌 포지션과 겹치지 않는 것만 추가
+        List<String> partsToCreate = parts.stream()
+                .filter(p -> !closedPositions.contains(p))
+                .distinct()
+                .toList();
+
+        for (String part : partsToCreate) {
+            recruitRepository.save(
+                    Recruit.builder()
+                            .position(part)
+                            .recruitPost(post)
+                            .build()
+            );
+        }
+    }
 }

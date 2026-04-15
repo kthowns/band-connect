@@ -50,4 +50,10 @@ public class HashtagService {
             );
         }
     }
+
+    @Transactional
+    public void updateHashtags(RecruitPost post, String tagString) {
+        postHashtagRepository.deleteByRecruitPostId(post.getId());
+        linkHashtags(post, tagString);
+    }
 }

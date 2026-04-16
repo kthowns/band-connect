@@ -21,7 +21,7 @@ public class RecruitPostDetail {
     private String content;
     private Long views;
     private LocalDateTime createdAt;
-    private Long applicantsCount;
+    private Long applicantCount;
     private List<HashtagDto> hashtags;
     private List<RecruitDto> recruits;
     private List<CommentDto> comments;

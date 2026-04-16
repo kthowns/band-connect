@@ -20,7 +20,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             " GROUP BY r.recruitPost.id")
     List<PostApplicantCount> countByRecruitPostIds(@Param("postIds") List<Long> postIds);
 
-    Long countByRecruitRecruitPost_Id(Long recruitPostId);
+    Long countByRecruit_RecruitPost_Id(Long recruitPostId);
 
     List<Application> findByApplicant_Id(Long applicantId);
 

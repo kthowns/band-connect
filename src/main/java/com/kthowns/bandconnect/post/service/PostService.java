@@ -54,15 +54,26 @@ public class PostService {
                 .orElseThrow(() -> new CustomException(CustomResponseCode.POST_NOT_FOUND));
 
         List<Hashtag> hashtags = postHashtagRepository.findHashtagsByPostId(recruitPostId);
-        Long applicantsCount = applicationRepository.countByRecruitRecruitPost_Id(recruitPostId);
         List<Recruit> recruits = recruitRepository.findByRecruitPost_Id(recruitPostId);
         List<Comment> comments = commentRepository.findByPostId(recruitPostId);
+
+        long totalApplicantCount = 0L;
+
+        for (Recruit recruit : recruits) {
+            long applicantCount = applicationRepository.countByRecruit_RecruitPost_Id(recruit.getRecruitPost().getId());
+
+            recruit.setApplicantCount(
+                    applicantCount
+            );
+
+            totalApplicantCount += recruit.getApplicantCount();
+        }
 
         return RecruitPostDetail.builder()
                 .id(recruitPostId)
                 .comments(comments.stream().map(CommentDto::fromEntity).toList())
                 .content(recruitPost.getContent())
-                .applicantsCount(applicantsCount)
+                .applicantCount(totalApplicantCount)
                 .views(recruitPost.getViews())
                 .title(recruitPost.getTitle())
                 .band(BandDto.fromEntity(recruitPost.getBand()))
@@ -250,7 +261,7 @@ public class PostService {
                         .title(recruitPost.getTitle())
                         .content(recruitPost.getContent())
                         .createdAt(recruitPost.getCreatedAt())
-                        .applicantsCount(
+                        .applicantCount(
                                 applicantsCountMap.getOrDefault(recruitPost.getId(), 0L)
                         )
                         .recruits(recruitMap.getOrDefault(recruitPost.getId(), List.of())

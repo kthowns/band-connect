@@ -19,7 +19,7 @@
                     <div class="flex flex-wrap gap-4 text-[0.85rem] text-slate-400 font-bold items-center">
                         <span th:text="|📅 ${#temporals.format(postDetail.createdAt, 'yyyy-MM-dd HH:mm')}|">작성일</span>
                         <span th:text="|👀 조회수 ${postDetail.views}|">조회수</span>
-                        <span class="text-accent" th:text="|👥 지원자 ${postDetail.applicantsCount}명|">지원자 수</span>
+                        <span class="text-accent" th:text="|👥 지원자 ${postDetail.applicantCount}명|">지원자 수</span>
                     </div>
                 </div>
                 

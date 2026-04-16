@@ -52,6 +52,12 @@ public class ApplicationService {
                         .status(ApplyStatus.APPLIED)
                         .build()
         );
+
+        long applicantCount = applicationRepository.countByRecruit_RecruitPost_Id(recruit.getRecruitPost().getId());
+
+        recruit.setApplicantCount(
+                applicantCount
+        );
     }
 
     @Transactional

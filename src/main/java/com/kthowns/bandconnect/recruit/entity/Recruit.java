@@ -39,6 +39,10 @@ public class Recruit {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User member;
 
+    @Column(name = "applicantCount")
+    @Builder.Default
+    private Long applicantCount = 0L;
+
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;

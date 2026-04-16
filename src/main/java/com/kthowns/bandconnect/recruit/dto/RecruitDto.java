@@ -18,6 +18,7 @@ public class RecruitDto {
     private RecruitPostDto post;
     private String position;
     private UserDto member;
+    private Long applicantCount;
     private LocalDateTime createdAt;
 
     static public RecruitDto fromEntity(Recruit recruit) {
@@ -26,6 +27,7 @@ public class RecruitDto {
                 .id(recruit.getId())
                 .post(RecruitPostDto.fromEntity(recruit.getRecruitPost()))
                 .position(recruit.getPosition())
+                .applicantCount(recruit.getApplicantCount())
                 .member(member != null ? UserDto.fromEntity(member) : null)
                 .createdAt(recruit.getCreatedAt())
                 .build();

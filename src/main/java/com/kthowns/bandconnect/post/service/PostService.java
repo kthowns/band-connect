@@ -47,7 +47,7 @@ public class PostService {
     private final ApplicationRepository applicationRepository;
     private final CommentRepository commentRepository;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public RecruitPostDetail getRecruitPostDetail(Long recruitPostId) {
         RecruitPost recruitPost = recruitPostRepository.findByIdWithAuthorAndBand(recruitPostId)
                 .orElseThrow(() -> new CustomException(CustomResponseCode.POST_NOT_FOUND));

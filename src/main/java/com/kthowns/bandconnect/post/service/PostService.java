@@ -1,7 +1,6 @@
 package com.kthowns.bandconnect.post.service;
 
 import com.kthowns.bandconnect.application.dto.ApplicationDto;
-import com.kthowns.bandconnect.application.dto.PostApplicantCount;
 import com.kthowns.bandconnect.application.entity.Application;
 import com.kthowns.bandconnect.application.repository.ApplicationRepository;
 import com.kthowns.bandconnect.band.dto.BandDto;
@@ -60,7 +59,7 @@ public class PostService {
         long totalApplicantCount = 0L;
 
         for (Recruit recruit : recruits) {
-            long applicantCount = applicationRepository.countByRecruit_RecruitPost_Id(recruit.getRecruitPost().getId());
+            long applicantCount = applicationRepository.countByRecruit_Id(recruit.getId());
 
             recruit.setApplicantCount(
                     applicantCount
@@ -90,7 +89,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public Page<RecruitPostDetail> getRecruitPosts(String searchKeyword, Pageable pageable) {
+    public Page<RecruitPostSimpleDto> searchRecruitPosts(String searchKeyword, Pageable pageable) {
         List<String> hashtags = new ArrayList<>();
         String keyword = "";
 
@@ -129,31 +128,31 @@ public class PostService {
             return Page.empty(pageable);
         }
 
+        // 해시태그 Batch fetch By Map Grouping
         List<PostHashtag> postHashtags = postHashtagRepository.findByRecruitPostIds(recruitPostIds);
         Map<Long, List<PostHashtag>> hashtagMap = postHashtags.stream()
                 .collect(Collectors.groupingBy((ph) -> ph.getRecruitPost().getId()));
 
+        // Recruit Strings Batch fetch By Map Grouping
         List<Recruit> recruits = recruitRepository.findByRecruitPostIds(recruitPostIds);
-        Map<Long, List<Recruit>> recruitMap = recruits.stream()
-                .collect(Collectors.groupingBy((ph) -> ph.getRecruitPost().getId()));
+        Map<Long, List<Recruit>> recruitPartsMap = recruits.stream()
+                .filter((r) -> r.getMember() == null)
+                .collect(Collectors.groupingBy((r) -> r.getRecruitPost().getId()));
 
-        List<Comment> comments = commentRepository.findByRecruitPostIds(recruitPostIds);
-        Map<Long, List<Comment>> commentMap = comments.stream()
-                .collect(Collectors.groupingBy((ph) -> ph.getPost().getId()));
-
-        List<PostApplicantCount> applicantsCount = applicationRepository.countByRecruitPostIds(recruitPostIds);
-        Map<Long, Long> applicantsCountMap = applicantsCount.stream()
+        // Comment count batch fetch
+        List<RecruitPostDto.PostCommentCount> commentCounts = commentRepository.countByRecruitPostIds(recruitPostIds);
+        Map<Long, Long> commentCountsMap = commentCounts.stream()
+                .filter((pcc) -> pcc.getCommentCount() != null)
                 .collect(Collectors.toMap(
-                        PostApplicantCount::getPostId,
-                        PostApplicantCount::getCount
+                        RecruitPostDto.PostCommentCount::getPostId,
+                        RecruitPostDto.PostCommentCount::getCommentCount
                 ));
 
-        return convertToDetail(
+        return convertToSimple(
                 recruitPosts,
                 hashtagMap,
-                applicantsCountMap,
-                recruitMap,
-                commentMap
+                recruitPartsMap,
+                commentCountsMap
         );
     }
 
@@ -245,34 +244,37 @@ public class PostService {
     }
 
 
-    private Page<RecruitPostDetail> convertToDetail(
+    private Page<RecruitPostSimpleDto> convertToSimple(
             Page<RecruitPost> recruitPosts,
             Map<Long, List<PostHashtag>> hashtagMap,
-            Map<Long, Long> applicantsCountMap,
             Map<Long, List<Recruit>> recruitMap,
-            Map<Long, List<Comment>> commentMap
+            Map<Long, Long> commentCountsMap
     ) {
         return recruitPosts.map((recruitPost) ->
-                RecruitPostDetail.builder()
+                RecruitPostSimpleDto.builder()
                         .id(recruitPost.getId())
-                        .author(UserDto.fromEntity(recruitPost.getAuthor()))
-                        .band(BandDto.fromEntity(recruitPost.getBand()))
+                        .authorName(recruitPost.getAuthor().getName())
+                        .bandName(recruitPost.getBand().getName())
                         .views(recruitPost.getViews())
                         .title(recruitPost.getTitle())
-                        .content(recruitPost.getContent())
                         .createdAt(recruitPost.getCreatedAt())
-                        .applicantCount(
-                                applicantsCountMap.getOrDefault(recruitPost.getId(), 0L)
+                        .recruitParts(
+                                recruitMap.getOrDefault(recruitPost.getId(), List.of())
+                                        .stream().map(Recruit::getPosition).toList()
                         )
-                        .recruits(recruitMap.getOrDefault(recruitPost.getId(), List.of())
-                                .stream().map(RecruitDto::fromEntity)
-                                .toList())
-                        .hashtags(hashtagMap.getOrDefault(recruitPost.getId(), List.of())
-                                .stream().map((ph) -> HashtagDto.fromEntity(ph.getHashtag()))
-                                .toList())
-                        .comments(commentMap.getOrDefault(recruitPost.getId(), List.of())
-                                .stream().map(CommentDto::fromEntity)
-                                .toList())
+                        .hashtags(
+                                hashtagMap.getOrDefault(recruitPost.getId(), List.of())
+                                        .stream().map((ph) -> ph.getHashtag().getName()).toList()
+                        )
+                        .commentCount(
+                                commentCountsMap.getOrDefault(recruitPost.getId(), 0L)
+                        )
+                        .applicantCount(
+                                recruitMap.getOrDefault(recruitPost.getId(), List.of())
+                                        .stream()
+                                        .filter((r) -> r.getApplicantCount() != null)
+                                        .mapToLong(Recruit::getApplicantCount).sum()
+                        )
                         .build()
         );
     }

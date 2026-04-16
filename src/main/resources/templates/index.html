@@ -54,28 +54,28 @@
 
                 <div class="flex flex-col md:justify-between md:items-start mb-6 gap-3 md:gap-4">
                     <h3 class="text-[1.2rem] md:text-[1.4rem] font-black text-primary group-hover:text-accent transition-colors tracking-tight" th:text="${post.title}">제목</h3>
-                    <p><strong class="font-bold min-w-[80px]" th:text="${post.author.name}">작성자</strong></p>
+                    <p><strong class="font-bold min-w-[80px]" th:text="${post.authorName}">작성자</strong></p>
                 </div>
 
                 <div class="space-y-3 mb-8 text-[1.05rem]">
-                    <p class="flex items-center gap-3"><strong class="text-slate-400 font-bold min-w-[80px]">밴드명</strong> <span class="text-primary font-bold" th:text="${post.band?.name ?: '이름 없음'}"></span></p>
+                    <p class="flex items-center gap-3"><strong class="text-slate-400 font-bold min-w-[80px]">밴드명</strong> <span class="text-primary font-bold" th:text="${post.bandName ?: '이름 없음'}"></span></p>
                     <p class="flex items-start gap-3">
                         <strong class="text-slate-400 font-bold min-w-[80px]">모집 파트</strong>
                         <span class="flex flex-wrap gap-2">
-                            <th:block th:each="recruit : ${post.recruits}" th:if="${recruit.member == null}">
-                                <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-[4px] text-[0.85rem] font-bold border border-border" th:text="${recruit.position}">기타</span>
+                            <th:block th:each="recruit : ${post.recruitParts}">
+                                <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-[4px] text-[0.85rem] font-bold border border-border" th:text="${recruit}">기타</span>
                             </th:block>
                             <span class="bg-slate-800 text-white px-3 py-1 rounded-[4px] text-[0.85rem] font-bold" th:if="${post.closed}">모집 마감</span>
                         </span>
                     </p>
                     <div class="flex flex-wrap gap-2 items-center">
-                        <span th:each="tag : ${post.hashtags}" class="text-accent font-bold text-[0.75rem] md:text-[0.85rem] bg-accent/5 px-2.5 py-1 rounded border border-accent/10" th:text="|${tag.name}|"></span>
+                        <span th:each="tag : ${post.hashtags}" class="text-accent font-bold text-[0.75rem] md:text-[0.85rem] bg-accent/5 px-2.5 py-1 rounded border border-accent/10" th:text="|${tag}|"></span>
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center pt-6 border-t border-slate-50">
                     <div class="flex gap-4 text-[0.9rem] font-bold">
-                        <span class="text-accent">💬 댓글 [[${#lists.size(post.comments)}]]</span>
+                        <span class="text-accent">💬 댓글 [[${post.commentCount}]]</span>
                         <span class="text-slate-400">👀 조회수 [[${post.views}]]</span>
                         <span class="text-slate-400">👥 지원자 [[${post.applicantCount}]]명</span>
                     </div>

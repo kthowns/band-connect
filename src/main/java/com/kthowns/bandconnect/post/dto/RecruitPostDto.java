@@ -32,4 +32,10 @@ public class RecruitPostDto {
                 .createdAt(recruitPost.getCreatedAt())
                 .build();
     }
+
+    public interface PostCommentCount {
+        Long getPostId();
+
+        Long getCommentCount();
+    }
 }

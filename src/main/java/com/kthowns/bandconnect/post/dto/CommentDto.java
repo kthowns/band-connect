@@ -1,7 +1,6 @@
 package com.kthowns.bandconnect.post.dto;
 
 import com.kthowns.bandconnect.post.entity.Comment;
-import com.kthowns.bandconnect.user.dto.UserDto;
 import com.kthowns.bandconnect.user.entity.User;
 import lombok.*;
 
@@ -14,8 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 public class CommentDto {
     private Long id;
-    private RecruitPostDto post;
-    private UserDto author;
+    private Long postId;
+    private Long authorId;
+    private String postTitle;
+    private String authorName;
     private String content;
     private LocalDateTime createdAt;
 
@@ -24,8 +25,10 @@ public class CommentDto {
 
         return CommentDto.builder()
                 .id(comment.getId())
-                .post(RecruitPostDto.fromEntity(comment.getPost()))
-                .author(user != null ? UserDto.fromEntity(user) : null)
+                .postId(comment.getPost().getId())
+                .authorId(comment.getAuthor().getId())
+                .postTitle(comment.getPost().getTitle())
+                .authorName(user != null ? user.getName() : "탈퇴한 사용자")
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .build();

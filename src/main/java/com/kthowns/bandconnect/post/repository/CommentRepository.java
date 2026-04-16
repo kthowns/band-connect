@@ -1,5 +1,6 @@
 package com.kthowns.bandconnect.post.repository;
 
+import com.kthowns.bandconnect.post.dto.RecruitPostDto;
 import com.kthowns.bandconnect.post.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,10 +12,10 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query("SELECT c FROM Comment c" +
-            " JOIN c.post p" +
-            " WHERE p.id IN :recruitPostIds")
-    List<Comment> findByRecruitPostIds(@Param("recruitPostIds") List<Long> recruitPostIds);
+    @Query("SELECT c.post.id as postId, COUNT(c) as commentCount FROM Comment c" +
+            " WHERE c.post.id IN :recruitPostIds" +
+            " GROUP BY c.post.id")
+    List<RecruitPostDto.PostCommentCount> countByRecruitPostIds(@Param("recruitPostIds") List<Long> recruitPostIds);
 
     List<Comment> findByPostId(Long postId);
 

@@ -4,10 +4,7 @@ import com.kthowns.bandconnect.band.dto.BandDto;
 import com.kthowns.bandconnect.band.service.BandService;
 import com.kthowns.bandconnect.common.exception.CustomException;
 import com.kthowns.bandconnect.common.exception.CustomResponseCode;
-import com.kthowns.bandconnect.post.dto.AddPostRequest;
-import com.kthowns.bandconnect.post.dto.EditPostRequest;
-import com.kthowns.bandconnect.post.dto.HashtagDto;
-import com.kthowns.bandconnect.post.dto.RecruitPostDetail;
+import com.kthowns.bandconnect.post.dto.*;
 import com.kthowns.bandconnect.post.facade.PostFacade;
 import com.kthowns.bandconnect.post.service.PostService;
 import com.kthowns.bandconnect.recruit.dto.RecruitDto;
@@ -44,7 +41,7 @@ public class PostController {
             @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
             Model model
     ) {
-        Page<RecruitPostDetail> posts = postService.getRecruitPosts(
+        Page<RecruitPostSimpleDto> posts = postService.searchRecruitPosts(
                 keyword, pageable
         );
 

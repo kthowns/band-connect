@@ -33,9 +33,11 @@ public class ApplicationService {
         Recruit recruit = recruitRepository.findByIdWithPostAndAuthor(request.getRecruitId())
                 .orElseThrow(() -> new CustomException(CustomResponseCode.RECRUIT_NOT_FOUND));
 
+        /* 자신의 구인글에 대한 지원 제한
         if (recruit.getRecruitPost().getAuthor().getId().equals(user.getId())) {
             throw new CustomException(CustomResponseCode.APPLY_RECURSIVE_ERROR);
         }
+        */
 
         if (applicationRepository.existsByRecruit_IdAndApplicant_Id(recruit.getId(), user.getId())) {
             throw new CustomException(CustomResponseCode.DUPLICATED_APPLY_POSITION);

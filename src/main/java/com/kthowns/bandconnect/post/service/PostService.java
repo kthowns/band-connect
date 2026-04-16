@@ -136,7 +136,6 @@ public class PostService {
         // Recruit Strings Batch fetch By Map Grouping
         List<Recruit> recruits = recruitRepository.findByRecruitPostIds(recruitPostIds);
         Map<Long, List<Recruit>> recruitPartsMap = recruits.stream()
-                .filter((r) -> r.getMember() == null)
                 .collect(Collectors.groupingBy((r) -> r.getRecruitPost().getId()));
 
         // Comment count batch fetch
@@ -260,7 +259,9 @@ public class PostService {
                         .createdAt(recruitPost.getCreatedAt())
                         .recruitParts(
                                 recruitMap.getOrDefault(recruitPost.getId(), List.of())
-                                        .stream().map(Recruit::getPosition).toList()
+                                        .stream()
+                                        .filter((r) -> r.getMember() == null)
+                                        .map(Recruit::getPosition).toList()
                         )
                         .hashtags(
                                 hashtagMap.getOrDefault(recruitPost.getId(), List.of())

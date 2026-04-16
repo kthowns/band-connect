@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class MemberDetail {
     private Long id;
     private String username;
+    private String name;
     private String position;
     private LocalDateTime joinAt;
 
@@ -21,6 +22,7 @@ public class MemberDetail {
         return MemberDetail.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .name(user.getName())
                 .position(member.getPosition())
                 .joinAt(member.getCreatedAt())
                 .build();

@@ -1,4 +1,4 @@
-package com.kthowns.bandconnect.user.controller;
+package com.kthowns.bandconnect.auth.controller;
 
 import com.kthowns.bandconnect.common.exception.CustomException;
 import com.kthowns.bandconnect.common.exception.CustomResponseCode;

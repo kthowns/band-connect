@@ -1,4 +1,4 @@
-package com.kthowns.bandconnect.user.dto;
+package com.kthowns.bandconnect.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

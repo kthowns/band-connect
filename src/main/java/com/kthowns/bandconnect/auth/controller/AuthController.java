@@ -19,41 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserService userService;
-
     @GetMapping("/login")
     public String login() {
         return "auth/login";
-    }
-
-    @GetMapping("/signup")
-    public String signupPage(Model model) {
-        model.addAttribute("signupRequest", new SignupRequest());
-        return "auth/signup";
-    }
-
-    @PostMapping("/signup")
-    public String signupProcess(
-            @ModelAttribute("signupRequest") @Valid SignupRequest request,
-            BindingResult bindingResult,
-            Model model,
-            RedirectAttributes rttr
-    ) {
-        if (bindingResult.hasErrors()) {
-            return "auth/signup";
-        }
-        try {
-            userService.signup(request);
-            rttr.addFlashAttribute("message", CustomResponseCode.SIGNUP_SUCCESS.getMessage());
-            return "redirect:/login";
-        } catch (CustomException e) {
-            log.error(e.getMessage());
-            model.addAttribute("message", e.getMessage());
-            return "auth/signup";
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            model.addAttribute("message", CustomResponseCode.INTERNAL_SERVER_ERROR.getMessage());
-            return "auth/signup";
-        }
     }
 }

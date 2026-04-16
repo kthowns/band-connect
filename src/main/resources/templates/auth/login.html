@@ -32,11 +32,6 @@
                     로그인
                 </button>
 
-                <button type="button" id="testLoginButton" onclick="quickLogin()"
-                        class="w-full bg-slate-100 text-slate-500 py-4 rounded-custom text-[0.95rem] font-bold hover:bg-slate-200 transition-all">
-                    테스트 계정으로 로그인 (Quick Login)
-                </button>
-
                 <p class="text-accent text-[0.85rem] font-bold mt-4 text-center" th:if="${param.error}">
                     아이디 또는 비밀번호가 틀렸습니다.
                 </p>
@@ -48,14 +43,6 @@
             </form>
         </section>
     </main>
-
-    <script>
-        function quickLogin() {
-            document.getElementById('username').value = 'test';
-            document.getElementById('password').value = 'test1231';
-            document.getElementById('loginForm').submit();
-        }
-    </script>
 
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>

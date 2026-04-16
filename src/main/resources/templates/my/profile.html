@@ -16,8 +16,12 @@
              th:if="${user != null}" th:object="${user}">
             <div class="space-y-4">
                 <p class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
+                    <strong class="text-slate-400 font-bold text-[0.95rem]">이름</strong>
+                    <span class="text-primary font-black text-[1.1rem]" th:text="*{name}">이름 없음</span>
+                </p>
+                <p class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
                     <strong class="text-slate-400 font-bold text-[0.95rem]">아이디</strong>
-                    <span class="text-primary font-black text-[1.1rem]" th:text="*{username}">이름 없음</span>
+                    <span class="text-primary font-black text-[1.1rem]" th:text="*{username}">아이디 없음</span>
                 </p>
                 <p class="flex justify-between items-center py-3 border-b border-slate-50 last:border-none">
                     <strong class="text-slate-400 font-bold text-[0.95rem]">이메일</strong>

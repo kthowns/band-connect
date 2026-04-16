@@ -58,8 +58,8 @@
                                                         (${statusName == 'REJECTED'} ? 'bg-slate-100 text-slate-400 border-border opacity-60' : 
                                                         (${isClosed} ? 'bg-slate-50 text-slate-300 border-border' : 'bg-white text-primary border-border hover:border-accent hover:text-accent hover:-translate-y-0.5'))"
                                          class="flex items-center justify-between px-4 py-3 border rounded-custom font-bold text-[0.95rem] transition-all cursor-pointer shadow-sm"
-                                         th:onclick="showApplicantDetails([[${app.id}]], [[${app.applicant.id}]], [[${app.applicant.username}]], [[${app.age}]], [[${app.location}]], [[${app.phone}]], [[${app.description}]], [[${app.status.description}]], [[${statusName}]])">
-                                        <span>👤 [[${app.applicant.username}]]</span>
+                                         th:onclick="showApplicantDetails([[${app.id}]], [[${app.applicant.id}]], [[${app.applicant.name}]], [[${app.age}]], [[${app.location}]], [[${app.phone}]], [[${app.description}]], [[${app.status.description}]], [[${statusName}]])">
+                                        <span>👤 [[${app.applicant.name}]]</span>
                                         <span th:if="${statusName == 'ACCEPTED'}" class="text-sm">✔️</span>
                                         <span th:if="${statusName == 'REJECTED'}" class="text-sm">❌</span>
                                     </div>

@@ -15,7 +15,7 @@
             <div class="flex justify-between items-start mb-6 pb-5 border-b border-slate-50">
                 <div>
                     <h1 class="text-[2rem] font-black text-primary tracking-tight leading-tight mb-3" th:text="${postDetail.title}">게시글 제목</h1>
-                    <p th:text="${postDetail.author.username}">작성자</p>
+                    <p th:text="${postDetail.author.name}">작성자</p>
                     <div class="flex flex-wrap gap-4 text-[0.85rem] text-slate-400 font-bold items-center">
                         <span th:text="|📅 ${#temporals.format(postDetail.createdAt, 'yyyy-MM-dd HH:mm')}|">작성일</span>
                         <span th:text="|👀 조회수 ${postDetail.views}|">조회수</span>
@@ -93,7 +93,7 @@
                 <div th:each="comment : ${postDetail.comments}" class="group pb-8 border-b border-slate-50 last:border-none">
                     <div class="flex justify-between items-start mb-3">
                         <div class="flex items-center gap-3">
-                            <strong class="text-primary font-black" th:text="${comment.author.username}">유저명</strong>
+                            <strong class="text-primary font-black" th:text="${comment.author.name}">유저명</strong>
                             <span class="text-[0.8rem] text-slate-400 font-bold" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
                         </div>
                         <!-- 댓글 삭제 버튼 -->
@@ -124,11 +124,6 @@
                 <form id="application-form" th:action="@{/recruits/apply}" method="post" class="space-y-5 text-left"
                       th:with="allRecruits=${postDetail.recruits},
                                availableRecruits=${allRecruits.?[member == null]}">
-                    <div>
-                        <label class="block text-[0.9rem] font-bold text-primary mb-2">이름</label>
-                        <input type="text" name="name" placeholder="이름을 입력하세요" required
-                               class="w-full px-5 py-3 border-[1.5px] border-border rounded-custom outline-none focus:border-accent focus:ring-4 focus:ring-accent/10 transition-all font-medium">
-                    </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[0.9rem] font-bold text-primary mb-2">나이</label>

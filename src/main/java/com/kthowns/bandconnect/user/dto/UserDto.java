@@ -14,6 +14,7 @@ public class UserDto {
     private Long id;
     private String email;
     private String username;
+    private String name;
     private LocalDateTime createdAt;
 
     static public UserDto fromEntity(User user) {
@@ -21,6 +22,7 @@ public class UserDto {
                 .id(user.getId())
                 .email(user.getEmail())
                 .username(user.getUsername())
+                .name(user.getName())
                 .createdAt(user.getCreatedAt())
                 .build();
     }

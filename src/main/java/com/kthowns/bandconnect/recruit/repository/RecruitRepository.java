@@ -1,7 +1,9 @@
 package com.kthowns.bandconnect.recruit.repository;
 
 import com.kthowns.bandconnect.recruit.entity.Recruit;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,11 +19,12 @@ public interface RecruitRepository extends JpaRepository<Recruit, Long> {
 
     List<Recruit> findByRecruitPost_Id(Long recruitPostId);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Recruit r" +
             " JOIN FETCH r.recruitPost rp" +
             " JOIN FETCH rp.author" +
             " WHERE r.id = :id")
-    Optional<Recruit> findByIdWithPostAndAuthor(@Param("id") Long id);
+    Optional<Recruit> findByIdWithPostAndAuthorWithLock(@Param("id") Long id);
 
     Optional<Recruit> findByIdAndRecruitPost_Author_Id(Long id, Long userId);
 

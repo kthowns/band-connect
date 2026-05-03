@@ -30,7 +30,7 @@ public class ApplicationService {
 
     @Transactional
     public void applyApplication(ApplyRecruitRequest request, User user) {
-        Recruit recruit = recruitRepository.findByIdWithPostAndAuthor(request.getRecruitId())
+        Recruit recruit = recruitRepository.findByIdWithPostAndAuthorWithLock(request.getRecruitId())
                 .orElseThrow(() -> new CustomException(CustomResponseCode.RECRUIT_NOT_FOUND));
 
         /* 자신의 구인글에 대한 지원 제한

@@ -18,7 +18,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "applications")
+@Table(
+    name = "applications",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"recruit_id", "applicant_id"})
+)
 @EntityListeners(AuditingEntityListener.class)
 public class Application {
     @Id

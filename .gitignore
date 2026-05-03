@@ -81,6 +81,9 @@ local.properties
 # AWS User-specific
 .idea/**/aws.xml
 
+# QueryDSL Generated files
+**/main/generated
+
 # Generated files
 .idea/**/contentModel.xml
 
@@ -96,6 +99,8 @@ local.properties
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+
+tmp_prompt.txt
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,

@@ -26,11 +26,9 @@ public class ApplicationFacade {
             applicationService.declineApplication(request.getApplicationId(), user.getId());
             return;
         }
-        log.info("applicationService.acceptApplication()");
         // 지원서 상태 변경
         Application application = applicationService.acceptApplication(request.getApplicationId(), user.getId());
 
-        log.info("recruitService.confirmRecruit()");
         // 구인에 합격자 넣기
         Recruit recruit = recruitService.confirmRecruit(
                 application.getRecruit().getId(),
@@ -38,7 +36,6 @@ public class ApplicationFacade {
                 user.getId()
         );
 
-        log.info("bandService.addMember()");
         // 밴드에 멤버 추가
         bandService.addMember(
                 recruit.getRecruitPost().getBand().getId(),

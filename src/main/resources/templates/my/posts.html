@@ -176,6 +176,15 @@
     }
 
     function handleConfirm(isAccepted) {
+        const form = document.getElementById('confirm-form');
+        const buttons = form.querySelectorAll('button');
+
+        // 중복 클릭 방지를 위해 모든 버튼 비활성화
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed'); // 시각적 처리
+        });
+
         document.getElementById('modal-isAccepted').value = isAccepted;
         document.getElementById('confirm-form').submit();
     }

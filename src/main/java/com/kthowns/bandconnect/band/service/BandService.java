@@ -91,6 +91,7 @@ public class BandService {
                 .build());
     }
 
+    @Transactional
     public void addMember(Long bandId, Long applicantId, String position, Long userId) {
         Band band = bandRepository.findByIdAndLeader_Id(bandId, userId)
                 .orElseThrow(() -> new CustomException(CustomResponseCode.BAND_NOT_FOUND));

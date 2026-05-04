@@ -16,7 +16,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "band_members")
+@Table(
+        name = "band_members",
+        uniqueConstraints = @UniqueConstraint(columnNames= {"band_id", "position"})
+)
 @EntityListeners(AuditingEntityListener.class)
 public class BandMember {
     @Id

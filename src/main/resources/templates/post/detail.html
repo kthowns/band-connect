@@ -23,18 +23,37 @@
                     </div>
                 </div>
                 
-                <!-- 수정 및 삭제 버튼 -->
-                <div th:if="${user != null and postDetail.author.id == user.id}" class="flex gap-2">
-                    <a th:href="@{/posts/{id}/edit(id=${postDetail.id})}"
-                       class="bg-white text-slate-300 border border-slate-200 px-3 py-1 rounded-custom font-bold hover:text-primary hover:border-primary transition-all text-xs">
-                        수정
-                    </a>
-                    <form th:action="@{/posts/{id}/delete(id=${postDetail.id})}" method="post">
-                        <input type="hidden" name="cls" value="Post">
-                        <input type="hidden" name="postId" th:value="${postDetail.id}">
-                        <button type="submit" class="bg-white text-slate-300 border border-slate-200 px-3 py-1 rounded-custom font-bold hover:text-accent hover:border-accent transition-all text-xs"
-                                onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
-                    </form>
+                <!-- 액션 버튼 영역 (공유, 수정, 삭제) -->
+                <div class="flex flex-col items-end gap-3">
+                    <div th:if="${user != null and postDetail.author.id == user.id}" class="flex gap-2">
+                        <a th:href="@{/posts/{id}/edit(id=${postDetail.id})}"
+                           class="bg-white text-slate-300 border border-slate-200 px-3 py-1 rounded-custom font-bold hover:text-primary hover:border-primary transition-all text-xs">
+                            수정
+                        </a>
+                        <form th:action="@{/posts/{id}/delete(id=${postDetail.id})}" method="post">
+                            <input type="hidden" name="cls" value="Post">
+                            <input type="hidden" name="postId" th:value="${postDetail.id}">
+                            <button type="submit" class="bg-white text-slate-300 border border-slate-200 px-3 py-1 rounded-custom font-bold hover:text-accent hover:border-accent transition-all text-xs"
+                                    onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+                        </form>
+                    </div>
+                    
+                    <!-- 공유하기 버튼 -->
+                    <button type="button" id="copyUrlBtn" 
+                            class="group relative flex items-center gap-2 px-3 py-1.5 bg-slate-50 text-slate-400 border border-slate-200 rounded-custom text-xs font-bold hover:bg-white hover:text-primary hover:border-primary hover:shadow-sm transition-all duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
+                        </svg>
+                        공유하기
+                        <!-- 복사 완료 툴팁 -->
+                        <span id="copyFeedback" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2.5 py-1.5 rounded-md opacity-0 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-lg">
+                            URL 복사 완료!
+                            <!-- 툴팁 화살표 -->
+                            <span class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-primary"></span>
+                        </span>
+                    </button>
                 </div>
             </div>
 
@@ -181,6 +200,31 @@
     <footer th:replace="~{fragments/footer :: footer}"></footer>
 
     <script th:inline="javascript">
+        document.getElementById("copyUrlBtn").addEventListener("click", function() {
+            // 현재 페이지의 URL 가져오기
+            const currentUrl = window.location.href;
+
+            // 클립보드 복사
+            navigator.clipboard.writeText(currentUrl).then(() => {
+                // 성공 시 피드백 (alert 대신 버튼 텍스트 변경이 더 세련된 방식입니다)
+                const btn = this;
+                const originalText = btn.innerHTML;
+
+                btn.innerHTML = "복사 완료!";
+                btn.classList.replace("bg-slate-100", "bg-green-100");
+                btn.classList.replace("text-slate-600", "text-green-600");
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace("bg-green-100", "bg-slate-100");
+                    btn.classList.replace("text-green-600", "text-slate-600");
+                }, 2000);
+            }).catch(err => {
+                console.error('URL 복사 실패:', err);
+                alert("URL 복사에 실패했습니다.");
+            });
+        });
+
         function openModal() {
             const isAuthenticated = [[${user != null}]];
             if (isAuthenticated) {
